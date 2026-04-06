@@ -97,13 +97,13 @@ export default async function BillingPage() {
               <Sparkles className="w-4 h-4" /> Essai gratuit en cours
             </p>
             <p className="text-xs text-primary/80 mt-1">
-              Votre essai se termine le{" "}
+              Votre essai se terminé le{" "}
               {new Intl.DateTimeFormat("fr-FR", {
                 day: "numeric",
                 month: "long",
                 year: "numeric",
               }).format(user.trialEndsAt)}
-              . Passez a un abonnement payant pour continuer.
+              . Passez à un abonnement payant pour continuer.
             </p>
           </div>
         )}
@@ -114,7 +114,7 @@ export default async function BillingPage() {
               <AlertTriangle className="w-4 h-4" /> Essai gratuit expire
             </p>
             <p className="text-xs text-warning/80 mt-1">
-              Votre essai est termine. Souscrivez un abonnement pour continuer a utiliser les fonctionnalites avancees.
+              Votre essai est terminé. Souscrivez un abonnement pour continuer à utiliser les fonctionnalités avancées.
             </p>
           </div>
         )}
@@ -122,7 +122,7 @@ export default async function BillingPage() {
         {/* Subscription status */}
         {subscription?.cancel_at_period_end && (
           <p className="mt-3 text-sm text-warning">
-            Votre abonnement sera annule le{" "}
+            Votre abonnement sera annulé le{" "}
             {new Intl.DateTimeFormat("fr-FR", {
               day: "numeric",
               month: "long",
@@ -172,7 +172,7 @@ export default async function BillingPage() {
               </div>
               <p className="text-sm text-muted-foreground mb-4">
                 {plan.quota === 0
-                  ? "Envois illimites"
+                  ? "Envois illimités"
                   : `${plan.quota} envois/mois`}
               </p>
 
@@ -192,7 +192,7 @@ export default async function BillingPage() {
               ) : plan.price === 0 ? null : (
                 <span className="block text-center py-2 text-sm text-muted-foreground">
                   {hasUsedTrial
-                    ? "Essai deja utilise"
+                    ? "Essai déjà utilisé"
                     : "Contactez-nous"}
                 </span>
               )}
@@ -206,7 +206,7 @@ export default async function BillingPage() {
       <div className="bg-card border border-border rounded-xl overflow-hidden">
         {invoices.length === 0 ? (
           <div className="p-8 text-center text-muted-foreground">
-            Aucun paiement enregistre.
+            Aucun paiement enregistré.
           </div>
         ) : (
           <table className="w-full">

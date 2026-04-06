@@ -5,11 +5,11 @@ import { useSearchParams, useRouter } from "next/navigation";
 const STATUS_OPTIONS = [
   { value: "", label: "Tous les statuts" },
   { value: "PENDING", label: "En attente" },
-  { value: "SENT", label: "Envoye" },
-  { value: "CLICKED", label: "Clique" },
-  { value: "REVIEWED", label: "Avis laisse" },
+  { value: "SENT", label: "Envoyé" },
+  { value: "CLICKED", label: "Cliqué" },
+  { value: "REVIEWED", label: "Avis laissé" },
   { value: "FEEDBACK", label: "Feedback" },
-  { value: "FAILED", label: "Echoue" },
+  { value: "FAILED", label: "Échoué" },
 ];
 
 const CHANNEL_OPTIONS = [
@@ -19,7 +19,7 @@ const CHANNEL_OPTIONS = [
 ];
 
 const PERIOD_OPTIONS = [
-  { value: "", label: "Toutes les periodes" },
+  { value: "", label: "Toutes les périodes" },
   { value: "7", label: "7 derniers jours" },
   { value: "30", label: "30 derniers jours" },
   { value: "90", label: "90 derniers jours" },

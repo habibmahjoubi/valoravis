@@ -8,7 +8,7 @@ export function LogoutButton() {
       onClick={() => signOut({ callbackUrl: "/" })}
       className="w-full text-left px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
     >
-      Deconnexion
+      Déconnexion
     </button>
   );
 }

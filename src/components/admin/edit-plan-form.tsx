@@ -86,7 +86,7 @@ export function EditPlanForm({
             className="w-full px-2 py-1.5 border border-border rounded text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <p className="text-[10px] text-muted-foreground mt-0.5">
-            0 = illimite
+            0 = illimité
           </p>
         </div>
         <div>
@@ -102,7 +102,7 @@ export function EditPlanForm({
             className="w-full px-2 py-1.5 border border-border rounded text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <p className="text-[10px] text-muted-foreground mt-0.5">
-            0 = illimite
+            0 = illimité
           </p>
         </div>
         <div>

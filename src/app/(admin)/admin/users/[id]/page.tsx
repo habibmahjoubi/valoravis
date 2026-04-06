@@ -49,11 +49,11 @@ export default async function AdminUserDetailPage({
 
   const statusConfig: Record<string, { label: string; className: string }> = {
     PENDING: { label: "En attente", className: "bg-warning/10 text-warning" },
-    SENT: { label: "Envoye", className: "bg-primary/10 text-primary" },
-    CLICKED: { label: "Clique", className: "bg-success/10 text-success" },
+    SENT: { label: "Envoyé", className: "bg-primary/10 text-primary" },
+    CLICKED: { label: "Cliqué", className: "bg-success/10 text-success" },
     REVIEWED: { label: "Avis", className: "bg-success/10 text-success" },
     FEEDBACK: { label: "Feedback", className: "bg-muted text-muted-foreground" },
-    FAILED: { label: "Echoue", className: "bg-destructive/10 text-destructive" },
+    FAILED: { label: "Échoué", className: "bg-destructive/10 text-destructive" },
   };
 
   return (
@@ -129,7 +129,7 @@ export default async function AdminUserDetailPage({
             label: "Quota",
             value: `${user.quotaUsed}/${user.monthlyQuota}`,
           },
-          { label: "Envoyes", value: sentCount },
+          { label: "Envoyés", value: sentCount },
           { label: "Cliques", value: `${clickedCount} (${clickRate}%)` },
           { label: "Avis Google", value: reviewedCount },
         ].map((s) => (

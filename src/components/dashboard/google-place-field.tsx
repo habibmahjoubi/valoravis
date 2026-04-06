@@ -96,7 +96,7 @@ export function GooglePlaceField({
         {isWriteReview ? (
           <div className="bg-success/10 border border-success/20 rounded-lg p-2.5">
             <p className="text-success font-medium">
-              {"\u2705"} Lien d'avis detecte et converti automatiquement
+              {"\u2705"} Lien d'avis détecté et converti automatiquement
             </p>
             <p className="text-success/70 mt-1 break-all">
               {writeReviewUrl}
@@ -112,7 +112,7 @@ export function GooglePlaceField({
           </div>
         ) : inputUrl ? (
           <p className="text-warning">
-            {"\u26A0\uFE0F"} URL non reconnue. Collez une URL Google Maps de votre etablissement.
+            {"\u26A0\uFE0F"} URL non reconnue. Collez une URL Google Maps de votre établissement.
           </p>
         ) : null}
 
@@ -130,7 +130,7 @@ export function GooglePlaceField({
                 Google Maps
               </a>
             </li>
-            <li>Cherchez le nom de votre etablissement</li>
+            <li>Cherchez le nom de votre établissement</li>
             <li>Cliquez sur votre fiche</li>
             <li>Copiez l'URL de la barre d'adresse et collez-la ici</li>
           </ol>

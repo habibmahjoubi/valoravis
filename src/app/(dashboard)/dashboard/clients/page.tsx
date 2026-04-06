@@ -68,7 +68,7 @@ export default async function ClientsPage() {
                   Demandes
                 </th>
                 <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">
-                  Ajoute le
+                  Ajouté le
                 </th>
                 <th className="text-right text-xs font-medium text-muted-foreground px-4 py-3">
                   Actions

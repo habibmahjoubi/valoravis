@@ -40,18 +40,18 @@ export default async function CampaignsPage({
 
   const statusConfig: Record<string, { label: string; className: string }> = {
     PENDING: { label: "En attente", className: "bg-warning/10 text-warning" },
-    SENT: { label: "Envoye", className: "bg-primary/10 text-primary" },
-    CLICKED: { label: "Clique", className: "bg-success/10 text-success" },
+    SENT: { label: "Envoyé", className: "bg-primary/10 text-primary" },
+    CLICKED: { label: "Cliqué", className: "bg-success/10 text-success" },
     REVIEWED: {
-      label: "Avis laisse",
+      label: "Avis laissé",
       className: "bg-success/10 text-success",
     },
     FEEDBACK: {
-      label: "Feedback prive",
+      label: "Feedback privé",
       className: "bg-muted text-muted-foreground",
     },
     FAILED: {
-      label: "Echoue",
+      label: "Échoué",
       className: "bg-destructive/10 text-destructive",
     },
   };
@@ -61,7 +61,7 @@ export default async function CampaignsPage({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-6">
         <h1 className="text-2xl font-bold">Campagnes</h1>
         <span className="text-sm text-muted-foreground">
-          {requests.length} resultat{requests.length !== 1 ? "s" : ""}
+          {requests.length} résultat{requests.length !== 1 ? "s" : ""}
         </span>
       </div>
 

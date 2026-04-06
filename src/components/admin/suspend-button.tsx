@@ -52,7 +52,7 @@ export function DeleteUserButton({ userId }: { userId: string }) {
 
 export function ResetQuotaButton({ userId }: { userId: string }) {
   async function handleClick() {
-    if (!confirm("Reinitialiser le quota de cet utilisateur a 0 ?")) return;
+    if (!confirm("Réinitialiser le quota de cet utilisateur à 0 ?")) return;
     await resetUserQuota(userId);
   }
 
@@ -60,7 +60,7 @@ export function ResetQuotaButton({ userId }: { userId: string }) {
     <button
       onClick={handleClick}
       className="px-2 py-1 rounded text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20"
-      title="Reinitialiser le quota"
+      title="Réinitialiser le quota"
     >
       Reset quota
     </button>

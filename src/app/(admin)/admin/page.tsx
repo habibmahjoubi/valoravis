@@ -140,11 +140,11 @@ export default async function AdminDashboard() {
 
   const statusConfig: Record<string, { label: string; className: string }> = {
     PENDING: { label: "En attente", className: "bg-warning/10 text-warning" },
-    SENT: { label: "Envoye", className: "bg-primary/10 text-primary" },
-    CLICKED: { label: "Clique", className: "bg-success/10 text-success" },
+    SENT: { label: "Envoyé", className: "bg-primary/10 text-primary" },
+    CLICKED: { label: "Cliqué", className: "bg-success/10 text-success" },
     REVIEWED: { label: "Avis", className: "bg-success/10 text-success" },
     FEEDBACK: { label: "Feedback", className: "bg-muted text-muted-foreground" },
-    FAILED: { label: "Echoue", className: "bg-destructive/10 text-destructive" },
+    FAILED: { label: "Échoué", className: "bg-destructive/10 text-destructive" },
   };
 
   return (
@@ -199,7 +199,7 @@ export default async function AdminDashboard() {
                   >
                     <span>{u.businessName || u.email} ({u.plan})</span>
                     <span className="text-destructive text-xs">
-                      expire le {formatDate(u.trialEndsAt!)}
+                      expiré le {formatDate(u.trialEndsAt!)}
                     </span>
                   </Link>
                 ))}
@@ -214,7 +214,7 @@ export default async function AdminDashboard() {
         {([
           { label: "Utilisateurs", value: String(totalUsers), Icon: Users },
           { label: "MRR", value: formatPrice(mrr), Icon: Banknote },
-          { label: "Demandes envoyees", value: String(totalSent), Icon: Send },
+          { label: "Demandes envoyées", value: String(totalSent), Icon: Send },
           { label: "Avis Google", value: String(totalReviewed), Icon: Star },
         ] as { label: string; value: string; Icon: LucideIcon }[]).map((stat) => (
           <div
@@ -290,11 +290,11 @@ export default async function AdminDashboard() {
 
         {/* Par niche */}
         <div className="bg-card border border-border rounded-xl p-6">
-          <h2 className="font-semibold mb-4">Par metier</h2>
+          <h2 className="font-semibold mb-4">Par métier</h2>
           <div className="space-y-3">
             {([
               { label: "Dentistes", value: dentistUsers, Icon: Stethoscope },
-              { label: "Osteopathes", value: osteopathUsers, Icon: Bone },
+              { label: "Ostéopathes", value: osteopathUsers, Icon: Bone },
               { label: "Garages", value: garageUsers, Icon: Wrench },
             ] as { label: string; value: number; Icon: LucideIcon }[]).map((n) => (
               <div
@@ -317,10 +317,10 @@ export default async function AdminDashboard() {
           <div className="space-y-3">
             {[
               { label: "Total demandes", value: totalRequests },
-              { label: "Envoyees", value: totalSent },
-              { label: "Cliquees", value: totalClicked },
+              { label: "Envoyées", value: totalSent },
+              { label: "Cliquées", value: totalClicked },
               { label: "Avis Google", value: totalReviewed },
-              { label: "Feedbacks prives", value: totalFeedback },
+              { label: "Feedbacks privés", value: totalFeedback },
             ].map((s) => (
               <div
                 key={s.label}
@@ -385,9 +385,9 @@ export default async function AdminDashboard() {
 
       {/* Activity Timeline */}
       <div className="bg-card border border-border rounded-xl p-6">
-        <h2 className="font-semibold mb-4">Activite recente</h2>
+        <h2 className="font-semibold mb-4">Activité récente</h2>
         {timeline.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Aucune activite</p>
+          <p className="text-sm text-muted-foreground">Aucune activité</p>
         ) : (
           <div className="space-y-2 max-h-96 overflow-auto">
             {timeline.map((item, i) => (

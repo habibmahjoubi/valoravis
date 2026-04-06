@@ -9,7 +9,7 @@ import type { LucideIcon } from "lucide-react";
 
 const NICHES: { value: string; label: string; Icon: LucideIcon }[] = [
   { value: "DENTIST", label: "Cabinet dentaire", Icon: Stethoscope },
-  { value: "OSTEOPATH", label: "Cabinet d'osteopathie", Icon: Bone },
+  { value: "OSTEOPATH", label: "Cabinet d'ostéopathie", Icon: Bone },
   { value: "GARAGE", label: "Garage automobile", Icon: Wrench },
 ];
 
@@ -63,9 +63,9 @@ function RegisterForm() {
         <Link href="/" className="text-2xl font-bold text-primary">
           AvisBoost
         </Link>
-        <h1 className="text-xl font-semibold mt-4">Creer votre compte</h1>
+        <h1 className="text-xl font-semibold mt-4">Créer votre compte</h1>
 
-        {/* Plan selectionne */}
+        {/* Plan sélectionné */}
         <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-lg">
           <span className="text-sm font-medium text-primary">
             Plan {planInfo.label}
@@ -121,7 +121,7 @@ function RegisterForm() {
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
           <label className="block text-sm font-medium mb-2">
-            Votre metier
+            Votre métier
           </label>
           <div className="grid grid-cols-3 gap-2">
             {NICHES.map((niche) => (
@@ -190,10 +190,10 @@ function RegisterForm() {
           className="w-full bg-primary text-primary-foreground py-2 rounded-lg font-medium hover:opacity-90 disabled:opacity-50"
         >
           {loading
-            ? "Creation en cours..."
+            ? "Création en cours..."
             : selectedPlan === "free"
               ? "Commencer gratuitement"
-              : `Demarrer l'essai gratuit ${planInfo.label}`}
+              : `Démarrer l'essai gratuit ${planInfo.label}`}
         </button>
 
         {selectedPlan !== "free" && (

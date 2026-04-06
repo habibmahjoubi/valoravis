@@ -10,14 +10,14 @@ export default function SuspendedPage() {
         </div>
         <h1 className="text-xl font-bold mb-2">Compte suspendu</h1>
         <p className="text-muted-foreground text-sm mb-6">
-          Votre compte a ete suspendu. Si vous pensez qu'il s'agit d'une erreur,
+          Votre compte à ete suspendu. Si vous pensez qu'il s'agit d'une erreur,
           veuillez contacter le support.
         </p>
         <Link
           href="/"
           className="text-primary text-sm font-medium hover:underline"
         >
-          Retour a l'accueil
+          Retour à l'accueil
         </Link>
       </div>
     </div>

@@ -47,13 +47,13 @@ function LoginForm() {
         </Link>
         <h1 className="text-xl font-semibold mt-4">Connexion</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Connectez-vous a votre espace
+          Connectez-vous à votre espace
         </p>
       </div>
 
       {justRegistered && (
         <div className="mb-4 p-3 bg-success/10 border border-success/20 rounded-lg text-sm text-success">
-          Compte cree avec succes ! Connectez-vous ci-dessous.
+          Compte créé avec succès ! Connectez-vous ci-dessous.
         </div>
       )}
 
@@ -108,14 +108,14 @@ function LoginForm() {
           href="/forgot-password"
           className="text-muted-foreground hover:text-primary"
         >
-          Mot de passe oublie ?
+          Mot de passe oublié ?
         </Link>
       </p>
 
       <p className="text-center text-sm text-muted-foreground mt-6">
         Pas encore de compte ?{" "}
         <Link href="/register" className="text-primary font-medium">
-          Creer un compte
+          Créer un compte
         </Link>
       </p>
     </div>

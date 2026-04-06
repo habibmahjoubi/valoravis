@@ -146,7 +146,7 @@ export function TemplateEditor({
             Restaurer le defaut
           </button>
           {saved && (
-            <span className="text-sm text-success">Enregistre !</span>
+            <span className="text-sm text-success">Enregistré !</span>
           )}
         </div>
       </form>

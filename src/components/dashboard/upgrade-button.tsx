@@ -20,13 +20,13 @@ export function UpgradeButton({
         body: JSON.stringify({ plan: planKey }),
       });
       if (!res.ok) {
-        alert("Erreur lors de la creation du paiement. Verifiez la configuration Stripe.");
+        alert("Erreur lors de la création du paiement. Vérifiez la configuration Stripe.");
         return;
       }
       const data = await res.json();
       if (data.url) window.location.href = data.url;
     } catch {
-      alert("Erreur de connexion. Veuillez reessayer.");
+      alert("Erreur de connexion. Veuillez réessayer.");
     } finally {
       setLoading(false);
     }

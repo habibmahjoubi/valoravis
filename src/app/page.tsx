@@ -32,8 +32,8 @@ import {
 const STEPS = [
   {
     icon: UserPlus,
-    title: "Creez votre compte",
-    description: "Inscription en 30 secondes. Configurez votre etablissement et collez votre lien Google.",
+    title: "Créez votre compte",
+    description: "Inscription en 30 secondes. Configurez votre établissement et collez votre lien Google.",
     color: "from-indigo-500 to-violet-500",
   },
   {
@@ -44,14 +44,14 @@ const STEPS = [
   },
   {
     icon: Send,
-    title: "Envoyez la demande",
-    description: "Un clic suffit. Email ou SMS personnalise, automatique apres chaque prestation.",
+    title: "Envoyéz la demande",
+    description: "Un clic suffit. Email ou SMS personnalisé, automatique après chaque prestation.",
     color: "from-purple-500 to-fuchsia-500",
   },
   {
     icon: Star,
-    title: "Recoltez les avis",
-    description: "Client satisfait ? Redirige vers Google. Insatisfait ? Feedback prive pour vous.",
+    title: "Récoltez les avis",
+    description: "Client satisfait ? Redirige vers Google. Insatisfait ? Feedback privé pour vous.",
     color: "from-fuchsia-500 to-pink-500",
   },
 ];
@@ -59,26 +59,26 @@ const STEPS = [
 const BENEFITS = [
   {
     icon: ShieldCheck,
-    title: "Protegez votre e-reputation",
-    description: "Les mecontents vous ecrivent en prive. Seuls les satisfaits publient sur Google.",
+    title: "Protégez votre e-réputation",
+    description: "Les mécontents vous écrivent en privé. Seuls les satisfaits publient sur Google.",
     gradient: "from-emerald-500/20 to-teal-500/20",
   },
   {
     icon: Rocket,
-    title: "100% automatise",
-    description: "Programmez l'envoi apres chaque prestation. Zéro effort au quotidien.",
+    title: "100% automatisé",
+    description: "Programmez l'envoi après chaque prestation. Zéro effort au quotidien.",
     gradient: "from-indigo-500/20 to-violet-500/20",
   },
   {
     icon: Target,
-    title: "Adapte a votre metier",
-    description: "Messages pre-rediges, vocabulaire metier, delais optimises par profession.",
+    title: "Adapté à votre métier",
+    description: "Messages pré-rédigés, vocabulaire métier, délais optimisés par profession.",
     gradient: "from-amber-500/20 to-orange-500/20",
   },
   {
     icon: BarChart3,
     title: "Tableaux de bord complets",
-    description: "Taux de clic, avis obtenus, evolution — suivez vos resultats en temps reel.",
+    description: "Taux de clic, avis obtenus, évolution — suivez vos résultats en temps réel.",
     gradient: "from-sky-500/20 to-blue-500/20",
   },
   {
@@ -90,7 +90,7 @@ const BENEFITS = [
   {
     icon: Lock,
     title: "Zero engagement",
-    description: "Plan gratuit pour demarrer. Upgradez quand vous voulez. Annulez en un clic.",
+    description: "Plan gratuit pour démarrer. Upgradez quand vous voulez. Annulez en un clic.",
     gradient: "from-slate-500/20 to-gray-500/20",
   },
 ];
@@ -99,15 +99,15 @@ const NICHES = [
   {
     icon: Stethoscope,
     label: "Cabinets dentaires",
-    description: "Envoi automatique 2h apres le rendez-vous",
+    description: "Envoi automatique 2h après le rendez-vous",
     stat: "+340%",
     statLabel: "d'avis en plus",
     gradient: "from-sky-500 to-indigo-500",
   },
   {
     icon: Bone,
-    label: "Osteopathes",
-    description: "Envoi automatique 3h apres la seance",
+    label: "Ostéopathes",
+    description: "Envoi automatique 3h après la séance",
     stat: "+280%",
     statLabel: "d'avis en plus",
     gradient: "from-violet-500 to-purple-500",
@@ -115,7 +115,7 @@ const NICHES = [
   {
     icon: Wrench,
     label: "Garages auto",
-    description: "Envoi automatique 24h apres l'intervention",
+    description: "Envoi automatique 24h après l'intervention",
     stat: "+250%",
     statLabel: "d'avis en plus",
     gradient: "from-amber-500 to-orange-500",
@@ -126,19 +126,19 @@ const TESTIMONIALS = [
   {
     name: "Dr. Martin L.",
     role: "Chirurgien-dentiste, Lyon",
-    text: "En 2 mois, on est passe de 12 a 67 avis Google. Les patients adorent la simplicite du processus.",
+    text: "En 2 mois, on est passe de 12 à 67 avis Google. Les patients adorent la simplicite du processus.",
     avatar: "M",
   },
   {
     name: "Sophie R.",
     role: "Osteopathe, Bordeaux",
-    text: "Tout est automatise. Mes patients recoivent un message apres chaque seance sans que j'aie rien a faire.",
+    text: "Tout est automatisé. Mes patients reçoivent un message après chaque séance sans que j'aie rien à faire.",
     avatar: "S",
   },
   {
     name: "Garage Central",
     role: "Garage auto, Nantes",
-    text: "3 a 4 nouveaux avis par semaine. Notre note est passee de 3.8 a 4.6 en trois mois.",
+    text: "3 à 4 nouveaux avis par semaine. Notre note est passee de 3.8 à 4.6 en trois mois.",
     avatar: "G",
   },
 ];
@@ -199,17 +199,17 @@ export default async function HomePage() {
             <span className="gradient-text font-semibold">
               {totalUsers > 10
                 ? `Rejoint par ${totalUsers}+ professionnels`
-                : "Nouveau : collecte d'avis Google automatisee"}
+                : "Nouveau : collecte d'avis Google automatisée"}
             </span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 leading-[1.1]">
             Transformez chaque client en{" "}
-            <span className="gradient-text">avis 5 etoiles</span>
+            <span className="gradient-text">avis 5 étoiles</span>
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-            Envoyez automatiquement une demande d'avis apres chaque prestation.
+            Envoyéz automatiquement une demande d'avis après chaque prestation.
             Un clic pour le client, un avis Google pour vous.
           </p>
 
@@ -218,14 +218,14 @@ export default async function HomePage() {
               href="/register"
               className="flex items-center gap-2 gradient-primary text-white px-8 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-all shadow-xl shadow-primary/30"
             >
-              Demarrer gratuitement
+              Démarrer gratuitement
               <ArrowRight className="w-5 h-5" />
             </Link>
             <a
               href="#fonctionnement"
               className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground px-6 py-4 text-lg font-medium transition-colors"
             >
-              Decouvrir
+              Découvrir
               <ChevronDown className="w-5 h-5" />
             </a>
           </div>
@@ -241,7 +241,7 @@ export default async function HomePage() {
             </span>
             <span className="flex items-center gap-1.5">
               <Clock className="w-4 h-4 text-success" />
-              Pret en 2 minutes
+              Prêt en 2 minutes
             </span>
           </div>
         </div>
@@ -310,13 +310,13 @@ export default async function HomePage() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold gradient-text uppercase tracking-wider mb-3">
-              Votre metier
+              Votre métier
             </p>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
-              Configure sur mesure
+              Configuré sur mesure
             </h2>
             <p className="text-muted-foreground text-lg">
-              Messages, vocabulaire et delais adaptes a votre profession.
+              Messages, vocabulaire et délais adaptes à votre profession.
             </p>
           </div>
 
@@ -351,7 +351,7 @@ export default async function HomePage() {
               Avantages
             </p>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
-              Tout pour booster votre reputation
+              Tout pour booster votre réputation
             </h2>
           </div>
 
@@ -386,7 +386,7 @@ export default async function HomePage() {
                 La Satisfaction Gate
               </h2>
               <p className="text-muted-foreground max-w-lg mx-auto">
-                Le filtre intelligent qui protege votre reputation et maximise vos avis positifs.
+                Le filtre intelligent qui protège votre réputation et maximise vos avis positifs.
               </p>
             </div>
 
@@ -428,11 +428,11 @@ export default async function HomePage() {
                   Client insatisfait
                 </h3>
                 <p className="text-sm text-amber-700/80 mb-4">
-                  Feedback prive envoye directement a votre etablissement. Rien sur Google.
+                  Feedback privé envoyé directement à votre établissement. Rien sur Google.
                 </p>
                 <div className="flex items-center gap-2 text-amber-700 text-sm font-semibold">
                   <Lock className="w-4 h-4" />
-                  Confidentiel et prive
+                  Confidentiel et privé
                 </div>
               </div>
             </div>
@@ -445,7 +445,7 @@ export default async function HomePage() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-sm font-semibold gradient-text uppercase tracking-wider mb-3">
-              Temoignages
+              Témoignages
             </p>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">
               Ils ont booste leurs avis
@@ -491,7 +491,7 @@ export default async function HomePage() {
               Simple, transparent, sans surprise
             </h2>
             <p className="text-muted-foreground text-lg">
-              Commencez gratuitement. Evoluez a votre rythme.
+              Commencez gratuitement. Évoluez à votre rythme.
             </p>
           </div>
 
@@ -511,13 +511,13 @@ export default async function HomePage() {
                 >
                   {isHighlighted && (
                     <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 gradient-primary text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg shadow-primary/30">
-                      Recommande
+                      Recommandé
                     </div>
                   )}
 
                   <h3 className="font-bold text-xl mb-1">{plan.name}</h3>
                   <p className="text-sm text-muted-foreground mb-6">
-                    {isUnlimited ? "Envois illimites" : `${plan.quota} envois/mois`}
+                    {isUnlimited ? "Envois illimités" : `${plan.quota} envois/mois`}
                   </p>
 
                   <div className="mb-6">
@@ -535,7 +535,7 @@ export default async function HomePage() {
                     {plan.price === 0 && (
                       <>
                         <PricingFeature text="Email uniquement" />
-                        <PricingFeature text={plan.maxUsers === 0 ? "Etablissements illimites" : `${plan.maxUsers} etablissement`} />
+                        <PricingFeature text={plan.maxUsers === 0 ? "Etablissements illimités" : `${plan.maxUsers} établissement`} />
                         <PricingFeature text="Templates standards" />
                         <PricingFeature text="Tableau de bord" />
                       </>
@@ -543,19 +543,19 @@ export default async function HomePage() {
                     {plan.price > 0 && plan.price < 50 && (
                       <>
                         <PricingFeature text="Email + SMS" highlighted />
-                        <PricingFeature text={plan.maxUsers === 0 ? "Etablissements illimites" : `${plan.maxUsers} etablissement${plan.maxUsers > 1 ? "s" : ""}`} highlighted />
+                        <PricingFeature text={plan.maxUsers === 0 ? "Etablissements illimités" : `${plan.maxUsers} établissement${plan.maxUsers > 1 ? "s" : ""}`} highlighted />
                         <PricingFeature text="Templates personnalisables" />
-                        <PricingFeature text="Statistiques detaillees" />
+                        <PricingFeature text="Statistiques détaillées" />
                         <PricingFeature text="Import CSV" />
                       </>
                     )}
                     {plan.price >= 50 && (
                       <>
                         <PricingFeature text="Email + SMS" highlighted />
-                        <PricingFeature text={plan.maxUsers === 0 ? "Etablissements illimites" : `${plan.maxUsers} etablissement${plan.maxUsers > 1 ? "s" : ""}`} highlighted />
-                        <PricingFeature text="Envois illimites" highlighted />
+                        <PricingFeature text={plan.maxUsers === 0 ? "Etablissements illimités" : `${plan.maxUsers} établissement${plan.maxUsers > 1 ? "s" : ""}`} highlighted />
+                        <PricingFeature text="Envois illimités" highlighted />
                         <PricingFeature text="Templates personnalisables" />
-                        <PricingFeature text="Statistiques avancees" />
+                        <PricingFeature text="Statistiques avancées" />
                         <PricingFeature text="Support prioritaire" />
                       </>
                     )}
@@ -597,16 +597,16 @@ export default async function HomePage() {
             <Rocket className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">
-            Pret a booster vos avis Google ?
+            Prêt à booster vos avis Google ?
           </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-lg mx-auto">
-            Rejoignez les professionnels qui collectent des avis 5 etoiles en automatique.
+            Rejoignez les professionnels qui collectent des avis 5 étoiles en automatique.
           </p>
           <Link
             href="/register"
             className="inline-flex items-center gap-2 gradient-primary text-white px-10 py-4 rounded-xl text-lg font-semibold hover:opacity-90 transition-all shadow-xl shadow-primary/30"
           >
-            Demarrer maintenant — c'est gratuit
+            Démarrer maintenant — c'est gratuit
             <ArrowRight className="w-5 h-5" />
           </Link>
           <p className="text-sm text-muted-foreground mt-4">

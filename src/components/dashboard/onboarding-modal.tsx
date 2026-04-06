@@ -16,13 +16,13 @@ export function OnboardingModal({ defaultNiche }: { defaultNiche: string }) {
     <div className="max-w-md mx-auto mt-12">
       <h1 className="text-2xl font-bold mb-2">Bienvenue sur AvisBoost !</h1>
       <p className="text-muted-foreground mb-6">
-        Configurez votre etablissement en 30 secondes.
+        Configurez votre établissement en 30 secondes.
       </p>
 
       <form action={completeOnboarding} className="space-y-5">
         <div>
           <label className="block text-sm font-medium mb-1">
-            Nom de votre etablissement
+            Nom de votre établissement
           </label>
           <input
             name="businessName"
@@ -34,7 +34,7 @@ export function OnboardingModal({ defaultNiche }: { defaultNiche: string }) {
 
         <div>
           <label className="block text-sm font-medium mb-2">
-            Votre metier
+            Votre métier
           </label>
           <div className="grid grid-cols-3 gap-2">
             {NICHES.map((niche) => (
@@ -59,7 +59,7 @@ export function OnboardingModal({ defaultNiche }: { defaultNiche: string }) {
 
         <div>
           <label className="block text-sm font-medium mb-1">
-            Telephone de l'etablissement (pour les SMS)
+            Telephone de l'établissement (pour les SMS)
           </label>
           <input
             name="phone"
@@ -73,7 +73,7 @@ export function OnboardingModal({ defaultNiche }: { defaultNiche: string }) {
           type="submit"
           className="w-full bg-primary text-primary-foreground py-2 rounded-lg font-medium hover:opacity-90"
         >
-          Commencer a collecter des avis
+          Commencer à collecter des avis
         </button>
       </form>
     </div>

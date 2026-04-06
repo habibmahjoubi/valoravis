@@ -54,7 +54,7 @@ export function SatisfactionGate({
         </div>
         <h1 className="text-xl font-bold mb-2">Merci {clientName} !</h1>
         <p className="text-muted-foreground text-sm">
-          Votre retour est precieux pour {businessName}.
+          Votre retour est précieux pour {businessName}.
         </p>
       </div>
     );
@@ -77,10 +77,10 @@ export function SatisfactionGate({
             ))}
           </div>
           <h2 className="text-lg font-bold">
-            Que pouvons-nous ameliorer ?
+            Que pouvons-nous améliorer ?
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
-            Votre retour est confidentiel et sera envoye directement a{" "}
+            Votre retour est confidentiel et sera envoyé directement a{" "}
             {businessName}.
           </p>
         </div>
@@ -93,7 +93,7 @@ export function SatisfactionGate({
             rows={4}
             autoFocus
             className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-            placeholder="Dites-nous ce qui pourrait etre ameliore..."
+            placeholder="Dites-nous ce qui pourrait etre amélioré..."
           />
           <button
             type="submit"
@@ -111,7 +111,7 @@ export function SatisfactionGate({
     <div className="max-w-sm w-full text-center bg-card rounded-2xl p-8 shadow-lg border border-border">
       <h1 className="text-lg font-bold mb-1">Bonjour {clientName} !</h1>
       <p className="text-sm text-muted-foreground mb-6">
-        Comment evaluez-vous votre experience chez{" "}
+        Comment évaluez-vous votre expérience chez{" "}
         <strong>{businessName}</strong> ?
       </p>
 
@@ -124,7 +124,7 @@ export function SatisfactionGate({
             onClick={() => handleRate(star)}
             disabled={submitting}
             className="transition-transform hover:scale-110 disabled:opacity-50"
-            aria-label={`${star} etoile${star > 1 ? "s" : ""}`}
+            aria-label={`${star} étoile${star > 1 ? "s" : ""}`}
           >
             <Star
               className={`w-10 h-10 ${
@@ -143,7 +143,7 @@ export function SatisfactionGate({
         </p>
       ) : (
         <p className="text-xs text-muted-foreground">
-          Cliquez sur une etoile pour evaluer
+          Cliquez sur une étoile pour evaluer
         </p>
       )}
     </div>

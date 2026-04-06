@@ -34,16 +34,16 @@ export default function ForgotPasswordPage() {
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
           </div>
-          <h1 className="text-2xl font-bold mb-2">Email envoye</h1>
+          <h1 className="text-2xl font-bold mb-2">Email envoyé</h1>
           <p className="text-muted-foreground text-sm mb-6">
             Si un compte existe avec cette adresse, vous recevrez un email avec
-            un lien pour reinitialiser votre mot de passe.
+            un lien pour réinitialiser votre mot de passe.
           </p>
           <Link
             href="/login"
             className="text-primary text-sm font-medium hover:underline"
           >
-            Retour a la connexion
+            Retour à la connexion
           </Link>
         </div>
       </div>
@@ -57,9 +57,9 @@ export default function ForgotPasswordPage() {
           <Link href="/" className="text-2xl font-bold text-primary">
             AvisBoost
           </Link>
-          <h1 className="text-xl font-semibold mt-4">Mot de passe oublie</h1>
+          <h1 className="text-xl font-semibold mt-4">Mot de passe oublié</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Entrez votre email pour recevoir un lien de reinitialisation
+            Entrez votre email pour recevoir un lien de réinitialisation
           </p>
         </div>
 
@@ -95,7 +95,7 @@ export default function ForgotPasswordPage() {
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           <Link href="/login" className="text-primary font-medium">
-            Retour a la connexion
+            Retour à la connexion
           </Link>
         </p>
       </div>

@@ -37,7 +37,7 @@ export default async function ReviewPage({
           </div>
           <h1 className="text-xl font-bold mb-2">Merci !</h1>
           <p className="text-muted-foreground mb-4">
-            Votre retour a bien ete enregistre.
+            Votre retour à bien ete enregistré.
           </p>
           {googleUrl && request.rating >= 4 && (
             <a
@@ -62,7 +62,7 @@ export default async function ReviewPage({
     <div className="min-h-screen flex items-center justify-center px-4 bg-muted">
       <SatisfactionGate
         token={token}
-        businessName={request.user.businessName || "notre etablissement"}
+        businessName={request.user.businessName || "notre établissement"}
         clientName={request.client.name}
         googlePlaceUrl={googleReviewUrl}
       />

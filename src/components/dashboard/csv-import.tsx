@@ -80,7 +80,7 @@ export function CsvImport() {
                 onChange={(e) => setSkipHeader(e.target.checked)}
               />
               <label htmlFor="skipHeader" className="text-sm">
-                La premiere ligne est un en-tete
+                La première ligne est un en-tête
               </label>
             </div>
 
@@ -126,14 +126,14 @@ export function CsvImport() {
             <p className="text-sm text-muted-foreground mb-4">
               {rawData.split("\n").filter((l) => l.trim()).length -
                 (skipHeader ? 1 : 0)}{" "}
-              lignes a importer
+              lignes à importer
             </p>
           </>
         )}
 
         {result && (
           <div className="bg-success/10 text-success border border-success/20 rounded-lg p-3 mb-4 text-sm">
-            {result.imported} importes, {result.skipped} ignores
+            {result.imported} importés, {result.skipped} ignorés
           </div>
         )}
 

@@ -43,7 +43,7 @@ export default async function SettingsPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Parametres</h1>
+      <h1 className="text-2xl font-bold">Paramètres</h1>
 
       {/* Business settings */}
       <form
@@ -53,7 +53,7 @@ export default async function SettingsPage() {
         <h2 className="font-semibold">Etablissement</h2>
         <div>
           <label className="block text-sm font-medium mb-1">
-            Nom de l'etablissement
+            Nom de l'établissement
           </label>
           <input
             name="businessName"
@@ -82,7 +82,7 @@ export default async function SettingsPage() {
 
         <div>
           <label className="block text-sm font-medium mb-1">
-            Telephone de l'etablissement
+            Telephone de l'établissement
           </label>
           <input
             name="phone"

@@ -27,7 +27,7 @@ export function SendReviewButton({
       return;
     }
 
-    setSuccess("Envoye !");
+    setSuccess("Envoyé !");
     setTimeout(() => setSuccess(""), 3000);
   }
 

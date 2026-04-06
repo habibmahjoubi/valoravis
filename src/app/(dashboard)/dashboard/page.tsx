@@ -75,7 +75,7 @@ export default async function DashboardPage({
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold">
-            {nicheConfig.icon} {user.businessName || "Mon etablissement"}
+            {nicheConfig.icon} {user.businessName || "Mon établissement"}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
             {nicheConfig.label} — Plan {user.plan}
@@ -107,12 +107,12 @@ export default async function DashboardPage({
       {/* Recent activity */}
       <div className="bg-card border border-border rounded-xl p-6">
         <h2 className="font-semibold mb-4">
-          Activite recente ({days} derniers jours)
+          Activité récente ({days} derniers jours)
         </h2>
         {recentRequests.length === 0 ? (
           <p className="text-muted-foreground text-sm">
-            Aucune activite sur cette periode. Ajoutez des {vocab.clients} et
-            envoyez votre premiere demande d'avis !
+            Aucune activité sur cette période. Ajoutez des {vocab.clients} et
+            envoyez votre première demande d'avis !
           </p>
         ) : (
           <div className="space-y-3">
@@ -140,10 +140,10 @@ export default async function DashboardPage({
 function StatusBadge({ status }: { status: string }) {
   const config: Record<string, { label: string; className: string }> = {
     PENDING: { label: "En attente", className: "bg-warning/10 text-warning" },
-    SENT: { label: "Envoye", className: "bg-primary/10 text-primary" },
-    CLICKED: { label: "Clique", className: "bg-success/10 text-success" },
+    SENT: { label: "Envoyé", className: "bg-primary/10 text-primary" },
+    CLICKED: { label: "Cliqué", className: "bg-success/10 text-success" },
     REVIEWED: {
-      label: "Avis laisse",
+      label: "Avis laissé",
       className: "bg-success/10 text-success",
     },
     FEEDBACK: {
@@ -151,7 +151,7 @@ function StatusBadge({ status }: { status: string }) {
       className: "bg-muted text-muted-foreground",
     },
     FAILED: {
-      label: "Echoue",
+      label: "Échoué",
       className: "bg-destructive/10 text-destructive",
     },
   };

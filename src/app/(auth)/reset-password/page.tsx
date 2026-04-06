@@ -19,7 +19,7 @@ function ResetForm() {
         <div className="text-4xl mb-4">{"\u{26A0}\uFE0F"}</div>
         <h1 className="text-xl font-bold mb-2">Lien invalide</h1>
         <p className="text-muted-foreground text-sm mb-6">
-          Ce lien de reinitialisation est invalide ou a expire.
+          Ce lien de réinitialisation est invalide ou à expire.
         </p>
         <Link
           href="/forgot-password"
@@ -36,10 +36,10 @@ function ResetForm() {
       <div className="max-w-sm w-full text-center">
         <div className="text-4xl mb-4">{"\u2705"}</div>
         <h1 className="text-xl font-bold mb-2">
-          Mot de passe reinitialise
+          Mot de passe réinitialisé
         </h1>
         <p className="text-muted-foreground text-sm mb-6">
-          Votre mot de passe a ete modifie avec succes.
+          Votre mot de passe à ete modifié avec succès.
         </p>
         <button
           onClick={() => router.push("/login")}
@@ -133,13 +133,13 @@ function ResetForm() {
           disabled={loading}
           className="w-full bg-primary text-primary-foreground py-2 rounded-lg font-medium hover:opacity-90 disabled:opacity-50"
         >
-          {loading ? "Reinitialisation..." : "Reinitialiser mon mot de passe"}
+          {loading ? "Réinitialisation..." : "Réinitialiser mon mot de passe"}
         </button>
       </form>
 
       <p className="text-center text-sm text-muted-foreground mt-6">
         <Link href="/login" className="text-primary font-medium">
-          Retour a la connexion
+          Retour à la connexion
         </Link>
       </p>
     </div>

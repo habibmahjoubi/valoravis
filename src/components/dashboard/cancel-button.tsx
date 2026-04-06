@@ -9,7 +9,7 @@ export function CancelButton() {
   async function handleCancel() {
     if (
       !confirm(
-        "Etes-vous sur de vouloir annuler votre abonnement ? Il restera actif jusqu'a la fin de la periode en cours."
+        "Etes-vous sur de vouloir annuler votre abonnement ? Il restera actif jusqu'a la fin de la période en cours."
       )
     )
       return;
@@ -19,7 +19,7 @@ export function CancelButton() {
     if (res.ok) {
       setDone(true);
     } else {
-      alert("Erreur lors de l'annulation. Veuillez reessayer.");
+      alert("Erreur lors de l'annulation. Veuillez réessayer.");
     }
     setLoading(false);
   }
@@ -27,7 +27,7 @@ export function CancelButton() {
   if (done) {
     return (
       <p className="text-sm text-muted-foreground">
-        Votre abonnement sera annule a la fin de la periode en cours.
+        Votre abonnement sera annulé à la fin de la période en cours.
       </p>
     );
   }

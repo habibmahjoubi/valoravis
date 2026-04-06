@@ -55,7 +55,7 @@ export default async function DashboardLayout({
       icon: Users,
     },
     { href: "/dashboard/campaigns", label: "Campagnes", icon: Send },
-    { href: "/dashboard/settings", label: "Parametres", icon: Settings },
+    { href: "/dashboard/settings", label: "Paramètres", icon: Settings },
     { href: "/dashboard/billing", label: "Abonnement", icon: CreditCard },
   ];
 
