@@ -39,10 +39,11 @@ export default async function BillingPage() {
         customer: user.stripeCustomerId,
         limit: 1,
       });
-      if (subs.data[0]) {
+      const sub = subs.data[0] as Record<string, unknown> | undefined;
+      if (sub) {
         subscription = {
-          cancel_at_period_end: subs.data[0].cancel_at_period_end,
-          current_period_end: subs.data[0].current_period_end,
+          cancel_at_period_end: sub.cancel_at_period_end as boolean,
+          current_period_end: sub.current_period_end as number,
         };
       }
 
