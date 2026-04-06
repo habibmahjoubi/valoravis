@@ -33,6 +33,11 @@ export async function updateUserPlan(formData: FormData) {
   const plan = formData.get("plan") as string;
   const monthlyQuota = Number(formData.get("monthlyQuota"));
 
+  if (!userId || !plan) throw new Error("Donnees manquantes");
+  if (!Number.isInteger(monthlyQuota) || monthlyQuota < 0 || monthlyQuota > 999999) {
+    throw new Error("Quota invalide");
+  }
+
   await prisma.user.update({
     where: { id: userId },
     data: { plan, monthlyQuota },
@@ -66,11 +71,15 @@ export async function updatePlan(formData: FormData) {
   const name = formData.get("name") as string;
   const rawPrice = formData.get("price") as string;
   const price = parseFloat(rawPrice.replace(",", "."));
-  console.log("[ADMIN] updatePlan raw:", rawPrice, "→ parsed:", price);
   const quota = Number(formData.get("quota"));
   const maxUsers = Number(formData.get("maxUsers"));
   const trialDays = Number(formData.get("trialDays"));
   const stripePriceId = (formData.get("stripePriceId") as string) || null;
+
+  if (!isFinite(price) || price < 0 || price > 99999) throw new Error("Prix invalide");
+  if (!Number.isInteger(quota) || quota < 0) throw new Error("Quota invalide");
+  if (!Number.isInteger(maxUsers) || maxUsers < 0) throw new Error("Max utilisateurs invalide");
+  if (!Number.isInteger(trialDays) || trialDays < 0 || trialDays > 365) throw new Error("Jours d'essai invalide");
 
   await prisma.plan.update({
     where: { id: planId },

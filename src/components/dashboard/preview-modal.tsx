@@ -18,10 +18,20 @@ export function PreviewButton({
   const [open, setOpen] = useState(false);
 
   function resolve(text: string) {
-    return text
+    const resolved = text
       .replace(/\{\{clientName\}\}/g, clientName)
       .replace(/\{\{businessName\}\}/g, businessName)
       .replace(/\{\{link\}\}/g, "https://example.com/review/xxx");
+    return resolved;
+  }
+
+  function sanitizeHtml(html: string) {
+    // Strip dangerous tags/attributes, keep safe formatting
+    return html
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+      .replace(/on\w+="[^"]*"/gi, "")
+      .replace(/on\w+='[^']*'/gi, "")
+      .replace(/javascript:/gi, "");
   }
 
   if (!open) {
@@ -63,7 +73,7 @@ export function PreviewButton({
         {channel === "EMAIL" ? (
           <div
             className="border border-border rounded-lg p-4 bg-white text-sm"
-            dangerouslySetInnerHTML={{ __html: resolve(templateBody) }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(resolve(templateBody)) }}
           />
         ) : (
           <div className="border border-border rounded-lg p-4 bg-muted/30">

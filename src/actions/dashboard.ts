@@ -36,9 +36,18 @@ export async function completeOnboarding(formData: FormData) {
   redirect("/dashboard");
 }
 
+// --- Validation helper ---
+function validateLength(value: string | null, max: number, label: string) {
+  if (value && value.length > max) throw new Error(`${label} trop long (max ${max} caracteres)`);
+}
+
 // --- Clients ---
 export async function addClient(formData: FormData) {
   const userId = await getUserId();
+  const name = formData.get("name") as string;
+  validateLength(name, 200, "Nom");
+  validateLength(formData.get("email") as string, 255, "Email");
+  validateLength(formData.get("notes") as string, 1000, "Notes");
 
   await prisma.client.create({
     data: {

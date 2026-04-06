@@ -21,14 +21,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           where: { email: credentials.email as string },
         });
 
-        if (!user || !user.password) return null;
+        // Always run bcrypt to prevent timing-based email enumeration
+        const dummyHash = "$2b$12$000000000000000000000uGWGmhFBiGFCkT9OJkwROmkAR.gzZXa";
+        const hashToCheck = user?.password || dummyHash;
 
         const isValid = await bcrypt.compare(
           credentials.password as string,
-          user.password
+          hashToCheck
         );
 
-        if (!isValid) return null;
+        if (!user || !user.password || !isValid) return null;
 
         return {
           id: user.id,

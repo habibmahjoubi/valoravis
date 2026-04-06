@@ -20,6 +20,12 @@ export async function registerUser(formData: FormData) {
   if (password.length < 8) {
     return { error: "Le mot de passe doit contenir au moins 8 caracteres" };
   }
+  if (!/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
+    return { error: "Le mot de passe doit contenir au moins une majuscule et un chiffre" };
+  }
+  if (email.length > 255 || (name && name.length > 100)) {
+    return { error: "Donnees trop longues" };
+  }
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
