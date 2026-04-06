@@ -95,7 +95,7 @@ export function CsvImport() {
                       Email
                     </th>
                     <th className="text-left px-3 py-2 text-xs font-medium text-muted-foreground">
-                      Telephone
+                      Téléphone
                     </th>
                     <th className="text-left px-3 py-2 text-xs font-medium text-muted-foreground">
                       Notes

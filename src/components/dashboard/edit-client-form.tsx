@@ -60,7 +60,7 @@ export function EditClientForm({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Telephone</label>
+          <label className="block text-sm font-medium mb-1">Téléphone</label>
           <input
             name="phone"
             type="tel"

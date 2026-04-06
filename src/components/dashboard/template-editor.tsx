@@ -99,7 +99,7 @@ export function TemplateEditor({
                   : "text-muted-foreground"
               }`}
             >
-              {body.length}/160 caracteres
+              {body.length}/160 caractères
               {body.length > 160 && " (attention : SMS long)"}
             </p>
           )}

@@ -18,13 +18,13 @@ export async function registerUser(formData: FormData) {
   }
 
   if (password.length < 8) {
-    return { error: "Le mot de passe doit contenir au moins 8 caracteres" };
+    return { error: "Le mot de passe doit contenir au moins 8 caractères" };
   }
   if (!/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
     return { error: "Le mot de passe doit contenir au moins une majuscule et un chiffre" };
   }
   if (email.length > 255 || (name && name.length > 100)) {
-    return { error: "Donnees trop longues" };
+    return { error: "Données trop longues" };
   }
 
   const existing = await prisma.user.findUnique({ where: { email } });
@@ -117,11 +117,11 @@ export async function resetPassword(formData: FormData) {
   const confirmPassword = formData.get("confirmPassword") as string;
 
   if (!token || !password) {
-    return { error: "Donnees manquantes" };
+    return { error: "Données manquantes" };
   }
 
   if (password.length < 8) {
-    return { error: "Le mot de passe doit contenir au moins 8 caracteres" };
+    return { error: "Le mot de passe doit contenir au moins 8 caractères" };
   }
 
   if (password !== confirmPassword) {

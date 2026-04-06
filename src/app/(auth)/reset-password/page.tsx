@@ -106,7 +106,7 @@ function ResetForm() {
             required
             minLength={8}
             className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            placeholder="8 caracteres minimum"
+            placeholder="8 caractères minimum"
           />
         </div>
 
@@ -124,7 +124,7 @@ function ResetForm() {
             required
             minLength={8}
             className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            placeholder="Repetez le mot de passe"
+            placeholder="Répétez le mot de passe"
           />
         </div>
 

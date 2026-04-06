@@ -79,7 +79,7 @@ export default async function BillingPage() {
         </div>
         <p className="text-sm text-muted-foreground mt-1">
           Plan {currentPlan.name} — {user.quotaUsed}/{currentPlan.quota} envois
-          utilises ce mois
+          utilisés ce mois
         </p>
         <div className="mt-3 w-full bg-muted rounded-full h-2">
           <div
@@ -250,7 +250,7 @@ export default async function BillingPage() {
                           : "bg-warning/10 text-warning"
                       }`}
                     >
-                      {inv.status === "paid" ? "Paye" : inv.status || "—"}
+                      {inv.status === "paid" ? "Payé" : inv.status || "—"}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
@@ -261,7 +261,7 @@ export default async function BillingPage() {
                         rel="noopener noreferrer"
                         className="text-xs text-primary hover:underline"
                       >
-                        Telecharger PDF
+                        Télécharger PDF
                       </a>
                     )}
                   </td>

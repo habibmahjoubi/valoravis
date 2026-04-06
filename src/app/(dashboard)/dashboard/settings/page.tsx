@@ -8,7 +8,7 @@ import { GooglePlaceField } from "@/components/dashboard/google-place-field";
 
 const NICHES = [
   { value: "DENTIST", label: "Cabinet dentaire" },
-  { value: "OSTEOPATH", label: "Osteopathie" },
+  { value: "OSTEOPATH", label: "Ostéopathie" },
   { value: "GARAGE", label: "Garage automobile" },
 ];
 
@@ -82,7 +82,7 @@ export default async function SettingsPage() {
 
         <div>
           <label className="block text-sm font-medium mb-1">
-            Telephone de l'établissement
+            Téléphone de l'établissement
           </label>
           <input
             name="phone"

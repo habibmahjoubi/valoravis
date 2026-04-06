@@ -9,7 +9,7 @@ export function CancelButton() {
   async function handleCancel() {
     if (
       !confirm(
-        "Etes-vous sur de vouloir annuler votre abonnement ? Il restera actif jusqu'a la fin de la période en cours."
+        "Êtes-vous sûr de vouloir annuler votre abonnement ? Il restera actif jusqu'à la fin de la période en cours."
       )
     )
       return;

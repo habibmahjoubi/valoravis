@@ -93,7 +93,7 @@ export function SatisfactionGate({
             rows={4}
             autoFocus
             className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-            placeholder="Dites-nous ce qui pourrait etre amélioré..."
+            placeholder="Dites-nous ce qui pourrait être amélioré..."
           />
           <button
             type="submit"

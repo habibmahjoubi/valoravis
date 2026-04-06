@@ -126,19 +126,19 @@ const TESTIMONIALS = [
   {
     name: "Dr. Martin L.",
     role: "Chirurgien-dentiste, Lyon",
-    text: "En 2 mois, on est passe de 12 à 67 avis Google. Les patients adorent la simplicite du processus.",
+    text: "En 2 mois, on est passe de 12 à 67 avis Google. Les patients adorent la simplicité du processus.",
     avatar: "M",
   },
   {
     name: "Sophie R.",
-    role: "Osteopathe, Bordeaux",
+    role: "Ostéopathe, Bordeaux",
     text: "Tout est automatisé. Mes patients reçoivent un message après chaque séance sans que j'aie rien à faire.",
     avatar: "S",
   },
   {
     name: "Garage Central",
     role: "Garage auto, Nantes",
-    text: "3 à 4 nouveaux avis par semaine. Notre note est passee de 3.8 à 4.6 en trois mois.",
+    text: "3 à 4 nouveaux avis par semaine. Notre note est passée de 3.8 à 4.6 en trois mois.",
     avatar: "G",
   },
 ];
@@ -277,10 +277,10 @@ export default async function HomePage() {
               Fonctionnement
             </p>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
-              4 etapes. 2 minutes. C'est tout.
+              4 étapes. 2 minutes. C'est tout.
             </h2>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-              Pas besoin de competences techniques. AvisBoost s'occupe de tout.
+              Pas besoin de compétences techniques. AvisBoost s'occupe de tout.
             </p>
           </div>
 
@@ -292,7 +292,7 @@ export default async function HomePage() {
                     <step.icon className="w-6 h-6 text-white" />
                   </div>
                   <span className="text-xs font-bold text-muted-foreground/50 uppercase tracking-wider">
-                    Etape {i + 1}
+                    Étape {i + 1}
                   </span>
                   <h3 className="font-bold text-lg mt-1 mb-2">{step.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
@@ -316,7 +316,7 @@ export default async function HomePage() {
               Configuré sur mesure
             </h2>
             <p className="text-muted-foreground text-lg">
-              Messages, vocabulaire et délais adaptes à votre profession.
+              Messages, vocabulaire et délais adaptés à votre profession.
             </p>
           </div>
 
@@ -351,7 +351,7 @@ export default async function HomePage() {
               Avantages
             </p>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
-              Tout pour booster votre réputation
+              Tout pour boostér votre réputation
             </h2>
           </div>
 
@@ -404,11 +404,11 @@ export default async function HomePage() {
                   Client satisfait
                 </h3>
                 <p className="text-sm text-emerald-700/80 mb-4">
-                  Redirige automatiquement vers Google pour publier un avis positif visible par tous.
+                  Redirigé automatiquement vers Google pour publier un avis positif visible par tous.
                 </p>
                 <div className="flex items-center gap-2 text-emerald-700 text-sm font-semibold">
                   <ArrowUpRight className="w-4 h-4" />
-                  Publie sur Google Maps
+                  Publié sur Google Maps
                 </div>
               </div>
 
@@ -448,7 +448,7 @@ export default async function HomePage() {
               Témoignages
             </p>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold">
-              Ils ont booste leurs avis
+              Ils ont boosté leurs avis
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -597,7 +597,7 @@ export default async function HomePage() {
             <Rocket className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6">
-            Prêt à booster vos avis Google ?
+            Prêt à boostér vos avis Google ?
           </h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-lg mx-auto">
             Rejoignez les professionnels qui collectent des avis 5 étoiles en automatique.

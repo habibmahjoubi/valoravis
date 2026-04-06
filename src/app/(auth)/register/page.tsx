@@ -180,7 +180,7 @@ function RegisterForm() {
             required
             minLength={8}
             className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            placeholder="8 caracteres minimum"
+            placeholder="8 caractères minimum"
           />
         </div>
 
@@ -204,7 +204,7 @@ function RegisterForm() {
       </form>
 
       <p className="text-center text-sm text-muted-foreground mt-6">
-        Deja un compte ?{" "}
+        Déjà un compte ?{" "}
         <Link href="/login" className="text-primary font-medium">
           Se connecter
         </Link>

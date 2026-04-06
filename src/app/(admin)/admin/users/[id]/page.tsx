@@ -153,7 +153,7 @@ export default async function AdminUserDetailPage({
               <span>{formatDate(user.createdAt)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Telephone</span>
+              <span className="text-muted-foreground">Téléphone</span>
               <span>{user.phone || "—"}</span>
             </div>
             <div className="flex justify-between">

@@ -7,7 +7,7 @@ import type { LucideIcon } from "lucide-react";
 
 const NICHES: { value: string; label: string; Icon: LucideIcon }[] = [
   { value: "DENTIST", label: "Cabinet dentaire", Icon: Stethoscope },
-  { value: "OSTEOPATH", label: "Osteopathie", Icon: Bone },
+  { value: "OSTEOPATH", label: "Ostéopathie", Icon: Bone },
   { value: "GARAGE", label: "Garage auto", Icon: Wrench },
 ];
 
@@ -59,7 +59,7 @@ export function OnboardingModal({ defaultNiche }: { defaultNiche: string }) {
 
         <div>
           <label className="block text-sm font-medium mb-1">
-            Telephone de l'établissement (pour les SMS)
+            Téléphone de l'établissement (pour les SMS)
           </label>
           <input
             name="phone"
