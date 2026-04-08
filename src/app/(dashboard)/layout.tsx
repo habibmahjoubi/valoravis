@@ -99,7 +99,7 @@ export default async function DashboardLayout({
         </div>
       </MobileSidebar>
 
-      <main className="flex-1 p-4 md:p-8 overflow-auto">{children}</main>
+      <main className="flex-1 px-4 pb-4 pt-18 md:p-8 overflow-auto">{children}</main>
     </div>
   );
 }

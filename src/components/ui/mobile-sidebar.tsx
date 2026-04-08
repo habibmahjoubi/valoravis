@@ -64,8 +64,7 @@ export function MobileSidebar({
         {children}
       </aside>
 
-      {/* Mobile spacer */}
-      <div className="md:hidden h-14 flex-shrink-0" />
+      {/* Mobile spacer — rendered outside flex row, handled via main pt */}
     </>
   );
 }
