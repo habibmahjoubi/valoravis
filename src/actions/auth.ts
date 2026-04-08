@@ -6,6 +6,24 @@ import { absoluteUrl } from "@/lib/utils";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 
+// --- Helpers ---
+function validateEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validatePassword(password: string): string | null {
+  if (!password || password.length < 8) {
+    return "Le mot de passe doit contenir au moins 8 caractères";
+  }
+  if (!/[A-Z]/.test(password)) {
+    return "Le mot de passe doit contenir au moins une majuscule";
+  }
+  if (!/[0-9]/.test(password)) {
+    return "Le mot de passe doit contenir au moins un chiffre";
+  }
+  return null;
+}
+
 // --- Inscription ---
 export async function registerUser(formData: FormData) {
   const email = (formData.get("email") as string).trim().toLowerCase();
@@ -17,25 +35,28 @@ export async function registerUser(formData: FormData) {
     return { error: "Email et mot de passe requis" };
   }
 
-  if (password.length < 8) {
-    return { error: "Le mot de passe doit contenir au moins 8 caractères" };
+  if (!validateEmail(email)) {
+    return { error: "Adresse email invalide" };
   }
-  if (!/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
-    return { error: "Le mot de passe doit contenir au moins une majuscule et un chiffre" };
-  }
+
   if (email.length > 255 || (name && name.length > 100)) {
     return { error: "Données trop longues" };
   }
 
+  const passwordError = validatePassword(password);
+  if (passwordError) {
+    return { error: passwordError };
+  }
+
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    return { error: "Un compte existe deja avec cet email" };
+    // Message générique pour ne pas révéler si l'email existe
+    return { error: "Impossible de créer le compte. Vérifiez vos informations ou essayez de vous connecter." };
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
   const selectedPlan = (formData.get("plan") as string) || "free";
 
-  // Charger le plan depuis la base
   const plan = await prisma.plan.findUnique({ where: { key: selectedPlan } });
 
   const isTrialPlan = plan && plan.trialDays > 0 && plan.price > 0;
@@ -43,36 +64,40 @@ export async function registerUser(formData: FormData) {
     ? new Date(Date.now() + plan.trialDays * 24 * 60 * 60 * 1000)
     : null;
 
-  await prisma.user.create({
-    data: {
-      email,
-      password: hashedPassword,
-      name,
-      niche: niche as "DENTIST" | "OSTEOPATH" | "GARAGE",
-      plan: plan ? plan.key : "free",
-      monthlyQuota: plan
-        ? plan.quota === 0
-          ? 999999
-          : plan.quota
-        : 50,
-      trialEndsAt,
-    },
-  });
+  try {
+    await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        name,
+        niche: niche as "DENTIST" | "OSTEOPATH" | "GARAGE",
+        plan: plan ? plan.key : "free",
+        monthlyQuota: plan
+          ? plan.quota === 0
+            ? 999999
+            : plan.quota
+          : 50,
+        trialEndsAt,
+      },
+    });
+  } catch {
+    return { error: "Erreur lors de la création du compte. Réessayez." };
+  }
 
   return { success: true };
 }
 
-// --- Mot de passe oublie ---
+// --- Mot de passe oublié ---
 export async function requestPasswordReset(formData: FormData) {
   const email = (formData.get("email") as string).trim().toLowerCase();
 
-  if (!email) {
-    return { error: "Email requis" };
+  if (!email || !validateEmail(email)) {
+    return { error: "Adresse email invalide" };
   }
 
   const user = await prisma.user.findUnique({ where: { email } });
 
-  // On retourne toujours succes pour ne pas reveler si l'email existe
+  // Toujours retourner succès pour ne pas révéler si l'email existe
   if (!user) {
     return { success: true };
   }
@@ -80,7 +105,7 @@ export async function requestPasswordReset(formData: FormData) {
   // Supprimer les anciens tokens pour cet email
   await prisma.passwordResetToken.deleteMany({ where: { email } });
 
-  // Generer un token securise
+  // Générer un token sécurisé
   const token = crypto.randomBytes(32).toString("hex");
   const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 heure
 
@@ -91,21 +116,27 @@ export async function requestPasswordReset(formData: FormData) {
   // Envoyer l'email
   const resetUrl = absoluteUrl(`/reset-password?token=${token}`);
 
-  await sendEmail({
-    to: email,
-    subject: "Réinitialisation de votre mot de passe - AvisBoost",
-    html: `<div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:24px">
+  try {
+    await sendEmail({
+      to: email,
+      subject: "Réinitialisation de votre mot de passe - AvisBoost",
+      html: `<div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:24px">
   <h2 style="color:#1a1a1a">Réinitialisation du mot de passe</h2>
   <p>Bonjour,</p>
-  <p>Vous avez demande la réinitialisation de votre mot de passe AvisBoost.</p>
+  <p>Vous avez demandé la réinitialisation de votre mot de passe AvisBoost.</p>
   <p>Cliquez sur le bouton ci-dessous pour choisir un nouveau mot de passe :</p>
-  <a href="${resetUrl}" style="display:inline-block;background:#2563eb;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;margin:16px 0">
+  <a href="${resetUrl}" style="display:inline-block;background:#6d28d9;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;margin:16px 0">
     Réinitialiser mon mot de passe
   </a>
   <p style="color:#666;font-size:13px">Ce lien expire dans 1 heure.</p>
   <p style="color:#666;font-size:13px">Si vous n'avez pas fait cette demande, ignorez cet email.</p>
 </div>`,
-  });
+    });
+  } catch {
+    // Si l'email échoue, supprimer le token créé
+    await prisma.passwordResetToken.deleteMany({ where: { email } });
+    return { error: "Erreur lors de l'envoi de l'email. Réessayez dans quelques instants." };
+  }
 
   return { success: true };
 }
@@ -120,37 +151,42 @@ export async function resetPassword(formData: FormData) {
     return { error: "Données manquantes" };
   }
 
-  if (password.length < 8) {
-    return { error: "Le mot de passe doit contenir au moins 8 caractères" };
+  const passwordError = validatePassword(password);
+  if (passwordError) {
+    return { error: passwordError };
   }
 
   if (password !== confirmPassword) {
     return { error: "Les mots de passe ne correspondent pas" };
   }
 
-  // Verifier le token
+  // Vérifier le token
   const resetToken = await prisma.passwordResetToken.findUnique({
     where: { token },
   });
 
   if (!resetToken) {
-    return { error: "Lien invalide ou deja utilise" };
+    return { error: "Lien invalide ou déjà utilisé" };
   }
 
   if (resetToken.expires < new Date()) {
     await prisma.passwordResetToken.delete({ where: { id: resetToken.id } });
-    return { error: "Ce lien a expire. Veuillez refaire une demande." };
+    return { error: "Ce lien a expiré. Veuillez refaire une demande." };
   }
 
-  // Mettre a jour le mot de passe
+  // Mettre à jour le mot de passe
   const hashedPassword = await bcrypt.hash(password, 12);
 
-  await prisma.user.update({
-    where: { email: resetToken.email },
-    data: { password: hashedPassword },
-  });
+  try {
+    await prisma.user.update({
+      where: { email: resetToken.email },
+      data: { password: hashedPassword },
+    });
+  } catch {
+    return { error: "Erreur lors de la réinitialisation. Réessayez." };
+  }
 
-  // Supprimer le token utilise
+  // Supprimer le token utilisé
   await prisma.passwordResetToken.delete({ where: { id: resetToken.id } });
 
   return { success: true };

@@ -180,8 +180,11 @@ function RegisterForm() {
             required
             minLength={8}
             className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            placeholder="8 caractères minimum"
+            placeholder="Min. 8 caractères, 1 majuscule, 1 chiffre"
           />
+          <p className="text-[11px] text-muted-foreground mt-1">
+            Minimum 8 caractères, une majuscule et un chiffre
+          </p>
         </div>
 
         <button
