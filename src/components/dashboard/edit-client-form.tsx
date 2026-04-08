@@ -37,7 +37,7 @@ export function EditClientForm({
           await updateClient(formData);
           setOpen(false);
         }}
-        className="bg-card border border-border rounded-xl p-4 md:p-6 w-full max-w-md space-y-4"
+        className="bg-card border border-border rounded-xl p-4 md:p-6 w-full sm:max-w-md space-y-4"
       >
         <h3 className="font-semibold text-lg">Modifier le contact</h3>
         <input type="hidden" name="clientId" value={clientId} />

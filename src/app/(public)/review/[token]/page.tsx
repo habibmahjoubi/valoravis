@@ -31,7 +31,7 @@ export default async function ReviewPage({
     );
     return (
       <div className="min-h-screen flex items-center justify-center px-4 bg-muted">
-        <div className="max-w-sm w-full text-center">
+        <div className="w-full sm:max-w-sm text-center">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
             <Heart className="w-8 h-8 text-primary fill-primary" />
           </div>

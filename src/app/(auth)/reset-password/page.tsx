@@ -17,7 +17,7 @@ function ResetForm() {
 
   if (!token) {
     return (
-      <div className="max-w-sm w-full text-center">
+      <div className="w-full sm:max-w-sm text-center">
         <div className="w-14 h-14 rounded-full bg-warning/10 flex items-center justify-center mx-auto mb-4">
           <AlertTriangle className="w-7 h-7 text-warning" />
         </div>
@@ -37,7 +37,7 @@ function ResetForm() {
 
   if (success) {
     return (
-      <div className="max-w-sm w-full text-center">
+      <div className="w-full sm:max-w-sm text-center">
         <div className="w-14 h-14 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-7 h-7 text-success" />
         </div>
@@ -78,7 +78,7 @@ function ResetForm() {
   }
 
   return (
-    <div className="max-w-sm w-full">
+    <div className="w-full sm:max-w-sm">
       <div className="text-center mb-8">
         <Link href="/" className="text-2xl font-bold text-primary">
           AvisBoost
@@ -153,7 +153,7 @@ function ResetForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <div className="flex-1 flex items-center justify-center px-4">
+    <div className="flex-1 flex items-center justify-center px-5">
       <Suspense
         fallback={
           <div className="text-center text-muted-foreground">

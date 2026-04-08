@@ -41,7 +41,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="max-w-sm w-full">
+    <div className="w-full sm:max-w-sm">
       <div className="text-center mb-8">
         <Link href="/" className="text-2xl font-bold text-primary">
           AvisBoost
@@ -124,7 +124,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="flex-1 flex items-center justify-center px-4">
+    <div className="flex-1 flex items-center justify-center px-5">
       <Suspense
         fallback={
           <div className="text-center text-muted-foreground">Chargement...</div>

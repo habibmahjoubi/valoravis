@@ -17,7 +17,7 @@ export function OnboardingModal({ defaultNiche }: { defaultNiche: string }) {
   const [selectedNiche, setSelectedNiche] = useState(defaultNiche);
 
   return (
-    <div className="max-w-md mx-auto mt-12">
+    <div className="w-full sm:max-w-md mx-auto mt-8 sm:mt-12 px-1">
       <h1 className="text-2xl font-bold mb-2">Bienvenue sur AvisBoost !</h1>
       <p className="text-muted-foreground mb-6">
         Configurez votre établissement en 30 secondes.
