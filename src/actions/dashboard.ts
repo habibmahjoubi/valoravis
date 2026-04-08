@@ -18,6 +18,7 @@ export async function completeOnboarding(formData: FormData) {
   const userId = await getUserId();
   const businessName = formData.get("businessName") as string;
   const niche = formData.get("niche") as Niche;
+  const customNiche = (formData.get("customNiche") as string) || null;
   const googlePlaceUrl = formData.get("googlePlaceUrl") as string;
   const phone = (formData.get("phone") as string) || null;
 
@@ -26,6 +27,7 @@ export async function completeOnboarding(formData: FormData) {
     data: {
       businessName,
       niche,
+      customNiche: niche === "OTHER" ? customNiche : null,
       googlePlaceUrl,
       phone,
       onboarded: true,
@@ -238,12 +240,14 @@ export async function resetTemplate(formData: FormData) {
 // --- Settings ---
 export async function updateSettings(formData: FormData) {
   const userId = await getUserId();
+  const niche = formData.get("niche") as Niche;
 
   await prisma.user.update({
     where: { id: userId },
     data: {
       businessName: formData.get("businessName") as string,
-      niche: formData.get("niche") as Niche,
+      niche,
+      customNiche: niche === "OTHER" ? (formData.get("customNiche") as string) || null : null,
       googlePlaceUrl: formData.get("googlePlaceUrl") as string,
       phone: (formData.get("phone") as string) || null,
     },

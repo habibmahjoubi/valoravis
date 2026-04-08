@@ -12,7 +12,8 @@
 export const Niche = {
   DENTIST: 'DENTIST',
   OSTEOPATH: 'OSTEOPATH',
-  GARAGE: 'GARAGE'
+  GARAGE: 'GARAGE',
+  OTHER: 'OTHER'
 } as const
 
 export type Niche = (typeof Niche)[keyof typeof Niche]

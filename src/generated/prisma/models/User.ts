@@ -44,6 +44,7 @@ export type UserMinAggregateOutputType = {
   name: string | null
   businessName: string | null
   niche: $Enums.Niche | null
+  customNiche: string | null
   googlePlaceUrl: string | null
   phone: string | null
   stripeCustomerId: string | null
@@ -66,6 +67,7 @@ export type UserMaxAggregateOutputType = {
   name: string | null
   businessName: string | null
   niche: $Enums.Niche | null
+  customNiche: string | null
   googlePlaceUrl: string | null
   phone: string | null
   stripeCustomerId: string | null
@@ -88,6 +90,7 @@ export type UserCountAggregateOutputType = {
   name: number
   businessName: number
   niche: number
+  customNiche: number
   googlePlaceUrl: number
   phone: number
   stripeCustomerId: number
@@ -122,6 +125,7 @@ export type UserMinAggregateInputType = {
   name?: true
   businessName?: true
   niche?: true
+  customNiche?: true
   googlePlaceUrl?: true
   phone?: true
   stripeCustomerId?: true
@@ -144,6 +148,7 @@ export type UserMaxAggregateInputType = {
   name?: true
   businessName?: true
   niche?: true
+  customNiche?: true
   googlePlaceUrl?: true
   phone?: true
   stripeCustomerId?: true
@@ -166,6 +171,7 @@ export type UserCountAggregateInputType = {
   name?: true
   businessName?: true
   niche?: true
+  customNiche?: true
   googlePlaceUrl?: true
   phone?: true
   stripeCustomerId?: true
@@ -275,6 +281,7 @@ export type UserGroupByOutputType = {
   name: string | null
   businessName: string | null
   niche: $Enums.Niche
+  customNiche: string | null
   googlePlaceUrl: string | null
   phone: string | null
   stripeCustomerId: string | null
@@ -320,6 +327,7 @@ export type UserWhereInput = {
   name?: Prisma.StringNullableFilter<"User"> | string | null
   businessName?: Prisma.StringNullableFilter<"User"> | string | null
   niche?: Prisma.EnumNicheFilter<"User"> | $Enums.Niche
+  customNiche?: Prisma.StringNullableFilter<"User"> | string | null
   googlePlaceUrl?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   stripeCustomerId?: Prisma.StringNullableFilter<"User"> | string | null
@@ -347,6 +355,7 @@ export type UserOrderByWithRelationInput = {
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   businessName?: Prisma.SortOrderInput | Prisma.SortOrder
   niche?: Prisma.SortOrder
+  customNiche?: Prisma.SortOrderInput | Prisma.SortOrder
   googlePlaceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -378,6 +387,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringNullableFilter<"User"> | string | null
   businessName?: Prisma.StringNullableFilter<"User"> | string | null
   niche?: Prisma.EnumNicheFilter<"User"> | $Enums.Niche
+  customNiche?: Prisma.StringNullableFilter<"User"> | string | null
   googlePlaceUrl?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   plan?: Prisma.StringFilter<"User"> | string
@@ -404,6 +414,7 @@ export type UserOrderByWithAggregationInput = {
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   businessName?: Prisma.SortOrderInput | Prisma.SortOrder
   niche?: Prisma.SortOrder
+  customNiche?: Prisma.SortOrderInput | Prisma.SortOrder
   googlePlaceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -434,6 +445,7 @@ export type UserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   businessName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   niche?: Prisma.EnumNicheWithAggregatesFilter<"User"> | $Enums.Niche
+  customNiche?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   googlePlaceUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   stripeCustomerId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -456,6 +468,7 @@ export type UserCreateInput = {
   name?: string | null
   businessName?: string | null
   niche?: $Enums.Niche
+  customNiche?: string | null
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
@@ -483,6 +496,7 @@ export type UserUncheckedCreateInput = {
   name?: string | null
   businessName?: string | null
   niche?: $Enums.Niche
+  customNiche?: string | null
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
@@ -510,6 +524,7 @@ export type UserUpdateInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -537,6 +552,7 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -564,6 +580,7 @@ export type UserCreateManyInput = {
   name?: string | null
   businessName?: string | null
   niche?: $Enums.Niche
+  customNiche?: string | null
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
@@ -586,6 +603,7 @@ export type UserUpdateManyMutationInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -608,6 +626,7 @@ export type UserUncheckedUpdateManyInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -630,6 +649,7 @@ export type UserCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   businessName?: Prisma.SortOrder
   niche?: Prisma.SortOrder
+  customNiche?: Prisma.SortOrder
   googlePlaceUrl?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
@@ -657,6 +677,7 @@ export type UserMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   businessName?: Prisma.SortOrder
   niche?: Prisma.SortOrder
+  customNiche?: Prisma.SortOrder
   googlePlaceUrl?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
@@ -679,6 +700,7 @@ export type UserMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   businessName?: Prisma.SortOrder
   niche?: Prisma.SortOrder
+  customNiche?: Prisma.SortOrder
   googlePlaceUrl?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
@@ -813,6 +835,7 @@ export type UserCreateWithoutAccountsInput = {
   name?: string | null
   businessName?: string | null
   niche?: $Enums.Niche
+  customNiche?: string | null
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
@@ -839,6 +862,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   name?: string | null
   businessName?: string | null
   niche?: $Enums.Niche
+  customNiche?: string | null
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
@@ -881,6 +905,7 @@ export type UserUpdateWithoutAccountsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -907,6 +932,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -933,6 +959,7 @@ export type UserCreateWithoutSessionsInput = {
   name?: string | null
   businessName?: string | null
   niche?: $Enums.Niche
+  customNiche?: string | null
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
@@ -959,6 +986,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   name?: string | null
   businessName?: string | null
   niche?: $Enums.Niche
+  customNiche?: string | null
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
@@ -1001,6 +1029,7 @@ export type UserUpdateWithoutSessionsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1027,6 +1056,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1053,6 +1083,7 @@ export type UserCreateWithoutClientsInput = {
   name?: string | null
   businessName?: string | null
   niche?: $Enums.Niche
+  customNiche?: string | null
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
@@ -1079,6 +1110,7 @@ export type UserUncheckedCreateWithoutClientsInput = {
   name?: string | null
   businessName?: string | null
   niche?: $Enums.Niche
+  customNiche?: string | null
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
@@ -1121,6 +1153,7 @@ export type UserUpdateWithoutClientsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1147,6 +1180,7 @@ export type UserUncheckedUpdateWithoutClientsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1173,6 +1207,7 @@ export type UserCreateWithoutReviewRequestsInput = {
   name?: string | null
   businessName?: string | null
   niche?: $Enums.Niche
+  customNiche?: string | null
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
@@ -1199,6 +1234,7 @@ export type UserUncheckedCreateWithoutReviewRequestsInput = {
   name?: string | null
   businessName?: string | null
   niche?: $Enums.Niche
+  customNiche?: string | null
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
@@ -1241,6 +1277,7 @@ export type UserUpdateWithoutReviewRequestsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1267,6 +1304,7 @@ export type UserUncheckedUpdateWithoutReviewRequestsInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1293,6 +1331,7 @@ export type UserCreateWithoutTemplatesInput = {
   name?: string | null
   businessName?: string | null
   niche?: $Enums.Niche
+  customNiche?: string | null
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
@@ -1319,6 +1358,7 @@ export type UserUncheckedCreateWithoutTemplatesInput = {
   name?: string | null
   businessName?: string | null
   niche?: $Enums.Niche
+  customNiche?: string | null
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
@@ -1361,6 +1401,7 @@ export type UserUpdateWithoutTemplatesInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1387,6 +1428,7 @@ export type UserUncheckedUpdateWithoutTemplatesInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   businessName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
+  customNiche?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1480,6 +1522,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   name?: boolean
   businessName?: boolean
   niche?: boolean
+  customNiche?: boolean
   googlePlaceUrl?: boolean
   phone?: boolean
   stripeCustomerId?: boolean
@@ -1508,6 +1551,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   businessName?: boolean
   niche?: boolean
+  customNiche?: boolean
   googlePlaceUrl?: boolean
   phone?: boolean
   stripeCustomerId?: boolean
@@ -1530,6 +1574,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   businessName?: boolean
   niche?: boolean
+  customNiche?: boolean
   googlePlaceUrl?: boolean
   phone?: boolean
   stripeCustomerId?: boolean
@@ -1552,6 +1597,7 @@ export type UserSelectScalar = {
   name?: boolean
   businessName?: boolean
   niche?: boolean
+  customNiche?: boolean
   googlePlaceUrl?: boolean
   phone?: boolean
   stripeCustomerId?: boolean
@@ -1566,7 +1612,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "password" | "name" | "businessName" | "niche" | "googlePlaceUrl" | "phone" | "stripeCustomerId" | "plan" | "monthlyQuota" | "quotaUsed" | "onboarded" | "isAdmin" | "isSuspended" | "trialEndsAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "password" | "name" | "businessName" | "niche" | "customNiche" | "googlePlaceUrl" | "phone" | "stripeCustomerId" | "plan" | "monthlyQuota" | "quotaUsed" | "onboarded" | "isAdmin" | "isSuspended" | "trialEndsAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -1595,6 +1641,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     name: string | null
     businessName: string | null
     niche: $Enums.Niche
+    customNiche: string | null
     googlePlaceUrl: string | null
     phone: string | null
     stripeCustomerId: string | null
@@ -2042,6 +2089,7 @@ export interface UserFieldRefs {
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly businessName: Prisma.FieldRef<"User", 'String'>
   readonly niche: Prisma.FieldRef<"User", 'Niche'>
+  readonly customNiche: Prisma.FieldRef<"User", 'String'>
   readonly googlePlaceUrl: Prisma.FieldRef<"User", 'String'>
   readonly phone: Prisma.FieldRef<"User", 'String'>
   readonly stripeCustomerId: Prisma.FieldRef<"User", 'String'>

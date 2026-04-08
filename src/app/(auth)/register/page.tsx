@@ -4,34 +4,28 @@ import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { registerUser } from "@/actions/auth";
-import { Stethoscope, Bone, Wrench } from "lucide-react";
+import { PasswordInput } from "@/components/ui/password-input";
+import { Stethoscope, Bone, Wrench, Building2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 const NICHES: { value: string; label: string; Icon: LucideIcon }[] = [
   { value: "DENTIST", label: "Cabinet dentaire", Icon: Stethoscope },
-  { value: "OSTEOPATH", label: "Cabinet d'ostéopathie", Icon: Bone },
-  { value: "GARAGE", label: "Garage automobile", Icon: Wrench },
+  { value: "OSTEOPATH", label: "Ostéopathie", Icon: Bone },
+  { value: "GARAGE", label: "Garage auto", Icon: Wrench },
+  { value: "OTHER", label: "Autre métier", Icon: Building2 },
 ];
 
 const PLAN_LABELS: Record<string, { label: string; description: string }> = {
-  free: {
-    label: "Gratuit",
-    description: "50 envois/mois, sans carte bancaire",
-  },
-  pro: {
-    label: "Pro",
-    description: "Essai gratuit 14 jours, puis 29\u20AC/mois",
-  },
-  business: {
-    label: "Business",
-    description: "Essai gratuit 14 jours, puis 59\u20AC/mois",
-  },
+  free: { label: "Gratuit", description: "50 envois/mois, sans carte bancaire" },
+  pro: { label: "Pro", description: "Essai gratuit 14 jours, puis 29\u20AC/mois" },
+  business: { label: "Business", description: "Essai gratuit 14 jours, puis 59\u20AC/mois" },
 };
 
 function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedNiche, setSelectedNiche] = useState("DENTIST");
+  const [customNiche, setCustomNiche] = useState("");
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedPlan = searchParams.get("plan") || "free";
@@ -45,6 +39,9 @@ function RegisterForm() {
     const formData = new FormData(e.currentTarget);
     formData.set("niche", selectedNiche);
     formData.set("plan", selectedPlan);
+    if (selectedNiche === "OTHER") {
+      formData.set("customNiche", customNiche);
+    }
 
     const result = await registerUser(formData);
 
@@ -65,7 +62,6 @@ function RegisterForm() {
         </Link>
         <h1 className="text-xl font-semibold mt-4">Créer votre compte</h1>
 
-        {/* Plan sélectionné */}
         <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-lg">
           <span className="text-sm font-medium text-primary">
             Plan {planInfo.label}
@@ -75,39 +71,11 @@ function RegisterForm() {
           {planInfo.description}
         </p>
 
-        {/* Changer de plan */}
         {selectedPlan !== "free" && (
           <div className="mt-2 flex justify-center gap-2 text-xs">
-            <Link
-              href="/register?plan=free"
-              className={`px-2 py-1 rounded ${
-                selectedPlan === "free"
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Gratuit
-            </Link>
-            <Link
-              href="/register?plan=pro"
-              className={`px-2 py-1 rounded ${
-                selectedPlan === "pro"
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Pro
-            </Link>
-            <Link
-              href="/register?plan=business"
-              className={`px-2 py-1 rounded ${
-                selectedPlan === "business"
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Business
-            </Link>
+            <Link href="/register?plan=free" className={`px-2 py-1 rounded ${selectedPlan === "free" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>Gratuit</Link>
+            <Link href="/register?plan=pro" className={`px-2 py-1 rounded ${selectedPlan === "pro" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>Pro</Link>
+            <Link href="/register?plan=business" className={`px-2 py-1 rounded ${selectedPlan === "business" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>Business</Link>
           </div>
         )}
       </div>
@@ -120,10 +88,8 @@ function RegisterForm() {
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block text-sm font-medium mb-2">
-            Votre métier
-          </label>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <label className="block text-sm font-medium mb-2">Votre métier</label>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {NICHES.map((niche) => (
               <button
                 key={niche.value}
@@ -135,17 +101,26 @@ function RegisterForm() {
                     : "border-border hover:border-primary/50"
                 }`}
               >
-                <niche.Icon className="w-6 h-6 mx-auto mb-1 text-primary" />
+                <niche.Icon className="w-5 h-5 mx-auto mb-1 text-primary" />
                 <div className="text-xs leading-tight">{niche.label}</div>
               </button>
             ))}
           </div>
+
+          {selectedNiche === "OTHER" && (
+            <input
+              type="text"
+              value={customNiche}
+              onChange={(e) => setCustomNiche(e.target.value)}
+              placeholder="Précisez votre métier (ex: restaurant, salon de coiffure...)"
+              required
+              className="w-full mt-2 px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          )}
         </div>
 
         <div>
-          <label htmlFor="name" className="block text-sm font-medium mb-1">
-            Nom complet
-          </label>
+          <label htmlFor="name" className="block text-sm font-medium mb-1">Nom complet</label>
           <input
             id="name"
             name="name"
@@ -156,9 +131,7 @@ function RegisterForm() {
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1">
-            Email professionnel
-          </label>
+          <label htmlFor="email" className="block text-sm font-medium mb-1">Email professionnel</label>
           <input
             id="email"
             name="email"
@@ -170,16 +143,12 @@ function RegisterForm() {
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium mb-1">
-            Mot de passe
-          </label>
-          <input
+          <label htmlFor="password" className="block text-sm font-medium mb-1">Mot de passe</label>
+          <PasswordInput
             id="password"
             name="password"
-            type="password"
             required
             minLength={8}
-            className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="Min. 8 caractères, 1 majuscule, 1 chiffre"
           />
           <p className="text-[11px] text-muted-foreground mt-1">
@@ -208,9 +177,7 @@ function RegisterForm() {
 
       <p className="text-center text-sm text-muted-foreground mt-6">
         Déjà un compte ?{" "}
-        <Link href="/login" className="text-primary font-medium">
-          Se connecter
-        </Link>
+        <Link href="/login" className="text-primary font-medium">Se connecter</Link>
       </p>
     </div>
   );
@@ -219,11 +186,7 @@ function RegisterForm() {
 export default function RegisterPage() {
   return (
     <div className="flex-1 flex items-center justify-center px-4 py-8">
-      <Suspense
-        fallback={
-          <div className="text-center text-muted-foreground">Chargement...</div>
-        }
-      >
+      <Suspense fallback={<div className="text-center text-muted-foreground">Chargement...</div>}>
         <RegisterForm />
       </Suspense>
     </div>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
-import { formatDate } from "@/lib/utils";
+import { formatDate, getNicheLabel } from "@/lib/utils";
 import {
   SuspendButton,
   DeleteUserButton,
@@ -177,7 +177,7 @@ export default async function AdminUsersPage({
                       </p>
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-sm">{user.niche}</td>
+                  <td className="px-4 py-3 text-sm">{getNicheLabel(user.niche, user.customNiche)}</td>
                   <td className="px-4 py-3">
                     <ChangePlanForm
                       userId={user.id}

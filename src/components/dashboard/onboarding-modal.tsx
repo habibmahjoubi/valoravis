@@ -1,17 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import { completeOnboarding } from "@/actions/dashboard";
 import { GooglePlaceField } from "./google-place-field";
-import { Stethoscope, Bone, Wrench } from "lucide-react";
+import { Stethoscope, Bone, Wrench, Building2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 const NICHES: { value: string; label: string; Icon: LucideIcon }[] = [
   { value: "DENTIST", label: "Cabinet dentaire", Icon: Stethoscope },
   { value: "OSTEOPATH", label: "Ostéopathie", Icon: Bone },
   { value: "GARAGE", label: "Garage auto", Icon: Wrench },
+  { value: "OTHER", label: "Autre métier", Icon: Building2 },
 ];
 
 export function OnboardingModal({ defaultNiche }: { defaultNiche: string }) {
+  const [selectedNiche, setSelectedNiche] = useState(defaultNiche);
+
   return (
     <div className="max-w-md mx-auto mt-12">
       <h1 className="text-2xl font-bold mb-2">Bienvenue sur AvisBoost !</h1>
@@ -36,23 +40,34 @@ export function OnboardingModal({ defaultNiche }: { defaultNiche: string }) {
           <label className="block text-sm font-medium mb-2">
             Votre métier
           </label>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {NICHES.map((niche) => (
               <label key={niche.value} className="cursor-pointer">
                 <input
                   type="radio"
                   name="niche"
                   value={niche.value}
-                  defaultChecked={niche.value === defaultNiche}
+                  checked={selectedNiche === niche.value}
+                  onChange={() => setSelectedNiche(niche.value)}
                   className="peer sr-only"
                 />
                 <div className="p-3 rounded-lg border border-border text-center text-sm peer-checked:border-primary peer-checked:ring-2 peer-checked:ring-primary hover:border-primary/50 transition-colors">
-                  <niche.Icon className="w-6 h-6 mx-auto mb-1 text-primary" />
+                  <niche.Icon className="w-5 h-5 mx-auto mb-1 text-primary" />
                   <div className="text-xs">{niche.label}</div>
                 </div>
               </label>
             ))}
           </div>
+
+          {selectedNiche === "OTHER" && (
+            <input
+              name="customNiche"
+              type="text"
+              required
+              placeholder="Précisez votre métier (ex: restaurant, coiffeur...)"
+              className="w-full mt-2 px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          )}
         </div>
 
         <GooglePlaceField defaultValue="" />

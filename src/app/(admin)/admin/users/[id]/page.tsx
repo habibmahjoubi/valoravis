@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { formatDate, formatPrice } from "@/lib/utils";
+import { formatDate, formatPrice, getNicheLabel } from "@/lib/utils";
 import {
   SuspendButton,
   DeleteUserButton,
@@ -76,7 +76,7 @@ export default async function AdminUserDetailPage({
           <p className="text-muted-foreground text-sm mt-1">{user.email}</p>
           <div className="flex items-center gap-2 mt-2">
             <span className="px-2 py-0.5 bg-muted rounded text-xs font-medium">
-              {user.niche}
+              {getNicheLabel(user.niche, user.customNiche)}
             </span>
             <ChangePlanForm
               userId={user.id}

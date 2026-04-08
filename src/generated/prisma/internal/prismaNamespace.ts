@@ -1125,6 +1125,7 @@ export const UserScalarFieldEnum = {
   name: 'name',
   businessName: 'businessName',
   niche: 'niche',
+  customNiche: 'customNiche',
   googlePlaceUrl: 'googlePlaceUrl',
   phone: 'phone',
   stripeCustomerId: 'stripeCustomerId',

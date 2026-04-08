@@ -10,6 +10,7 @@ const NICHES = [
   { value: "DENTIST", label: "Cabinet dentaire" },
   { value: "OSTEOPATH", label: "Ostéopathie" },
   { value: "GARAGE", label: "Garage automobile" },
+  { value: "OTHER", label: "Autre métier" },
 ];
 
 export default async function SettingsPage() {

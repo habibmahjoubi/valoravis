@@ -30,6 +30,7 @@ export async function registerUser(formData: FormData) {
   const password = formData.get("password") as string;
   const name = (formData.get("name") as string) || null;
   const niche = (formData.get("niche") as string) || "DENTIST";
+  const customNiche = (formData.get("customNiche") as string) || null;
 
   if (!email || !password) {
     return { error: "Email et mot de passe requis" };
@@ -69,7 +70,8 @@ export async function registerUser(formData: FormData) {
         email,
         password: hashedPassword,
         name,
-        niche: niche as "DENTIST" | "OSTEOPATH" | "GARAGE",
+        niche: niche as "DENTIST" | "OSTEOPATH" | "GARAGE" | "OTHER",
+      customNiche: niche === "OTHER" ? customNiche : null,
         plan: plan ? plan.key : "free",
         monthlyQuota: plan
           ? plan.quota === 0

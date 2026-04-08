@@ -82,4 +82,31 @@ export const NICHE_CONFIGS: NicheConfigs = {
       },
     },
   },
+  OTHER: {
+    label: "Autre métier",
+    icon: "\u{1F3E2}",
+    defaultDelay: 4,
+    vocabulary: {
+      client: "client",
+      clients: "clients",
+      establishment: "établissement",
+      visit: "visite",
+    },
+    templates: {
+      SMS: {
+        body: "Bonjour {{clientName}}, merci pour votre visite chez {{businessName}}. Votre avis compte beaucoup : {{link}}",
+      },
+      EMAIL: {
+        subject: "Votre avis compte pour {{businessName}}",
+        body: `<div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:24px">
+  <h2 style="color:#1a1a1a">Merci pour votre visite !</h2>
+  <p>Bonjour {{clientName}},</p>
+  <p>Nous espérons que votre expérience chez <strong>{{businessName}}</strong> vous a plu.</p>
+  <p>Votre retour nous aide à nous améliorer. Cela ne prend que 30 secondes :</p>
+  <a href="{{link}}" style="display:inline-block;background:#6d28d9;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;margin:16px 0">Donner mon avis</a>
+  <p style="color:#666;font-size:13px">Merci pour votre confiance.<br>L'équipe {{businessName}}</p>
+</div>`,
+      },
+    },
+  },
 };

@@ -11,6 +11,7 @@ enum Niche {
   DENTIST
   OSTEOPATH
   GARAGE
+  OTHER
 }
 
 enum Channel {
@@ -35,6 +36,7 @@ model User {
   name             String?
   businessName     String?
   niche            Niche    @default(DENTIST)
+  customNiche      String?
   googlePlaceUrl   String?
   phone            String?
   stripeCustomerId String?  @unique

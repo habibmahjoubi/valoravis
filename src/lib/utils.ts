@@ -1,3 +1,15 @@
+const NICHE_LABELS: Record<string, string> = {
+  DENTIST: "Dentiste",
+  OSTEOPATH: "Ostéopathe",
+  GARAGE: "Garage",
+  OTHER: "Autre",
+};
+
+export function getNicheLabel(niche: string, customNiche?: string | null): string {
+  if (niche === "OTHER" && customNiche) return customNiche;
+  return NICHE_LABELS[niche] || niche;
+}
+
 export function absoluteUrl(path: string) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   return `${baseUrl}${path}`;

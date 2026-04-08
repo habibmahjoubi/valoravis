@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { PasswordInput } from "@/components/ui/password-input";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -83,13 +84,12 @@ function LoginForm() {
           <label htmlFor="password" className="block text-sm font-medium mb-1">
             Mot de passe
           </label>
-          <input
+          <PasswordInput
             id="password"
-            type="password"
+            name="password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="Votre mot de passe"
           />
         </div>

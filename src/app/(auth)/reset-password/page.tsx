@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { resetPassword } from "@/actions/auth";
+import { PasswordInput } from "@/components/ui/password-input";
 
 function ResetForm() {
   const [loading, setLoading] = useState(false);
@@ -99,13 +100,11 @@ function ResetForm() {
           >
             Nouveau mot de passe
           </label>
-          <input
+          <PasswordInput
             id="password"
             name="password"
-            type="password"
             required
             minLength={8}
-            className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="Min. 8 caractères, 1 majuscule, 1 chiffre"
           />
           <p className="text-[11px] text-muted-foreground mt-1">
@@ -120,13 +119,11 @@ function ResetForm() {
           >
             Confirmer le mot de passe
           </label>
-          <input
+          <PasswordInput
             id="confirmPassword"
             name="confirmPassword"
-            type="password"
             required
             minLength={8}
-            className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="Répétez le mot de passe"
           />
         </div>

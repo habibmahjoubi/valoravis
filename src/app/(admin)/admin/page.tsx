@@ -14,6 +14,7 @@ import {
   Stethoscope,
   Bone,
   Wrench,
+  Building2,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -31,6 +32,7 @@ export default async function AdminDashboard() {
     dentistUsers,
     osteopathUsers,
     garageUsers,
+    otherUsers,
     totalRequests,
     totalSent,
     totalClicked,
@@ -51,6 +53,7 @@ export default async function AdminDashboard() {
     prisma.user.count({ where: { isAdmin: false, niche: "DENTIST" } }),
     prisma.user.count({ where: { isAdmin: false, niche: "OSTEOPATH" } }),
     prisma.user.count({ where: { isAdmin: false, niche: "GARAGE" } }),
+    prisma.user.count({ where: { isAdmin: false, niche: "OTHER" } }),
     prisma.reviewRequest.count(),
     prisma.reviewRequest.count({ where: { status: "SENT" } }),
     prisma.reviewRequest.count({ where: { status: "CLICKED" } }),
@@ -296,6 +299,7 @@ export default async function AdminDashboard() {
               { label: "Dentistes", value: dentistUsers, Icon: Stethoscope },
               { label: "Ostéopathes", value: osteopathUsers, Icon: Bone },
               { label: "Garages", value: garageUsers, Icon: Wrench },
+              { label: "Autres", value: otherUsers, Icon: Building2 },
             ] as { label: string; value: number; Icon: LucideIcon }[]).map((n) => (
               <div
                 key={n.label}
