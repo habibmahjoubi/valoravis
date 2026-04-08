@@ -27,6 +27,7 @@ export type AggregateTemplate = {
 export type TemplateMinAggregateOutputType = {
   id: string | null
   userId: string | null
+  name: string | null
   niche: $Enums.Niche | null
   channel: $Enums.Channel | null
   subject: string | null
@@ -37,6 +38,7 @@ export type TemplateMinAggregateOutputType = {
 export type TemplateMaxAggregateOutputType = {
   id: string | null
   userId: string | null
+  name: string | null
   niche: $Enums.Niche | null
   channel: $Enums.Channel | null
   subject: string | null
@@ -47,6 +49,7 @@ export type TemplateMaxAggregateOutputType = {
 export type TemplateCountAggregateOutputType = {
   id: number
   userId: number
+  name: number
   niche: number
   channel: number
   subject: number
@@ -59,6 +62,7 @@ export type TemplateCountAggregateOutputType = {
 export type TemplateMinAggregateInputType = {
   id?: true
   userId?: true
+  name?: true
   niche?: true
   channel?: true
   subject?: true
@@ -69,6 +73,7 @@ export type TemplateMinAggregateInputType = {
 export type TemplateMaxAggregateInputType = {
   id?: true
   userId?: true
+  name?: true
   niche?: true
   channel?: true
   subject?: true
@@ -79,6 +84,7 @@ export type TemplateMaxAggregateInputType = {
 export type TemplateCountAggregateInputType = {
   id?: true
   userId?: true
+  name?: true
   niche?: true
   channel?: true
   subject?: true
@@ -162,6 +168,7 @@ export type TemplateGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type TemplateGroupByOutputType = {
   id: string
   userId: string
+  name: string
   niche: $Enums.Niche
   channel: $Enums.Channel
   subject: string | null
@@ -193,6 +200,7 @@ export type TemplateWhereInput = {
   NOT?: Prisma.TemplateWhereInput | Prisma.TemplateWhereInput[]
   id?: Prisma.StringFilter<"Template"> | string
   userId?: Prisma.StringFilter<"Template"> | string
+  name?: Prisma.StringFilter<"Template"> | string
   niche?: Prisma.EnumNicheFilter<"Template"> | $Enums.Niche
   channel?: Prisma.EnumChannelFilter<"Template"> | $Enums.Channel
   subject?: Prisma.StringNullableFilter<"Template"> | string | null
@@ -204,6 +212,7 @@ export type TemplateWhereInput = {
 export type TemplateOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   niche?: Prisma.SortOrder
   channel?: Prisma.SortOrder
   subject?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -214,22 +223,23 @@ export type TemplateOrderByWithRelationInput = {
 
 export type TemplateWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  userId_niche_channel?: Prisma.TemplateUserIdNicheChannelCompoundUniqueInput
   AND?: Prisma.TemplateWhereInput | Prisma.TemplateWhereInput[]
   OR?: Prisma.TemplateWhereInput[]
   NOT?: Prisma.TemplateWhereInput | Prisma.TemplateWhereInput[]
   userId?: Prisma.StringFilter<"Template"> | string
+  name?: Prisma.StringFilter<"Template"> | string
   niche?: Prisma.EnumNicheFilter<"Template"> | $Enums.Niche
   channel?: Prisma.EnumChannelFilter<"Template"> | $Enums.Channel
   subject?: Prisma.StringNullableFilter<"Template"> | string | null
   body?: Prisma.StringFilter<"Template"> | string
   isDefault?: Prisma.BoolFilter<"Template"> | boolean
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "userId_niche_channel">
+}, "id">
 
 export type TemplateOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   niche?: Prisma.SortOrder
   channel?: Prisma.SortOrder
   subject?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -246,6 +256,7 @@ export type TemplateScalarWhereWithAggregatesInput = {
   NOT?: Prisma.TemplateScalarWhereWithAggregatesInput | Prisma.TemplateScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Template"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Template"> | string
+  name?: Prisma.StringWithAggregatesFilter<"Template"> | string
   niche?: Prisma.EnumNicheWithAggregatesFilter<"Template"> | $Enums.Niche
   channel?: Prisma.EnumChannelWithAggregatesFilter<"Template"> | $Enums.Channel
   subject?: Prisma.StringNullableWithAggregatesFilter<"Template"> | string | null
@@ -255,6 +266,7 @@ export type TemplateScalarWhereWithAggregatesInput = {
 
 export type TemplateCreateInput = {
   id?: string
+  name?: string
   niche: $Enums.Niche
   channel: $Enums.Channel
   subject?: string | null
@@ -266,6 +278,7 @@ export type TemplateCreateInput = {
 export type TemplateUncheckedCreateInput = {
   id?: string
   userId: string
+  name?: string
   niche: $Enums.Niche
   channel: $Enums.Channel
   subject?: string | null
@@ -275,6 +288,7 @@ export type TemplateUncheckedCreateInput = {
 
 export type TemplateUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
   channel?: Prisma.EnumChannelFieldUpdateOperationsInput | $Enums.Channel
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -286,6 +300,7 @@ export type TemplateUpdateInput = {
 export type TemplateUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
   channel?: Prisma.EnumChannelFieldUpdateOperationsInput | $Enums.Channel
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -296,6 +311,7 @@ export type TemplateUncheckedUpdateInput = {
 export type TemplateCreateManyInput = {
   id?: string
   userId: string
+  name?: string
   niche: $Enums.Niche
   channel: $Enums.Channel
   subject?: string | null
@@ -305,6 +321,7 @@ export type TemplateCreateManyInput = {
 
 export type TemplateUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
   channel?: Prisma.EnumChannelFieldUpdateOperationsInput | $Enums.Channel
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -315,6 +332,7 @@ export type TemplateUpdateManyMutationInput = {
 export type TemplateUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
   channel?: Prisma.EnumChannelFieldUpdateOperationsInput | $Enums.Channel
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -332,15 +350,10 @@ export type TemplateOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type TemplateUserIdNicheChannelCompoundUniqueInput = {
-  userId: string
-  niche: $Enums.Niche
-  channel: $Enums.Channel
-}
-
 export type TemplateCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   niche?: Prisma.SortOrder
   channel?: Prisma.SortOrder
   subject?: Prisma.SortOrder
@@ -351,6 +364,7 @@ export type TemplateCountOrderByAggregateInput = {
 export type TemplateMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   niche?: Prisma.SortOrder
   channel?: Prisma.SortOrder
   subject?: Prisma.SortOrder
@@ -361,6 +375,7 @@ export type TemplateMaxOrderByAggregateInput = {
 export type TemplateMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   niche?: Prisma.SortOrder
   channel?: Prisma.SortOrder
   subject?: Prisma.SortOrder
@@ -412,6 +427,7 @@ export type TemplateUncheckedUpdateManyWithoutUserNestedInput = {
 
 export type TemplateCreateWithoutUserInput = {
   id?: string
+  name?: string
   niche: $Enums.Niche
   channel: $Enums.Channel
   subject?: string | null
@@ -421,6 +437,7 @@ export type TemplateCreateWithoutUserInput = {
 
 export type TemplateUncheckedCreateWithoutUserInput = {
   id?: string
+  name?: string
   niche: $Enums.Niche
   channel: $Enums.Channel
   subject?: string | null
@@ -460,6 +477,7 @@ export type TemplateScalarWhereInput = {
   NOT?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
   id?: Prisma.StringFilter<"Template"> | string
   userId?: Prisma.StringFilter<"Template"> | string
+  name?: Prisma.StringFilter<"Template"> | string
   niche?: Prisma.EnumNicheFilter<"Template"> | $Enums.Niche
   channel?: Prisma.EnumChannelFilter<"Template"> | $Enums.Channel
   subject?: Prisma.StringNullableFilter<"Template"> | string | null
@@ -469,6 +487,7 @@ export type TemplateScalarWhereInput = {
 
 export type TemplateCreateManyUserInput = {
   id?: string
+  name?: string
   niche: $Enums.Niche
   channel: $Enums.Channel
   subject?: string | null
@@ -478,6 +497,7 @@ export type TemplateCreateManyUserInput = {
 
 export type TemplateUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
   channel?: Prisma.EnumChannelFieldUpdateOperationsInput | $Enums.Channel
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -487,6 +507,7 @@ export type TemplateUpdateWithoutUserInput = {
 
 export type TemplateUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
   channel?: Prisma.EnumChannelFieldUpdateOperationsInput | $Enums.Channel
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -496,6 +517,7 @@ export type TemplateUncheckedUpdateWithoutUserInput = {
 
 export type TemplateUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   niche?: Prisma.EnumNicheFieldUpdateOperationsInput | $Enums.Niche
   channel?: Prisma.EnumChannelFieldUpdateOperationsInput | $Enums.Channel
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -508,6 +530,7 @@ export type TemplateUncheckedUpdateManyWithoutUserInput = {
 export type TemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  name?: boolean
   niche?: boolean
   channel?: boolean
   subject?: boolean
@@ -519,6 +542,7 @@ export type TemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type TemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  name?: boolean
   niche?: boolean
   channel?: boolean
   subject?: boolean
@@ -530,6 +554,7 @@ export type TemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type TemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  name?: boolean
   niche?: boolean
   channel?: boolean
   subject?: boolean
@@ -541,6 +566,7 @@ export type TemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type TemplateSelectScalar = {
   id?: boolean
   userId?: boolean
+  name?: boolean
   niche?: boolean
   channel?: boolean
   subject?: boolean
@@ -548,7 +574,7 @@ export type TemplateSelectScalar = {
   isDefault?: boolean
 }
 
-export type TemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "niche" | "channel" | "subject" | "body" | "isDefault", ExtArgs["result"]["template"]>
+export type TemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "name" | "niche" | "channel" | "subject" | "body" | "isDefault", ExtArgs["result"]["template"]>
 export type TemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -567,6 +593,7 @@ export type $TemplatePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
+    name: string
     niche: $Enums.Niche
     channel: $Enums.Channel
     subject: string | null
@@ -998,6 +1025,7 @@ export interface Prisma__TemplateClient<T, Null = never, ExtArgs extends runtime
 export interface TemplateFieldRefs {
   readonly id: Prisma.FieldRef<"Template", 'String'>
   readonly userId: Prisma.FieldRef<"Template", 'String'>
+  readonly name: Prisma.FieldRef<"Template", 'String'>
   readonly niche: Prisma.FieldRef<"Template", 'Niche'>
   readonly channel: Prisma.FieldRef<"Template", 'Channel'>
   readonly subject: Prisma.FieldRef<"Template", 'String'>

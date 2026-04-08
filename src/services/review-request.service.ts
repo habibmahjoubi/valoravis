@@ -75,6 +75,7 @@ export async function createReviewRequest({
 
     const customTemplate = await prisma.template.findFirst({
       where: { userId, niche: user.niche, channel },
+      orderBy: { isDefault: "desc" },
     });
     const template = customTemplate
       ? { subject: customTemplate.subject || undefined, body: customTemplate.body }
@@ -136,9 +137,10 @@ export async function processPendingRequests() {
       const { user, client } = request;
       const nicheConfig = NICHE_CONFIGS[user.niche];
 
-      // US15-16 - Check for custom template first
+      // US15-16 - Check for custom template first (prefer default)
       const customTemplate = await prisma.template.findFirst({
         where: { userId: user.id, niche: user.niche, channel: request.channel },
+        orderBy: { isDefault: "desc" },
       });
       const template = customTemplate
         ? {

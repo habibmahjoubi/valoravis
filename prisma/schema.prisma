@@ -46,6 +46,7 @@ model User {
   onboarded        Boolean  @default(false)
   isAdmin          Boolean  @default(false)
   isSuspended      Boolean  @default(false)
+  satisfactionThreshold Int  @default(4)
   trialEndsAt      DateTime?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
@@ -158,6 +159,7 @@ model ReviewRequest {
 model Template {
   id        String  @id @default(cuid())
   userId    String
+  name      String  @default("Par défaut")
   niche     Niche
   channel   Channel
   subject   String?
@@ -166,6 +168,5 @@ model Template {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, niche, channel])
   @@index([userId, niche, channel])
 }

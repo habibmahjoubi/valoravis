@@ -6,6 +6,7 @@ import { NICHE_CONFIGS } from "@/config/niches";
 import { TemplateEditor } from "@/components/dashboard/template-editor";
 import { GooglePlaceField } from "@/components/dashboard/google-place-field";
 import { NicheSelector } from "@/components/dashboard/niche-selector";
+import { ThresholdSelector } from "@/components/dashboard/threshold-selector";
 
 export default async function SettingsPage() {
   const session = await auth();
@@ -18,23 +19,21 @@ export default async function SettingsPage() {
   // Load custom templates
   const customTemplates = await prisma.template.findMany({
     where: { userId: user.id, niche: user.niche },
+    orderBy: { isDefault: "desc" },
   });
 
   const nicheConfig = NICHE_CONFIGS[user.niche];
   const defaultTemplates = nicheConfig.templates;
 
-  const emailCustom = customTemplates.find((t) => t.channel === "EMAIL");
-  const smsCustom = customTemplates.find((t) => t.channel === "SMS");
-
-  const templates = {
-    EMAIL: {
-      subject: emailCustom?.subject || defaultTemplates.EMAIL.subject,
-      body: emailCustom?.body || defaultTemplates.EMAIL.body,
-    },
-    SMS: {
-      body: smsCustom?.body || defaultTemplates.SMS.body,
-    },
-  };
+  // Serialize templates for the editor
+  const userTemplates = customTemplates.map((t) => ({
+    id: t.id,
+    name: t.name,
+    channel: t.channel as "EMAIL" | "SMS",
+    subject: t.subject || undefined,
+    body: t.body,
+    isDefault: t.isDefault,
+  }));
 
   return (
     <div className="space-y-8">
@@ -43,7 +42,7 @@ export default async function SettingsPage() {
       {/* Business settings */}
       <form
         action={updateSettings}
-        className="max-w-lg space-y-5 bg-card border border-border rounded-xl p-6"
+        className="max-w-lg space-y-5 bg-card border border-border rounded-xl p-4 sm:p-6"
       >
         <h2 className="font-semibold">Établissement</h2>
         <div>
@@ -85,11 +84,15 @@ export default async function SettingsPage() {
         </button>
       </form>
 
+      {/* Satisfaction Threshold */}
+      <ThresholdSelector defaultValue={user.satisfactionThreshold} />
+
       {/* Template Editor */}
       <TemplateEditor
         niche={user.niche}
-        templates={templates}
+        userTemplates={userTemplates}
         defaultTemplates={defaultTemplates}
+        presets={nicheConfig.presets}
       />
     </div>
   );

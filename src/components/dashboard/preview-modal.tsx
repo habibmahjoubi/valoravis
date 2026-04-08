@@ -74,7 +74,7 @@ export function PreviewButton({
           <iframe
             srcDoc={sanitizeHtml(resolve(templateBody))}
             sandbox=""
-            className="border border-border rounded-lg w-full h-64 bg-white"
+            className="border border-border rounded-lg w-full h-48 sm:h-64 bg-white"
             title="Aperçu email"
           />
         ) : (

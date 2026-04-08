@@ -19,6 +19,7 @@ export async function submitRating(
 
   const request = await prisma.reviewRequest.findUnique({
     where: { token },
+    include: { user: { select: { satisfactionThreshold: true } } },
   });
 
   if (!request) throw new Error("Ce lien de demande d'avis est invalide");
@@ -28,12 +29,14 @@ export async function submitRating(
     throw new Error("Vous avez déjà donné votre avis, merci !");
   }
 
+  const threshold = request.user.satisfactionThreshold;
+
   await prisma.reviewRequest.update({
     where: { id: request.id },
     data: {
       rating,
       feedback: feedback?.slice(0, 2000) || null,
-      status: rating >= 4 ? "REVIEWED" : "FEEDBACK",
+      status: rating >= threshold ? "REVIEWED" : "FEEDBACK",
     },
   });
 }

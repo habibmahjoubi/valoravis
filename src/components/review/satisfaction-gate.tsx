@@ -9,11 +9,13 @@ export function SatisfactionGate({
   businessName,
   clientName,
   googlePlaceUrl,
+  threshold = 4,
 }: {
   token: string;
   businessName: string;
   clientName: string;
   googlePlaceUrl: string;
+  threshold?: number;
 }) {
   const [rating, setRating] = useState(0);
   const [hovering, setHovering] = useState(0);
@@ -25,10 +27,10 @@ export function SatisfactionGate({
     setRating(selectedRating);
     setSubmitting(true);
 
-    if (selectedRating >= 4 && googlePlaceUrl) {
+    if (selectedRating >= threshold && googlePlaceUrl) {
       await submitRating(token, selectedRating, null);
       window.location.href = googlePlaceUrl;
-    } else if (selectedRating >= 4) {
+    } else if (selectedRating >= threshold) {
       await submitRating(token, selectedRating, null);
       setStep("thanks");
       setSubmitting(false);

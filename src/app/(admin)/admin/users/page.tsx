@@ -112,7 +112,7 @@ export default async function AdminUsersPage({
               <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">
                 Utilisateur
               </th>
-              <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">
+              <th className="hidden md:table-cell text-left text-xs font-medium text-muted-foreground px-4 py-3">
                 Métier
               </th>
               <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">
@@ -121,13 +121,13 @@ export default async function AdminUsersPage({
               <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">
                 Quota
               </th>
-              <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">
+              <th className="hidden sm:table-cell text-left text-xs font-medium text-muted-foreground px-4 py-3">
                 Clients
               </th>
-              <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">
+              <th className="hidden sm:table-cell text-left text-xs font-medium text-muted-foreground px-4 py-3">
                 Envois
               </th>
-              <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">
+              <th className="hidden md:table-cell text-left text-xs font-medium text-muted-foreground px-4 py-3">
                 Inscription
               </th>
               <th className="text-right text-xs font-medium text-muted-foreground px-4 py-3">
@@ -177,7 +177,7 @@ export default async function AdminUsersPage({
                       </p>
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-sm">{getNicheLabel(user.niche, user.customNiche)}</td>
+                  <td className="hidden md:table-cell px-4 py-3 text-sm">{getNicheLabel(user.niche, user.customNiche)}</td>
                   <td className="px-4 py-3">
                     <ChangePlanForm
                       userId={user.id}
@@ -196,17 +196,17 @@ export default async function AdminUsersPage({
                       {user.quotaUsed}/{user.monthlyQuota}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-sm text-muted-foreground">
+                  <td className="hidden sm:table-cell px-4 py-3 text-sm text-muted-foreground">
                     {user._count.clients}
                   </td>
-                  <td className="px-4 py-3 text-sm text-muted-foreground">
+                  <td className="hidden sm:table-cell px-4 py-3 text-sm text-muted-foreground">
                     {user._count.reviewRequests}
                   </td>
-                  <td className="px-4 py-3 text-sm text-muted-foreground">
+                  <td className="hidden md:table-cell px-4 py-3 text-sm text-muted-foreground">
                     {formatDate(user.createdAt)}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center justify-end gap-1">
+                    <div className="flex flex-wrap items-center justify-end gap-1">
                       <ResetQuotaButton userId={user.id} />
                       <SuspendButton
                         userId={user.id}

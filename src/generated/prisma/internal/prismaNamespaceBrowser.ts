@@ -96,6 +96,7 @@ export const UserScalarFieldEnum = {
   onboarded: 'onboarded',
   isAdmin: 'isAdmin',
   isSuspended: 'isSuspended',
+  satisfactionThreshold: 'satisfactionThreshold',
   trialEndsAt: 'trialEndsAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -204,6 +205,7 @@ export type ReviewRequestScalarFieldEnum = (typeof ReviewRequestScalarFieldEnum)
 export const TemplateScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  name: 'name',
   niche: 'niche',
   channel: 'channel',
   subject: 'subject',

@@ -64,10 +64,10 @@ export default async function ClientsPage() {
                 <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">
                   Contact
                 </th>
-                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">
+                <th className="hidden sm:table-cell text-left text-xs font-medium text-muted-foreground px-4 py-3">
                   Demandes
                 </th>
-                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">
+                <th className="hidden sm:table-cell text-left text-xs font-medium text-muted-foreground px-4 py-3">
                   Ajouté le
                 </th>
                 <th className="text-right text-xs font-medium text-muted-foreground px-4 py-3">
@@ -93,14 +93,14 @@ export default async function ClientsPage() {
                     {client.email && <p>{client.email}</p>}
                     {client.phone && <p>{client.phone}</p>}
                   </td>
-                  <td className="px-4 py-3 text-sm">
+                  <td className="hidden sm:table-cell px-4 py-3 text-sm">
                     {client._count.reviewRequests}
                   </td>
-                  <td className="px-4 py-3 text-sm text-muted-foreground">
+                  <td className="hidden sm:table-cell px-4 py-3 text-sm text-muted-foreground">
                     {formatDate(client.createdAt)}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center justify-end gap-1">
+                    <div className="flex flex-wrap items-center justify-end gap-1">
                       <PreviewButton
                         clientName={client.name}
                         businessName={user.businessName || "Établissement"}

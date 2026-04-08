@@ -39,7 +39,7 @@ export default async function ReviewPage({
           <p className="text-muted-foreground mb-4">
             Votre retour à bien ete enregistré.
           </p>
-          {googleUrl && request.rating >= 4 && (
+          {googleUrl && request.rating >= request.user.satisfactionThreshold && (
             <a
               href={googleUrl}
               target="_blank"
@@ -66,6 +66,7 @@ export default async function ReviewPage({
         businessName={request.user.businessName || "notre établissement"}
         clientName={request.client.name}
         googlePlaceUrl={googleReviewUrl}
+        threshold={request.user.satisfactionThreshold}
       />
       </div>
     </div>

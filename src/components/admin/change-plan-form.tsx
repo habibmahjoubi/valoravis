@@ -37,7 +37,7 @@ export function ChangePlanForm({
         await updateUserPlan(formData);
         setOpen(false);
       }}
-      className="inline-flex items-center gap-1"
+      className="inline-flex flex-wrap items-center gap-1"
     >
       <input type="hidden" name="userId" value={userId} />
       <select

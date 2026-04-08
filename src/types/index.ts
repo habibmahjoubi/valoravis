@@ -7,6 +7,12 @@ export type NicheVocabulary = {
   visit: string;
 };
 
+export type TemplatePreset = {
+  name: string;
+  subject?: string;
+  body: string;
+};
+
 export type NicheConfig = {
   label: string;
   defaultDelay: number; // hours
@@ -16,6 +22,9 @@ export type NicheConfig = {
       subject?: string;
       body: string;
     };
+  };
+  presets: {
+    [K in Channel]: TemplatePreset[];
   };
 };
 

@@ -213,25 +213,64 @@ export async function saveTemplate(formData: FormData) {
   const userId = await getUserId();
   const niche = formData.get("niche") as Niche;
   const channel = formData.get("channel") as Channel;
+  const name = (formData.get("name") as string) || "Sans nom";
   const subject = (formData.get("subject") as string) || null;
   const body = formData.get("body") as string;
+  const templateId = formData.get("templateId") as string | null;
+  const isDefault = formData.get("isDefault") === "true";
 
-  await prisma.template.upsert({
-    where: { userId_niche_channel: { userId, niche, channel } },
-    create: { userId, niche, channel, subject, body },
-    update: { subject, body },
+  // If setting as default, unset other defaults for same user/niche/channel
+  if (isDefault) {
+    await prisma.template.updateMany({
+      where: { userId, niche, channel, isDefault: true },
+      data: { isDefault: false },
+    });
+  }
+
+  if (templateId) {
+    // Update existing, or create if it was deleted
+    const existing = await prisma.template.findFirst({ where: { id: templateId, userId } });
+    if (existing) {
+      await prisma.template.update({
+        where: { id: templateId, userId },
+        data: { name, subject, body, isDefault },
+      });
+    } else {
+      await prisma.template.create({
+        data: { userId, niche, channel, name, subject, body, isDefault },
+      });
+    }
+  } else {
+    await prisma.template.create({
+      data: { userId, niche, channel, name, subject, body, isDefault },
+    });
+  }
+
+  revalidatePath("/dashboard/settings");
+}
+
+export async function deleteTemplate(formData: FormData) {
+  const userId = await getUserId();
+  const templateId = formData.get("templateId") as string;
+
+  await prisma.template.delete({
+    where: { id: templateId, userId },
   });
 
   revalidatePath("/dashboard/settings");
 }
 
-export async function resetTemplate(formData: FormData) {
+// --- Satisfaction Threshold ---
+export async function updateThreshold(formData: FormData) {
   const userId = await getUserId();
-  const niche = formData.get("niche") as Niche;
-  const channel = formData.get("channel") as Channel;
+  const threshold = Number(formData.get("threshold"));
+  if (!Number.isInteger(threshold) || threshold < 1 || threshold > 5) {
+    throw new Error("Seuil invalide (entre 1 et 5)");
+  }
 
-  await prisma.template.deleteMany({
-    where: { userId, niche, channel },
+  await prisma.user.update({
+    where: { id: userId },
+    data: { satisfactionThreshold: threshold },
   });
 
   revalidatePath("/dashboard/settings");
