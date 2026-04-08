@@ -68,13 +68,13 @@ export default async function BillingPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Abonnement</h1>
+      <h1 className="text-xl sm:text-2xl font-bold mb-6">Abonnement</h1>
 
       {/* Current plan */}
       <div className="bg-card border border-border rounded-xl p-6 mb-8">
         <h2 className="font-semibold mb-2">Plan actuel</h2>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-bold">{formatPrice(currentPlan.price)}</span>
+          <span className="text-2xl sm:text-3xl font-bold">{formatPrice(currentPlan.price)}</span>
           <span className="text-muted-foreground">/mois</span>
         </div>
         <p className="text-sm text-muted-foreground mt-1">
@@ -160,10 +160,10 @@ export default async function BillingPage() {
               <h3 className="font-semibold">{plan.name}</h3>
               <div className="my-3">
                 {plan.price === 0 ? (
-                  <span className="text-2xl font-bold">Gratuit</span>
+                  <span className="text-xl sm:text-2xl font-bold">Gratuit</span>
                 ) : (
                   <>
-                    <span className="text-2xl font-bold">
+                    <span className="text-xl sm:text-2xl font-bold">
                       {formatPrice(plan.price)}
                     </span>
                     <span className="text-muted-foreground text-sm">/mois</span>

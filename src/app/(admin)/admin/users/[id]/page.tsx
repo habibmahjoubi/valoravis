@@ -70,7 +70,7 @@ export default async function AdminUserDetailPage({
 
       <div className="flex flex-col md:flex-row items-start justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-xl sm:text-2xl font-bold">
             {user.businessName || "Non configure"}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">{user.email}</p>

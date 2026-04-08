@@ -35,7 +35,7 @@ export default async function AdminPlansPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold">Offres & Plans</h1>
+        <h1 className="text-xl sm:text-2xl font-bold">Offres & Plans</h1>
         <CreatePlanForm />
       </div>
 
@@ -43,15 +43,15 @@ export default async function AdminPlansPage() {
       <div className="grid md:grid-cols-3 gap-4 mb-8">
         <div className="bg-card border border-border rounded-xl p-6">
           <p className="text-sm text-muted-foreground">MRR (revenu mensuel)</p>
-          <p className="text-3xl font-bold mt-1">{formatPrice(mrr)}</p>
+          <p className="text-2xl sm:text-3xl font-bold mt-1">{formatPrice(mrr)}</p>
         </div>
         <div className="bg-card border border-border rounded-xl p-6">
           <p className="text-sm text-muted-foreground">ARR (revenu annuel)</p>
-          <p className="text-3xl font-bold mt-1">{formatPrice(mrr * 12)}</p>
+          <p className="text-2xl sm:text-3xl font-bold mt-1">{formatPrice(mrr * 12)}</p>
         </div>
         <div className="bg-card border border-border rounded-xl p-6">
           <p className="text-sm text-muted-foreground">Abonnes payants</p>
-          <p className="text-3xl font-bold mt-1">{totalPaying}</p>
+          <p className="text-2xl sm:text-3xl font-bold mt-1">{totalPaying}</p>
         </div>
       </div>
 

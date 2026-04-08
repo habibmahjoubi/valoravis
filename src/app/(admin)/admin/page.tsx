@@ -152,7 +152,7 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-8">Tableau de bord</h1>
+      <h1 className="text-xl sm:text-2xl font-bold mb-8">Tableau de bord</h1>
 
       {/* Alerts */}
       {(expiringTrials.length > 0 || expiredTrials.length > 0) && (
@@ -232,7 +232,7 @@ export default async function AdminDashboard() {
                 <stat.Icon className="w-4 h-4 text-primary" />
               </div>
             </div>
-            <p className="text-2xl font-bold">{stat.value}</p>
+            <p className="text-xl sm:text-2xl font-bold">{stat.value}</p>
           </div>
         ))}
       </div>
@@ -346,11 +346,11 @@ export default async function AdminDashboard() {
           <h2 className="font-semibold mb-4">Statut des comptes</h2>
           <div className="flex gap-4">
             <div className="flex-1 bg-success/10 rounded-lg p-3 text-center">
-              <p className="text-2xl font-bold text-success">{activeUsers}</p>
+              <p className="text-xl sm:text-2xl font-bold text-success">{activeUsers}</p>
               <p className="text-xs text-success">Actifs</p>
             </div>
             <div className="flex-1 bg-destructive/10 rounded-lg p-3 text-center">
-              <p className="text-2xl font-bold text-destructive">
+              <p className="text-xl sm:text-2xl font-bold text-destructive">
                 {suspendedUsers}
               </p>
               <p className="text-xs text-destructive">Suspendus</p>

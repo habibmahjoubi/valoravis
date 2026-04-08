@@ -83,7 +83,7 @@ export default async function DashboardPage({
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
+          <h1 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
             {(() => { const NIcon = NICHE_ICONS[user.niche]; return <NIcon className="w-6 h-6 text-primary" />; })()}
             {user.businessName || "Mon établissement"}
           </h1>
@@ -109,7 +109,7 @@ export default async function DashboardPage({
                 <stat.Icon className="w-4 h-4 text-primary" />
               </div>
             </div>
-            <p className="text-2xl font-bold">{stat.value}</p>
+            <p className="text-xl sm:text-2xl font-bold">{stat.value}</p>
           </div>
         ))}
       </div>

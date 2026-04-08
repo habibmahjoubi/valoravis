@@ -44,7 +44,7 @@ export default async function ReviewPage({
               href={googleUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-primary text-primary-foreground px-6 py-2 rounded-lg text-sm font-medium hover:opacity-90"
+              className="inline-block bg-primary text-primary-foreground px-4 sm:px-6 py-2 rounded-lg text-sm font-medium hover:opacity-90"
             >
               Publier aussi sur Google
             </a>

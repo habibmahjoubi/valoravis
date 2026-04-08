@@ -49,7 +49,7 @@ function ResetForm() {
         </p>
         <button
           onClick={() => router.push("/login")}
-          className="bg-primary text-primary-foreground px-6 py-2 rounded-lg font-medium hover:opacity-90"
+          className="bg-primary text-primary-foreground px-4 sm:px-6 py-2 rounded-lg font-medium hover:opacity-90 text-sm sm:text-base"
         >
           Se connecter
         </button>
@@ -138,7 +138,7 @@ function ResetForm() {
           disabled={loading}
           className="w-full bg-primary text-primary-foreground py-2 rounded-lg font-medium hover:opacity-90 disabled:opacity-50"
         >
-          {loading ? "Réinitialisation..." : "Réinitialiser mon mot de passe"}
+          {loading ? "Réinitialisation..." : "Réinitialiser le mot de passe"}
         </button>
       </form>
 

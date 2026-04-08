@@ -35,7 +35,7 @@ export default async function ClientsPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">{clientLabel}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold">{clientLabel}</h1>
           <p className="text-sm text-muted-foreground">
             {clients.length} {clients.length !== 1 ? vocab.clients : vocab.client}
           </p>

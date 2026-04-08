@@ -159,13 +159,13 @@ function RegisterForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-primary text-primary-foreground py-2 rounded-lg font-medium hover:opacity-90 disabled:opacity-50"
+          className="w-full bg-primary text-primary-foreground py-2 rounded-lg text-sm sm:text-base font-medium hover:opacity-90 disabled:opacity-50"
         >
           {loading
-            ? "Création en cours..."
+            ? "Création..."
             : selectedPlan === "free"
               ? "Commencer gratuitement"
-              : `Démarrer l'essai gratuit ${planInfo.label}`}
+              : `Essai gratuit ${planInfo.label}`}
         </button>
 
         {selectedPlan !== "free" && (

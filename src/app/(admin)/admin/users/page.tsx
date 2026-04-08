@@ -56,7 +56,7 @@ export default async function AdminUsersPage({
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Utilisateurs</h1>
+        <h1 className="text-xl sm:text-2xl font-bold">Utilisateurs</h1>
         <div className="flex items-center gap-3">
           <span className="text-sm text-muted-foreground">
             {users.length} compte{users.length !== 1 ? "s" : ""}

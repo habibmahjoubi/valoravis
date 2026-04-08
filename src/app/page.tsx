@@ -36,15 +36,15 @@ export default async function HomePage() {
             <a href="#metiers" className="link-underline text-muted-foreground hover:text-foreground transition-colors">Pour qui</a>
             <a href="#tarifs" className="link-underline text-muted-foreground hover:text-foreground transition-colors">Tarifs</a>
           </nav>
-          <div className="flex items-center gap-3">
-            <Link href="/login" className="text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors">Se connecter</Link>
-            <Link href="/register" className="text-[13px] font-semibold brand-gradient text-white px-5 py-2 rounded-full btn-glow transition-all">Essai gratuit</Link>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link href="/login" className="text-xs sm:text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">Connexion</Link>
+            <Link href="/register" className="text-xs sm:text-[13px] font-semibold brand-gradient text-white px-3 sm:px-5 py-1.5 sm:py-2 rounded-full btn-glow transition-all whitespace-nowrap">Essai gratuit</Link>
           </div>
         </div>
       </header>
 
       {/* ── HERO ── */}
-      <section className="relative mesh-bg grain py-16 sm:py-24 md:py-28 px-5">
+      <section className="relative mesh-bg grain py-10 sm:py-24 md:py-28 px-5">
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="grid sm:grid-cols-2 gap-8 sm:gap-10 items-center">
             <div>
@@ -53,12 +53,14 @@ export default async function HomePage() {
                 Vos clients vous adorent.<br />
                 <span className="brand-gradient-text">Faites-le savoir.</span>
               </h1>
-              <p className="text-base md:text-[17px] text-muted-foreground mb-8 leading-relaxed max-w-lg">
+              <p className="text-base md:text-[17px] text-muted-foreground mb-5 sm:mb-8 leading-relaxed max-w-lg">
                 Après chaque prestation, AvisBoost envoie automatiquement une demande d'avis. Client satisfait ? Il publie sur Google. Mécontent ? Il vous écrit en privé.
               </p>
               <div className="flex flex-col sm:flex-row items-start gap-3 mb-6">
-                <Link href="/register" className="flex items-center gap-2 brand-gradient text-white px-7 py-3.5 rounded-full text-[15px] font-semibold btn-glow transition-all shadow-xl shadow-primary/20">
-                  Créer mon compte gratuitement <ArrowRight className="w-4 h-4" />
+                <Link href="/register" className="flex items-center gap-2 brand-gradient text-white px-5 sm:px-7 py-3 sm:py-3.5 rounded-full text-sm sm:text-[15px] font-semibold btn-glow transition-all shadow-xl shadow-primary/20">
+                  <span className="sm:hidden">Essai gratuit</span>
+                  <span className="hidden sm:inline">Créer mon compte gratuitement</span>
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
               <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
@@ -77,12 +79,12 @@ export default async function HomePage() {
       </section>
 
       {/* ── LE PROBLÈME / LA SOLUTION ── */}
-      <section className="py-20 px-5 border-b border-border/40">
+      <section className="py-10 sm:py-20 px-5 border-b border-border/40">
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div>
               <p className="text-sm font-semibold text-destructive/70 mb-2">Le constat</p>
-              <h2 className="text-2xl font-bold mb-4">80% de vos clients satisfaits ne laissent jamais d'avis</h2>
+              <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">80% de vos clients satisfaits ne laissent jamais d'avis</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 Ils ont apprécié votre travail, mais personne ne le saura. Pendant ce temps, un seul client mécontent peut ruiner votre note Google.
               </p>
@@ -92,7 +94,7 @@ export default async function HomePage() {
             </div>
             <div>
               <p className="text-sm font-semibold text-primary mb-2">La solution</p>
-              <h2 className="text-2xl font-bold mb-4">AvisBoost transforme le silence en 5 étoiles</h2>
+              <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">AvisBoost transforme le silence en 5 étoiles</h2>
               <div className="space-y-4">
                 {[
                   "Un message envoyé automatiquement après la prestation",
@@ -111,10 +113,10 @@ export default async function HomePage() {
       </section>
 
       {/* ── COMMENT ÇA MARCHE ── */}
-      <section id="comment" className="py-20 px-5">
+      <section id="comment" className="py-10 sm:py-20 px-5">
         <div className="max-w-4xl mx-auto">
           <p className="text-sm font-semibold text-primary mb-2">En pratique</p>
-          <h2 className="text-2xl sm:text-3xl font-bold mb-10">Ce que vit votre client</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-10">Ce que vit votre client</h2>
 
           <div className="relative">
             {/* Timeline line */}
@@ -147,11 +149,11 @@ export default async function HomePage() {
       </section>
 
       {/* ── POUR QUI ── */}
-      <section id="metiers" className="py-20 px-5 mesh-bg grain relative">
+      <section id="metiers" className="py-10 sm:py-20 px-5 mesh-bg grain relative">
         <div className="max-w-5xl mx-auto relative z-10">
           <p className="text-sm font-semibold text-primary mb-2">Pour tous les professionnels</p>
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">Quel que soit votre métier, vos avis comptent</h2>
-          <p className="text-muted-foreground mb-10 max-w-lg">
+          <p className="text-muted-foreground mb-6 sm:mb-10 max-w-lg">
             AvisBoost s'adapte automatiquement à votre activité : vocabulaire, délais d'envoi, modèles de messages.
           </p>
 
@@ -203,7 +205,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── SATISFACTION GATE ── */}
-      <section className="py-20 px-5">
+      <section className="py-10 sm:py-20 px-5">
         <div className="max-w-4xl mx-auto">
           <div className="grid md:grid-cols-5 gap-8 items-center">
             <div className="md:col-span-2">
@@ -244,7 +246,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── AVANTAGES (compact) ── */}
-      <section className="py-20 px-5 border-y border-border/40">
+      <section className="py-10 sm:py-20 px-5 border-y border-border/40">
         <div className="max-w-5xl mx-auto">
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
             {[
@@ -266,10 +268,10 @@ export default async function HomePage() {
       </section>
 
       {/* ── TÉMOIGNAGES ── */}
-      <section className="py-20 px-5 bg-muted/30">
+      <section className="py-10 sm:py-20 px-5 bg-muted/30">
         <div className="max-w-4xl mx-auto">
           <p className="text-sm font-semibold text-primary mb-2">Retours clients</p>
-          <h2 className="text-2xl font-bold mb-8">Ce qu'en disent nos utilisateurs</h2>
+          <h2 className="text-2xl font-bold mb-5 sm:mb-8">Ce qu'en disent nos utilisateurs</h2>
           <div className="grid md:grid-cols-3 gap-5">
             {[
               { name: "Dr. Martin L.", role: "Dentiste · Lyon", quote: "De 12 à 67 avis en 2 mois. Mes patients adorent la simplicité." },
@@ -293,11 +295,11 @@ export default async function HomePage() {
       </section>
 
       {/* ── TARIFS ── */}
-      <section id="tarifs" className="py-20 px-5 mesh-bg grain relative">
+      <section id="tarifs" className="py-10 sm:py-20 px-5 mesh-bg grain relative">
         <div className="max-w-5xl mx-auto relative z-10">
           <p className="text-sm font-semibold text-primary mb-2">Tarifs</p>
           <h2 className="text-2xl sm:text-3xl font-bold mb-2">Commencez gratuitement</h2>
-          <p className="text-muted-foreground mb-10">Évoluez quand vous êtes prêt. Annulation à tout moment.</p>
+          <p className="text-muted-foreground mb-6 sm:mb-10">Évoluez quand vous êtes prêt. Annulation à tout moment.</p>
 
           <div className="grid md:grid-cols-3 gap-5 items-stretch">
             {plans.map((plan, index) => {
@@ -308,7 +310,7 @@ export default async function HomePage() {
                   <h3 className="font-bold text-lg">{plan.name}</h3>
                   <p className="text-xs text-muted-foreground mb-5">{plan.quota === 0 ? "Envois illimités" : `${plan.quota} envois/mois`}</p>
                   <div className="mb-6">
-                    {plan.price === 0 ? <span className="text-3xl font-extrabold">Gratuit</span> : <><span className="text-3xl font-extrabold">{formatPrice(plan.price)}</span><span className="text-muted-foreground text-sm ml-1">/mois</span></>}
+                    {plan.price === 0 ? <span className="text-2xl sm:text-3xl font-extrabold">Gratuit</span> : <><span className="text-2xl sm:text-3xl font-extrabold">{formatPrice(plan.price)}</span><span className="text-muted-foreground text-sm ml-1">/mois</span></>}
                   </div>
                   <ul className="space-y-2.5 flex-1">
                     {plan.key === "free" && <>
@@ -352,26 +354,28 @@ export default async function HomePage() {
       </section>
 
       {/* ── CTA FINAL ── */}
-      <section className="py-20 px-5">
+      <section className="py-10 sm:py-20 px-5">
         <div className="max-w-xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl font-bold mb-3">
             Vos prochains avis 5 étoiles<br />commencent ici
           </h2>
-          <p className="text-muted-foreground mb-8">
+          <p className="text-muted-foreground mb-5 sm:mb-8">
             Créez votre compte, ajoutez vos premiers clients, et regardez les avis arriver.
           </p>
-          <Link href="/register" className="inline-flex items-center gap-2 brand-gradient text-white px-8 py-4 rounded-full text-base font-semibold btn-glow transition-all shadow-xl shadow-primary/20">
-            Créer mon compte — c'est gratuit <ArrowRight className="w-4 h-4" />
+          <Link href="/register" className="inline-flex items-center gap-2 brand-gradient text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full text-sm sm:text-base font-semibold btn-glow transition-all shadow-xl shadow-primary/20">
+            <span className="sm:hidden">Créer mon compte gratuit</span>
+            <span className="hidden sm:inline">Créer mon compte — c'est gratuit</span>
+            <ArrowRight className="w-4 h-4" />
           </Link>
           <p className="text-xs text-muted-foreground mt-3">Aucune carte bancaire requise</p>
         </div>
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="py-10 px-5 border-t border-border/40">
+      <footer className="py-6 sm:py-10 px-5 border-t border-border/40">
         <div className="max-w-6xl mx-auto">
           {/* Badges confiance */}
-          <div className="flex flex-wrap items-center justify-center gap-5 sm:gap-8 mb-8 pb-8 border-b border-border/30">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-8 mb-5 sm:mb-8 pb-5 sm:pb-8 border-b border-border/30">
             {[
               { icon: MapPin, text: "Données hébergées en France" },
               { icon: Shield, text: "Conforme RGPD" },

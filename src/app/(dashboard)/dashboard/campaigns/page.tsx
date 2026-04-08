@@ -63,7 +63,7 @@ export default async function CampaignsPage({
   return (
     <div>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-6">
-        <h1 className="text-2xl font-bold">Campagnes</h1>
+        <h1 className="text-xl sm:text-2xl font-bold">Campagnes</h1>
         <span className="text-sm text-muted-foreground">
           {requests.length} résultat{requests.length !== 1 ? "s" : ""}
         </span>

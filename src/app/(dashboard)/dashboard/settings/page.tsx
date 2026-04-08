@@ -38,7 +38,7 @@ export default async function SettingsPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold">Paramètres</h1>
+      <h1 className="text-xl sm:text-2xl font-bold">Paramètres</h1>
 
       {/* Business settings */}
       <form
@@ -79,7 +79,7 @@ export default async function SettingsPage() {
 
         <button
           type="submit"
-          className="bg-primary text-primary-foreground px-6 py-2 rounded-lg text-sm font-medium hover:opacity-90"
+          className="bg-primary text-primary-foreground px-4 sm:px-6 py-2 rounded-lg text-sm font-medium hover:opacity-90"
         >
           Enregistrer
         </button>
