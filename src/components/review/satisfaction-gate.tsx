@@ -48,7 +48,7 @@ export function SatisfactionGate({
 
   if (step === "thanks") {
     return (
-      <div className="max-w-sm w-full text-center bg-card rounded-2xl p-8 shadow-lg border border-border">
+      <div className="max-w-sm w-full text-center bg-card rounded-2xl p-5 sm:p-8 shadow-lg border border-border">
         <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
           <Heart className="w-7 h-7 text-primary fill-primary" />
         </div>
@@ -62,7 +62,7 @@ export function SatisfactionGate({
 
   if (step === "feedback") {
     return (
-      <div className="max-w-sm w-full bg-card rounded-2xl p-8 shadow-lg border border-border">
+      <div className="max-w-sm w-full bg-card rounded-2xl p-5 sm:p-8 shadow-lg border border-border">
         <div className="text-center mb-4">
           <div className="flex justify-center gap-1 mb-2">
             {[1, 2, 3, 4, 5].map((s) => (
@@ -108,7 +108,7 @@ export function SatisfactionGate({
   }
 
   return (
-    <div className="max-w-sm w-full text-center bg-card rounded-2xl p-8 shadow-lg border border-border">
+    <div className="max-w-sm w-full text-center bg-card rounded-2xl p-5 sm:p-8 shadow-lg border border-border">
       <h1 className="text-lg font-bold mb-1">Bonjour {clientName} !</h1>
       <p className="text-sm text-muted-foreground mb-6">
         Comment évaluez-vous votre expérience chez{" "}

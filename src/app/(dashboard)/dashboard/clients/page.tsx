@@ -51,7 +51,7 @@ export default async function ClientsPage() {
       {/* Client list */}
       <div className="bg-card border border-border rounded-xl overflow-x-auto">
         {clients.length === 0 ? (
-          <div className="p-8 text-center text-muted-foreground">
+          <div className="p-6 text-center text-muted-foreground">
             Aucun {vocab.client}. Ajoutez votre premier {vocab.client} ci-dessus.
           </div>
         ) : (

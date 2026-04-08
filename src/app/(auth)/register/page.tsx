@@ -123,7 +123,7 @@ function RegisterForm() {
           <label className="block text-sm font-medium mb-2">
             Votre métier
           </label>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {NICHES.map((niche) => (
               <button
                 key={niche.value}

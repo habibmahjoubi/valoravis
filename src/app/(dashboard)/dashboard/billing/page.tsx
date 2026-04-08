@@ -203,9 +203,9 @@ export default async function BillingPage() {
 
       {/* Invoice History */}
       <h2 className="font-semibold mb-4">Historique des paiements</h2>
-      <div className="bg-card border border-border rounded-xl overflow-hidden">
+      <div className="bg-card border border-border rounded-xl overflow-x-auto">
         {invoices.length === 0 ? (
-          <div className="p-8 text-center text-muted-foreground">
+          <div className="p-6 text-center text-muted-foreground">
             Aucun paiement enregistré.
           </div>
         ) : (

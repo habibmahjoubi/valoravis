@@ -71,7 +71,7 @@ export default async function CampaignsPage({
 
       <div className="bg-card border border-border rounded-xl overflow-x-auto">
         {requests.length === 0 ? (
-          <div className="p-8 text-center text-muted-foreground">
+          <div className="p-6 text-center text-muted-foreground">
             Aucune campagne correspondant aux filtres.
           </div>
         ) : (

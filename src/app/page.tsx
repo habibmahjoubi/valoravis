@@ -45,7 +45,7 @@ export default async function HomePage() {
       </header>
 
       {/* HERO */}
-      <section className="relative mesh-bg grain py-24 md:py-36 px-5">
+      <section className="relative mesh-bg grain py-16 sm:py-24 md:py-36 px-5">
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <div className="pill mx-auto mb-8 w-fit">
             <Sparkles className="w-3.5 h-3.5" />
