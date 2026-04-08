@@ -9,7 +9,7 @@ import type { Niche, Channel } from "@/generated/prisma/enums";
 
 async function getUserId(): Promise<string> {
   const session = await auth();
-  if (!session?.user?.id) throw new Error("Non authentifie");
+  if (!session?.user?.id) throw new Error("Non authentifié");
   return session.user.id;
 }
 
@@ -38,7 +38,7 @@ export async function completeOnboarding(formData: FormData) {
 
 // --- Validation helper ---
 function validateLength(value: string | null, max: number, label: string) {
-  if (value && value.length > max) throw new Error(`${label} trop long (max ${max} caracteres)`);
+  if (value && value.length > max) throw new Error(`${label} trop long (max ${max} caractères)`);
 }
 
 // --- Clients ---
@@ -185,7 +185,7 @@ export async function startTrial(planKey: string) {
 
   // Verifier que l'utilisateur n'a pas deja eu un essai
   if (user.trialEndsAt) {
-    return { error: "Vous avez deja utilise votre essai gratuit" };
+    return { error: "Vous avez déjà utilisé votre essai gratuit" };
   }
 
   const trialEndsAt = new Date(

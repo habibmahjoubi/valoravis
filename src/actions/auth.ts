@@ -50,8 +50,7 @@ export async function registerUser(formData: FormData) {
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    // Message générique pour ne pas révéler si l'email existe
-    return { error: "Impossible de créer le compte. Vérifiez vos informations ou essayez de vous connecter." };
+    return { error: "Cette adresse email est déjà associée à un compte. Connectez-vous ou utilisez une autre adresse." };
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);

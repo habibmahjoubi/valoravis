@@ -31,7 +31,7 @@ function LoginForm() {
     });
 
     if (result?.error) {
-      setError("Email ou mot de passe incorrect");
+      setError("Email ou mot de passe incorrect. Vérifiez vos identifiants ou créez un compte.");
       setLoading(false);
       return;
     }

@@ -6,11 +6,11 @@ import { revalidatePath } from "next/cache";
 
 async function requireAdmin() {
   const session = await auth();
-  if (!session?.user?.id) throw new Error("Non authentifie");
+  if (!session?.user?.id) throw new Error("Non authentifié");
   const user = await prisma.user.findUniqueOrThrow({
     where: { id: session.user.id },
   });
-  if (!user.isAdmin) throw new Error("Acces refuse");
+  if (!user.isAdmin) throw new Error("Accès refusé");
   return user;
 }
 

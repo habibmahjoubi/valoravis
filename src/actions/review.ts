@@ -9,23 +9,23 @@ export async function submitRating(
 ) {
   // Validate rating
   if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
-    throw new Error("Note invalide");
+    throw new Error("Note invalide (entre 1 et 5)");
   }
 
   // Validate feedback length
   if (feedback && feedback.length > 2000) {
-    throw new Error("Feedback trop long");
+    throw new Error("Votre message est trop long (2000 caractères maximum)");
   }
 
   const request = await prisma.reviewRequest.findUnique({
     where: { token },
   });
 
-  if (!request) throw new Error("Demande introuvable");
+  if (!request) throw new Error("Ce lien de demande d'avis est invalide");
 
   // Prevent re-submission
   if (request.rating !== null) {
-    throw new Error("Avis deja soumis");
+    throw new Error("Vous avez déjà donné votre avis, merci !");
   }
 
   await prisma.reviewRequest.update({
