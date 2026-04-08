@@ -31,13 +31,13 @@ export default async function HomePage() {
             </div>
             <span className="text-lg font-bold tracking-tight">AvisBoost</span>
           </Link>
-          <nav className="hidden md:flex items-center gap-8 text-[13px] font-medium">
+          <nav className="hidden sm:flex items-center gap-6 sm:gap-8 text-[13px] font-medium">
             <a href="#comment" className="link-underline text-muted-foreground hover:text-foreground transition-colors">Comment ça marche</a>
             <a href="#metiers" className="link-underline text-muted-foreground hover:text-foreground transition-colors">Pour qui</a>
             <a href="#tarifs" className="link-underline text-muted-foreground hover:text-foreground transition-colors">Tarifs</a>
           </nav>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:block">Se connecter</Link>
+            <Link href="/login" className="text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors">Se connecter</Link>
             <Link href="/register" className="text-[13px] font-semibold brand-gradient text-white px-5 py-2 rounded-full btn-glow transition-all">Essai gratuit</Link>
           </div>
         </div>
@@ -46,7 +46,7 @@ export default async function HomePage() {
       {/* ── HERO ── */}
       <section className="relative mesh-bg grain py-16 sm:py-24 md:py-28 px-5">
         <div className="max-w-6xl mx-auto relative z-10">
-          <div className="grid md:grid-cols-2 gap-10 items-center">
+          <div className="grid sm:grid-cols-2 gap-8 sm:gap-10 items-center">
             <div>
               <p className="text-sm font-semibold text-primary mb-4 tracking-wide">Pour les professionnels de proximité</p>
               <h1 className="text-[2.2rem] sm:text-5xl md:text-[3.4rem] font-extrabold tracking-tight leading-[1.08] mb-5">
@@ -69,7 +69,7 @@ export default async function HomePage() {
             </div>
 
             {/* Démo téléphone animée */}
-            <div className="hidden md:flex justify-center pb-10">
+            <div className="hidden sm:flex justify-center pb-10">
               <PhoneDemo />
             </div>
           </div>
@@ -79,7 +79,7 @@ export default async function HomePage() {
       {/* ── LE PROBLÈME / LA SOLUTION ── */}
       <section className="py-20 px-5 border-b border-border/40">
         <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div>
               <p className="text-sm font-semibold text-destructive/70 mb-2">Le constat</p>
               <h2 className="text-2xl font-bold mb-4">80% de vos clients satisfaits ne laissent jamais d'avis</h2>
@@ -303,7 +303,7 @@ export default async function HomePage() {
             {plans.map((plan, index) => {
               const isHL = index === highlightedIndex;
               return (
-                <div key={plan.id} className={`rounded-2xl p-7 transition-all relative flex flex-col ${isHL ? "card-elevated border-2 border-primary/30 shadow-xl shadow-primary/8" : "card-elevated"}`}>
+                <div key={plan.id} className={`rounded-2xl p-5 sm:p-7 transition-all relative flex flex-col ${isHL ? "card-elevated border-2 border-primary/30 shadow-xl shadow-primary/8" : "card-elevated"}`}>
                   {isHL && <div className="absolute -top-3 left-1/2 -translate-x-1/2 brand-gradient text-white text-[11px] font-bold px-3.5 py-1 rounded-full tracking-wide">RECOMMANDÉ</div>}
                   <h3 className="font-bold text-lg">{plan.name}</h3>
                   <p className="text-xs text-muted-foreground mb-5">{plan.quota === 0 ? "Envois illimités" : `${plan.quota} envois/mois`}</p>

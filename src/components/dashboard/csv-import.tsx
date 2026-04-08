@@ -62,7 +62,7 @@ export function CsvImport() {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+    <div className="fixed inset-0 bg-black/50 flex items-start sm:items-center justify-center z-50 px-4 pt-16 sm:pt-0">
       <div className="bg-card border border-border rounded-xl p-4 md:p-6 w-full max-w-2xl">
         <h3 className="font-semibold text-lg mb-4">Importer des contacts</h3>
 
