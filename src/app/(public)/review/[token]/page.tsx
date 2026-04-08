@@ -30,8 +30,8 @@ export default async function ReviewPage({
       request.user.googlePlaceUrl || ""
     );
     return (
-      <div className="min-h-screen flex items-start sm:items-center justify-center px-5 pt-12 sm:pt-0 bg-muted">
-        <div className="w-full sm:max-w-sm text-center">
+      <div className="min-h-dvh w-full flex flex-col justify-start sm:justify-center px-4 pt-12 sm:pt-0 pb-8 bg-muted">
+        <div className="w-full sm:max-w-sm sm:mx-auto text-center">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
             <Heart className="w-8 h-8 text-primary fill-primary" />
           </div>
@@ -59,13 +59,15 @@ export default async function ReviewPage({
   );
 
   return (
-    <div className="min-h-screen flex items-start sm:items-center justify-center px-5 pt-12 sm:pt-0 bg-muted">
+    <div className="min-h-dvh w-full flex flex-col justify-start sm:justify-center px-4 pt-12 sm:pt-0 pb-8 bg-muted">
+      <div className="w-full sm:max-w-sm sm:mx-auto">
       <SatisfactionGate
         token={token}
         businessName={request.user.businessName || "notre établissement"}
         clientName={request.client.name}
         googlePlaceUrl={googleReviewUrl}
       />
+      </div>
     </div>
   );
 }
