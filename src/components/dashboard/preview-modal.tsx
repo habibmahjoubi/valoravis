@@ -38,7 +38,7 @@ export function PreviewButton({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="px-2 py-1 text-xs text-muted-foreground hover:bg-muted rounded"
+        className="px-3 py-1.5 text-xs text-muted-foreground hover:bg-muted rounded"
         title="Apercu du message"
       >
         Apercu
@@ -55,7 +55,7 @@ export function PreviewButton({
           </h3>
           <button
             onClick={() => setOpen(false)}
-            className="text-muted-foreground hover:text-foreground text-lg"
+            className="text-muted-foreground hover:text-foreground text-lg p-1"
           >
             x
           </button>

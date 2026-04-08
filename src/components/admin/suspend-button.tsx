@@ -18,7 +18,7 @@ export function SuspendButton({
   return (
     <button
       onClick={handleClick}
-      className={`px-2 py-1 rounded text-xs font-medium ${
+      className={`px-3 py-1.5 rounded text-xs font-medium ${
         isSuspended
           ? "bg-success/10 text-success hover:bg-success/20"
           : "bg-warning/10 text-warning hover:bg-warning/20"
@@ -43,7 +43,7 @@ export function DeleteUserButton({ userId }: { userId: string }) {
   return (
     <button
       onClick={handleClick}
-      className="px-2 py-1 rounded text-xs font-medium bg-destructive/10 text-destructive hover:bg-destructive/20"
+      className="px-3 py-1.5 rounded text-xs font-medium bg-destructive/10 text-destructive hover:bg-destructive/20"
     >
       Supprimer
     </button>
@@ -59,7 +59,7 @@ export function ResetQuotaButton({ userId }: { userId: string }) {
   return (
     <button
       onClick={handleClick}
-      className="px-2 py-1 rounded text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20"
+      className="px-3 py-1.5 rounded text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20"
       title="Réinitialiser le quota"
     >
       Reset quota

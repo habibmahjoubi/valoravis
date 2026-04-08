@@ -10,7 +10,7 @@ export function DeleteClientButton({ clientId }: { clientId: string }) {
           await deleteClient(clientId);
         }
       }}
-      className="px-2 py-1 text-xs text-destructive hover:bg-destructive/10 rounded"
+      className="px-3 py-1.5 text-xs text-destructive hover:bg-destructive/10 rounded"
       title="Supprimer"
     >
       Supprimer

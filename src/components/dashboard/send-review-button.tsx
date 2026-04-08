@@ -41,7 +41,7 @@ export function SendReviewButton({
             type="submit"
             name="channel"
             value="EMAIL"
-            className="px-2 py-1 text-xs bg-primary/10 text-primary rounded hover:bg-primary/20"
+            className="px-3 py-1.5 text-xs bg-primary/10 text-primary rounded hover:bg-primary/20"
             title="Envoyer par email"
           >
             Email
@@ -52,7 +52,7 @@ export function SendReviewButton({
             type="submit"
             name="channel"
             value="SMS"
-            className="px-2 py-1 text-xs bg-success/10 text-success rounded hover:bg-success/20"
+            className="px-3 py-1.5 text-xs bg-success/10 text-success rounded hover:bg-success/20"
             title="Envoyer par SMS"
           >
             SMS

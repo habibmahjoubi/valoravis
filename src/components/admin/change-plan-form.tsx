@@ -24,7 +24,7 @@ export function ChangePlanForm({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="px-2 py-1 rounded text-xs font-medium bg-muted hover:bg-muted/80"
+        className="px-3 py-1.5 rounded text-xs font-medium bg-muted hover:bg-muted/80"
       >
         {currentPlan}
       </button>
@@ -50,7 +50,7 @@ export function ChangePlanForm({
           ) as HTMLInputElement;
           if (plan && quotaInput) quotaInput.value = String(plan.quota);
         }}
-        className="px-1.5 py-0.5 border border-border rounded text-xs bg-card"
+        className="px-2 py-1.5 border border-border rounded text-xs bg-card"
       >
         {PLANS.map((p) => (
           <option key={p.value} value={p.value}>
@@ -65,14 +65,14 @@ export function ChangePlanForm({
       />
       <button
         type="submit"
-        className="px-1.5 py-0.5 rounded text-xs bg-primary text-primary-foreground"
+        className="px-2.5 py-1.5 rounded text-xs bg-primary text-primary-foreground"
       >
         OK
       </button>
       <button
         type="button"
         onClick={() => setOpen(false)}
-        className="px-1.5 py-0.5 rounded text-xs text-muted-foreground hover:text-foreground"
+        className="px-2.5 py-1.5 rounded text-xs text-muted-foreground hover:text-foreground"
       >
         x
       </button>

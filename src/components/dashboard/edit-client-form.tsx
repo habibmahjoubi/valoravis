@@ -22,7 +22,7 @@ export function EditClientForm({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="px-2 py-1 text-xs text-primary hover:bg-primary/10 rounded"
+        className="px-3 py-1.5 text-xs text-primary hover:bg-primary/10 rounded"
         title="Modifier"
       >
         Modifier

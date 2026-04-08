@@ -55,10 +55,12 @@ export function MobileSidebar({
 
       {/* Sidebar */}
       <aside
-        className={`fixed md:relative z-40 w-64 border-r border-border bg-card flex flex-col h-screen md:h-auto transition-transform duration-200 ease-out md:translate-x-0 ${
+        className={`fixed md:relative z-40 w-64 border-r border-border bg-card flex flex-col h-dvh md:h-auto top-0 left-0 transition-transform duration-200 ease-out md:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
+        {/* Spacer for mobile fixed header */}
+        <div className="md:hidden h-14 flex-shrink-0" />
         {children}
       </aside>
 
