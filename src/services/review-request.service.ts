@@ -156,7 +156,7 @@ export async function processPendingRequests() {
       if (request.channel === "EMAIL" && client.email) {
         await sendEmail({
           to: client.email,
-          subject: resolveTemplate(template.subject || nicheConfig.templates[channel].subject || "Votre avis compte", vars),
+          subject: resolveTemplate(template.subject || nicheConfig.templates[request.channel].subject || "Votre avis compte", vars),
           html: resolveTemplate(template.body, vars),
         });
       } else if (request.channel === "SMS" && client.phone) {
