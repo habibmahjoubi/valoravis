@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { resetPassword } from "@/actions/auth";
 import { PasswordInput } from "@/components/ui/password-input";
+import { AlertTriangle, CheckCircle } from "lucide-react";
 
 function ResetForm() {
   const [loading, setLoading] = useState(false);
@@ -17,7 +18,9 @@ function ResetForm() {
   if (!token) {
     return (
       <div className="max-w-sm w-full text-center">
-        <div className="text-4xl mb-4">{"\u{26A0}\uFE0F"}</div>
+        <div className="w-14 h-14 rounded-full bg-warning/10 flex items-center justify-center mx-auto mb-4">
+          <AlertTriangle className="w-7 h-7 text-warning" />
+        </div>
         <h1 className="text-xl font-bold mb-2">Lien invalide</h1>
         <p className="text-muted-foreground text-sm mb-6">
           Ce lien de réinitialisation est invalide ou à expire.
@@ -35,12 +38,14 @@ function ResetForm() {
   if (success) {
     return (
       <div className="max-w-sm w-full text-center">
-        <div className="text-4xl mb-4">{"\u2705"}</div>
+        <div className="w-14 h-14 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-4">
+          <CheckCircle className="w-7 h-7 text-success" />
+        </div>
         <h1 className="text-xl font-bold mb-2">
           Mot de passe réinitialisé
         </h1>
         <p className="text-muted-foreground text-sm mb-6">
-          Votre mot de passe à ete modifié avec succès.
+          Votre mot de passe a été modifié avec succès.
         </p>
         <button
           onClick={() => router.push("/login")}

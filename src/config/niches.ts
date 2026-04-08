@@ -3,7 +3,6 @@ import type { NicheConfigs } from "@/types";
 export const NICHE_CONFIGS: NicheConfigs = {
   DENTIST: {
     label: "Cabinet dentaire",
-    icon: "\u{1F9B7}",
     defaultDelay: 2,
     vocabulary: {
       client: "patient",
@@ -30,7 +29,6 @@ export const NICHE_CONFIGS: NicheConfigs = {
   },
   OSTEOPATH: {
     label: "Cabinet d'ostéopathie",
-    icon: "\u{1F932}",
     defaultDelay: 3,
     vocabulary: {
       client: "patient",
@@ -57,7 +55,6 @@ export const NICHE_CONFIGS: NicheConfigs = {
   },
   GARAGE: {
     label: "Garage automobile",
-    icon: "\u{1F527}",
     defaultDelay: 24,
     vocabulary: {
       client: "client",
@@ -84,7 +81,6 @@ export const NICHE_CONFIGS: NicheConfigs = {
   },
   OTHER: {
     label: "Autre métier",
-    icon: "\u{1F3E2}",
     defaultDelay: 4,
     vocabulary: {
       client: "client",

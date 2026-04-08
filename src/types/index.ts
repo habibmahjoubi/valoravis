@@ -9,7 +9,6 @@ export type NicheVocabulary = {
 
 export type NicheConfig = {
   label: string;
-  icon: string;
   defaultDelay: number; // hours
   vocabulary: NicheVocabulary;
   templates: {

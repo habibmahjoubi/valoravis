@@ -8,7 +8,10 @@ import {
   UserPlus, Users, Check, ArrowRight, ChevronRight, Clock, CreditCard,
   ThumbsUp, ArrowUpRight, Stethoscope, Bone, Wrench, Quote, Building2,
   Scissors, UtensilsCrossed, ShoppingBag, Heart, Car, Dumbbell, Briefcase,
+  Shield, MapPin, MessageCircle,
 } from "lucide-react";
+import { PhoneDemo } from "@/components/landing/phone-demo";
+import { FaqButton } from "@/components/landing/faq-modal";
 
 export default async function HomePage() {
   const plans = await prisma.plan.findMany({
@@ -41,26 +44,33 @@ export default async function HomePage() {
       </header>
 
       {/* ── HERO ── */}
-      <section className="relative mesh-bg grain py-16 sm:py-24 md:py-32 px-5">
+      <section className="relative mesh-bg grain py-16 sm:py-24 md:py-28 px-5">
         <div className="max-w-6xl mx-auto relative z-10">
-          <div className="max-w-2xl">
-            <p className="text-sm font-semibold text-primary mb-4 tracking-wide">Pour les professionnels de proximité</p>
-            <h1 className="text-[2.2rem] sm:text-5xl md:text-[3.4rem] font-extrabold tracking-tight leading-[1.08] mb-5">
-              Vos clients vous adorent.<br />
-              <span className="brand-gradient-text">Faites-le savoir.</span>
-            </h1>
-            <p className="text-base md:text-[17px] text-muted-foreground mb-8 leading-relaxed max-w-lg">
-              Après chaque prestation, AvisBoost envoie automatiquement une demande d'avis à votre client. S'il est satisfait, il publie directement sur Google. Sinon, il vous écrit en privé.
-            </p>
-            <div className="flex flex-col sm:flex-row items-start gap-3 mb-6">
-              <Link href="/register" className="flex items-center gap-2 brand-gradient text-white px-7 py-3.5 rounded-full text-[15px] font-semibold btn-glow transition-all shadow-xl shadow-primary/20">
-                Créer mon compte gratuitement <ArrowRight className="w-4 h-4" />
-              </Link>
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <p className="text-sm font-semibold text-primary mb-4 tracking-wide">Pour les professionnels de proximité</p>
+              <h1 className="text-[2.2rem] sm:text-5xl md:text-[3.4rem] font-extrabold tracking-tight leading-[1.08] mb-5">
+                Vos clients vous adorent.<br />
+                <span className="brand-gradient-text">Faites-le savoir.</span>
+              </h1>
+              <p className="text-base md:text-[17px] text-muted-foreground mb-8 leading-relaxed max-w-lg">
+                Après chaque prestation, AvisBoost envoie automatiquement une demande d'avis. Client satisfait ? Il publie sur Google. Mécontent ? Il vous écrit en privé.
+              </p>
+              <div className="flex flex-col sm:flex-row items-start gap-3 mb-6">
+                <Link href="/register" className="flex items-center gap-2 brand-gradient text-white px-7 py-3.5 rounded-full text-[15px] font-semibold btn-glow transition-all shadow-xl shadow-primary/20">
+                  Créer mon compte gratuitement <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+              <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-success" />{plans[0]?.quota > 0 ? `${plans[0].quota} envois offerts` : "Gratuit"}</span>
+                <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-success" />Sans carte bancaire</span>
+                <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-success" />2 min pour démarrer</span>
+              </div>
             </div>
-            <div className="flex items-center gap-4 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-success" />{plans[0]?.quota > 0 ? `${plans[0].quota} envois offerts` : "Gratuit"}</span>
-              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-success" />Sans carte bancaire</span>
-              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-success" />2 min pour démarrer</span>
+
+            {/* Démo téléphone animée */}
+            <div className="hidden md:flex justify-center pb-10">
+              <PhoneDemo />
             </div>
           </div>
         </div>
@@ -104,7 +114,7 @@ export default async function HomePage() {
       <section id="comment" className="py-20 px-5">
         <div className="max-w-4xl mx-auto">
           <p className="text-sm font-semibold text-primary mb-2">En pratique</p>
-          <h2 className="text-2xl sm:text-3xl font-bold mb-12">Ce que vit votre client</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-10">Ce que vit votre client</h2>
 
           <div className="relative">
             {/* Timeline line */}
@@ -141,7 +151,7 @@ export default async function HomePage() {
         <div className="max-w-5xl mx-auto relative z-10">
           <p className="text-sm font-semibold text-primary mb-2">Pour tous les professionnels</p>
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">Quel que soit votre métier, vos avis comptent</h2>
-          <p className="text-muted-foreground mb-12 max-w-lg">
+          <p className="text-muted-foreground mb-10 max-w-lg">
             AvisBoost s'adapte automatiquement à votre activité : vocabulaire, délais d'envoi, modèles de messages.
           </p>
 
@@ -234,7 +244,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── AVANTAGES (compact) ── */}
-      <section className="py-16 px-5 border-y border-border/40">
+      <section className="py-20 px-5 border-y border-border/40">
         <div className="max-w-5xl mx-auto">
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
             {[
@@ -256,10 +266,10 @@ export default async function HomePage() {
       </section>
 
       {/* ── TÉMOIGNAGES ── */}
-      <section className="py-20 px-5">
+      <section className="py-20 px-5 bg-muted/30">
         <div className="max-w-4xl mx-auto">
           <p className="text-sm font-semibold text-primary mb-2">Retours clients</p>
-          <h2 className="text-2xl font-bold mb-10">Ce qu'en disent nos utilisateurs</h2>
+          <h2 className="text-2xl font-bold mb-8">Ce qu'en disent nos utilisateurs</h2>
           <div className="grid md:grid-cols-3 gap-5">
             {[
               { name: "Dr. Martin L.", role: "Dentiste · Lyon", quote: "De 12 à 67 avis en 2 mois. Mes patients adorent la simplicité." },
@@ -287,25 +297,50 @@ export default async function HomePage() {
         <div className="max-w-5xl mx-auto relative z-10">
           <p className="text-sm font-semibold text-primary mb-2">Tarifs</p>
           <h2 className="text-2xl sm:text-3xl font-bold mb-2">Commencez gratuitement</h2>
-          <p className="text-muted-foreground mb-12">Évoluez quand vous êtes prêt. Annulation à tout moment.</p>
+          <p className="text-muted-foreground mb-10">Évoluez quand vous êtes prêt. Annulation à tout moment.</p>
 
-          <div className="grid md:grid-cols-3 gap-5 items-start">
+          <div className="grid md:grid-cols-3 gap-5 items-stretch">
             {plans.map((plan, index) => {
               const isHL = index === highlightedIndex;
               return (
-                <div key={plan.id} className={`rounded-2xl p-7 transition-all relative ${isHL ? "card-elevated border-2 border-primary/30 md:scale-[1.03] md:-my-3 shadow-xl shadow-primary/8" : "card-elevated"}`}>
+                <div key={plan.id} className={`rounded-2xl p-7 transition-all relative flex flex-col ${isHL ? "card-elevated border-2 border-primary/30 shadow-xl shadow-primary/8" : "card-elevated"}`}>
                   {isHL && <div className="absolute -top-3 left-1/2 -translate-x-1/2 brand-gradient text-white text-[11px] font-bold px-3.5 py-1 rounded-full tracking-wide">RECOMMANDÉ</div>}
                   <h3 className="font-bold text-lg">{plan.name}</h3>
                   <p className="text-xs text-muted-foreground mb-5">{plan.quota === 0 ? "Envois illimités" : `${plan.quota} envois/mois`}</p>
                   <div className="mb-6">
                     {plan.price === 0 ? <span className="text-3xl font-extrabold">Gratuit</span> : <><span className="text-3xl font-extrabold">{formatPrice(plan.price)}</span><span className="text-muted-foreground text-sm ml-1">/mois</span></>}
                   </div>
-                  <ul className="space-y-2.5 mb-7">
-                    {plan.price === 0 && <><PF text="Email uniquement" /><PF text={plan.maxUsers === 0 ? "Établissements illimités" : `${plan.maxUsers} établissement`} /><PF text="Templates standards" /><PF text="Tableau de bord" /></>}
-                    {plan.price > 0 && plan.price < 50 && <><PF text="Email + SMS" bold /><PF text={plan.maxUsers === 0 ? "Établissements illimités" : `${plan.maxUsers} établissement${plan.maxUsers > 1 ? "s" : ""}`} bold /><PF text="Templates personnalisés" /><PF text="Statistiques détaillées" /><PF text="Import CSV" /></>}
-                    {plan.price >= 50 && <><PF text="Email + SMS" bold /><PF text={plan.maxUsers === 0 ? "Établissements illimités" : `${plan.maxUsers} établissement${plan.maxUsers > 1 ? "s" : ""}`} bold /><PF text="Envois illimités" bold /><PF text="Templates personnalisés" /><PF text="Statistiques avancées" /><PF text="Support prioritaire" /></>}
+                  <ul className="space-y-2.5 flex-1">
+                    {plan.key === "free" && <>
+                      <PF text="Email uniquement" />
+                      <PF text={plan.maxUsers === 0 ? "Établissements illimités" : `${plan.maxUsers} établissement`} />
+                      <PF text="Templates standards" />
+                      <PF text="Tableau de bord" />
+                    </>}
+                    {plan.key === "pro" && <>
+                      <PF text="Email + SMS" />
+                      <PF text={plan.maxUsers === 0 ? "Établissements illimités" : `${plan.maxUsers} établissement${plan.maxUsers > 1 ? "s" : ""}`} />
+                      <PF text="Templates personnalisés" />
+                      <PF text="Statistiques détaillées" />
+                      <PF text="Import CSV" />
+                    </>}
+                    {plan.key === "business" && <>
+                      <PF text="Email + SMS" />
+                      <PF text={plan.maxUsers === 0 ? "Établissements illimités" : `${plan.maxUsers} établissement${plan.maxUsers > 1 ? "s" : ""}`} />
+                      <PF text={plan.quota === 0 ? "Envois illimités" : `${plan.quota} envois/mois`} />
+                      <PF text="Templates personnalisés" />
+                      <PF text="Statistiques avancées" />
+                      <PF text="Import CSV" />
+                      <PF text="Support prioritaire" />
+                    </>}
+                    {!["free", "pro", "business"].includes(plan.key) && <>
+                      <PF text="Email + SMS" />
+                      <PF text={plan.maxUsers === 0 ? "Établissements illimités" : `${plan.maxUsers} établissement${plan.maxUsers > 1 ? "s" : ""}`} />
+                      <PF text="Templates personnalisés" />
+                      <PF text="Tableau de bord" />
+                    </>}
                   </ul>
-                  <Link href={`/register?plan=${plan.key}`} className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all ${isHL ? "brand-gradient text-white shadow-md shadow-primary/20 btn-glow" : "bg-muted text-foreground hover:bg-muted-foreground/10"}`}>
+                  <Link href={`/register?plan=${plan.key}`} className={`flex items-center justify-center gap-2 py-3 mt-7 rounded-xl text-sm font-semibold transition-all ${isHL ? "brand-gradient text-white shadow-md shadow-primary/20 btn-glow" : "bg-muted text-foreground hover:bg-muted-foreground/10"}`}>
                     {plan.price === 0 ? "Commencer" : plan.trialDays > 0 ? `Essai gratuit ${plan.trialDays}j` : "Choisir"}
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
@@ -333,16 +368,35 @@ export default async function HomePage() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="py-8 px-5 border-t border-border/40">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 brand-gradient rounded-md flex items-center justify-center"><Star className="w-2.5 h-2.5 text-white fill-white" /></div>
-            <span className="text-sm font-semibold">AvisBoost</span>
-            <span className="text-xs text-muted-foreground">© {new Date().getFullYear()}</span>
+      <footer className="py-10 px-5 border-t border-border/40">
+        <div className="max-w-6xl mx-auto">
+          {/* Badges confiance */}
+          <div className="flex flex-wrap items-center justify-center gap-5 sm:gap-8 mb-8 pb-8 border-b border-border/30">
+            {[
+              { icon: MapPin, text: "Données hébergées en France" },
+              { icon: Shield, text: "Conforme RGPD" },
+              { icon: MessageCircle, text: "Support en français" },
+              { icon: Lock, text: "Connexion sécurisée SSL" },
+            ].map((item) => (
+              <div key={item.text} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <item.icon className="w-3.5 h-3.5" />
+                <span>{item.text}</span>
+              </div>
+            ))}
           </div>
-          <div className="flex items-center gap-5 text-xs text-muted-foreground">
-            <Link href="/login" className="link-underline hover:text-foreground transition-colors">Connexion</Link>
-            <Link href="/register" className="link-underline hover:text-foreground transition-colors">Inscription</Link>
+
+          {/* Footer bottom */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 brand-gradient rounded-md flex items-center justify-center"><Star className="w-2.5 h-2.5 text-white fill-white" /></div>
+              <span className="text-sm font-semibold">AvisBoost</span>
+              <span className="text-xs text-muted-foreground">© {new Date().getFullYear()}</span>
+            </div>
+            <div className="flex items-center gap-5 text-xs text-muted-foreground">
+              <FaqButton />
+              <Link href="/login" className="link-underline hover:text-foreground transition-colors">Connexion</Link>
+              <Link href="/register" className="link-underline hover:text-foreground transition-colors">Inscription</Link>
+            </div>
           </div>
         </div>
       </footer>
@@ -350,11 +404,11 @@ export default async function HomePage() {
   );
 }
 
-function PF({ text, bold }: { text: string; bold?: boolean }) {
+function PF({ text }: { text: string }) {
   return (
-    <li className="text-sm flex items-start gap-2">
-      <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${bold ? "text-primary" : "text-success/70"}`} />
-      <span className={bold ? "font-medium" : "text-muted-foreground"}>{text}</span>
+    <li className="text-sm flex items-start gap-2.5">
+      <Check className="w-4 h-4 mt-0.5 flex-shrink-0 text-primary" />
+      <span>{text}</span>
     </li>
   );
 }

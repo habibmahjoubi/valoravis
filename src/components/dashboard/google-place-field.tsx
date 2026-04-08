@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { CheckCircle, AlertTriangle } from "lucide-react";
 
 /**
  * Client-side version of toGoogleWriteReviewUrl (same logic as server)
@@ -96,7 +97,7 @@ export function GooglePlaceField({
         {isWriteReview ? (
           <div className="bg-success/10 border border-success/20 rounded-lg p-2.5">
             <p className="text-success font-medium">
-              {"\u2705"} Lien d'avis détecté et converti automatiquement
+              <CheckCircle className="w-3.5 h-3.5 inline mr-1" /> Lien d'avis détecté et converti automatiquement
             </p>
             <p className="text-success/70 mt-1 break-all">
               {writeReviewUrl}
@@ -112,7 +113,7 @@ export function GooglePlaceField({
           </div>
         ) : inputUrl ? (
           <p className="text-warning">
-            {"\u26A0\uFE0F"} URL non reconnue. Collez une URL Google Maps de votre établissement.
+            <AlertTriangle className="w-3.5 h-3.5 inline mr-1" /> URL non reconnue. Collez une URL Google Maps de votre établissement.
           </p>
         ) : null}
 

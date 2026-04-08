@@ -6,8 +6,16 @@ import { formatDate } from "@/lib/utils";
 import { OnboardingModal } from "@/components/dashboard/onboarding-modal";
 import { PeriodSelector } from "@/components/dashboard/period-selector";
 import { Suspense } from "react";
-import { Users, Send, MousePointerClick, Star } from "lucide-react";
+import { Users, Send, MousePointerClick, Star, Stethoscope, Bone, Wrench, Building2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import type { Niche } from "@/generated/prisma/enums";
+
+const NICHE_ICONS: Record<Niche, LucideIcon> = {
+  DENTIST: Stethoscope,
+  OSTEOPATH: Bone,
+  GARAGE: Wrench,
+  OTHER: Building2,
+};
 
 export default async function DashboardPage({
   searchParams,
@@ -75,8 +83,9 @@ export default async function DashboardPage({
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold">
-            {nicheConfig.icon} {user.businessName || "Mon établissement"}
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            {(() => { const NIcon = NICHE_ICONS[user.niche]; return <NIcon className="w-6 h-6 text-primary" />; })()}
+            {user.businessName || "Mon établissement"}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
             {nicheConfig.label} — Plan {user.plan}

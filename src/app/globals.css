@@ -1,31 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fcfcfd;
-  --foreground: #0f0d15;
+  --background: #fefdfb;
+  --foreground: #1a1614;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: #6d28d9;
+  --color-primary: #c2410c;
   --color-primary-foreground: #ffffff;
-  --color-secondary: #0ea5e9;
-  --color-muted: #f4f2f7;
-  --color-muted-foreground: #6b6080;
-  --color-border: #e8e4ef;
+  --color-secondary: #1e3a5f;
+  --color-muted: #f5f0eb;
+  --color-muted-foreground: #8a7e74;
+  --color-border: #e8e0d8;
   --color-card: #ffffff;
-  --color-destructive: #e11d48;
-  --color-success: #059669;
-  --color-warning: #d97706;
+  --color-destructive: #dc2626;
+  --color-success: #16a34a;
+  --color-warning: #ca8a04;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0f0d15;
-    --foreground: #e8e4ef;
+    --background: #1a1614;
+    --foreground: #f5f0eb;
   }
 }
 
@@ -34,67 +34,64 @@ body {
   color: var(--foreground);
 }
 
-/* --- Brand gradient --- */
+/* --- Brand --- */
 .brand-gradient {
-  background: linear-gradient(135deg, #6d28d9 0%, #0ea5e9 100%);
+  background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%);
 }
 
 .brand-gradient-text {
-  background: linear-gradient(135deg, #6d28d9 0%, #0ea5e9 100%);
+  background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* --- Mesh background --- */
+/* --- Warm mesh background --- */
 .mesh-bg {
   background-color: var(--background);
   background-image:
-    radial-gradient(at 20% 25%, rgba(109, 40, 217, 0.08) 0px, transparent 50%),
-    radial-gradient(at 80% 75%, rgba(14, 165, 233, 0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 50%, rgba(109, 40, 217, 0.03) 0px, transparent 70%);
+    radial-gradient(at 15% 30%, rgba(194, 65, 12, 0.04) 0px, transparent 50%),
+    radial-gradient(at 85% 70%, rgba(30, 58, 95, 0.04) 0px, transparent 50%);
 }
 
-/* --- Grain texture overlay --- */
+/* --- Grain --- */
 .grain::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 0;
 }
 
-/* --- Card styles --- */
+/* --- Card --- */
 .card-elevated {
   background: #ffffff;
-  border: 1px solid #e8e4ef;
-  box-shadow: 0 1px 3px rgba(15, 13, 21, 0.04), 0 6px 24px rgba(15, 13, 21, 0.03);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #e8e0d8;
+  box-shadow: 0 1px 2px rgba(26, 22, 20, 0.04), 0 4px 16px rgba(26, 22, 20, 0.03);
+  transition: all 0.25s ease;
 }
-
 .card-elevated:hover {
-  box-shadow: 0 4px 12px rgba(109, 40, 217, 0.08), 0 12px 40px rgba(15, 13, 21, 0.06);
-  border-color: rgba(109, 40, 217, 0.2);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(194, 65, 12, 0.06), 0 8px 32px rgba(26, 22, 20, 0.06);
+  border-color: rgba(194, 65, 12, 0.15);
+  transform: translateY(-1px);
 }
 
-/* --- Pill tag --- */
+/* --- Pill --- */
 .pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
+  padding: 5px 12px;
   border-radius: 999px;
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.01em;
-  border: 1px solid rgba(109, 40, 217, 0.15);
-  background: rgba(109, 40, 217, 0.06);
-  color: #6d28d9;
+  border: 1px solid rgba(194, 65, 12, 0.12);
+  background: rgba(194, 65, 12, 0.05);
+  color: #c2410c;
 }
 
-/* --- Number badge --- */
+/* --- Step number --- */
 .step-number {
   width: 28px;
   height: 28px;
@@ -104,11 +101,11 @@ body {
   justify-content: center;
   font-size: 13px;
   font-weight: 700;
-  background: linear-gradient(135deg, #6d28d9, #0ea5e9);
-  color: white;
+  background: #1a1614;
+  color: #fefdfb;
 }
 
-/* --- Glow button --- */
+/* --- Button glow --- */
 .btn-glow {
   position: relative;
   z-index: 1;
@@ -118,17 +115,17 @@ body {
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background: linear-gradient(135deg, #6d28d9, #0ea5e9);
+  background: linear-gradient(135deg, #c2410c, #ea580c);
   z-index: -1;
   opacity: 0;
   transition: opacity 0.3s;
-  filter: blur(12px);
+  filter: blur(10px);
 }
 .btn-glow:hover::before {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
-/* --- Animated underline --- */
+/* --- Link underline --- */
 .link-underline {
   position: relative;
 }
@@ -138,10 +135,10 @@ body {
   bottom: -2px;
   left: 0;
   width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #6d28d9, #0ea5e9);
+  height: 1.5px;
+  background: #c2410c;
   border-radius: 2px;
-  transition: width 0.3s;
+  transition: width 0.25s;
 }
 .link-underline:hover::after {
   width: 100%;
@@ -152,8 +149,8 @@ html {
   scroll-behavior: smooth;
 }
 
-/* --- Selection color --- */
+/* --- Selection --- */
 ::selection {
-  background: rgba(109, 40, 217, 0.15);
-  color: #0f0d15;
+  background: rgba(194, 65, 12, 0.12);
+  color: #1a1614;
 }
