@@ -1,4 +1,4 @@
-# AvisBoost
+# Valoravis
 
 Plateforme SaaS de collecte d'avis Google pour professionnels locaux (dentistes, osteopathes, garages).
 
@@ -18,7 +18,7 @@ Plateforme SaaS de collecte d'avis Google pour professionnels locaux (dentistes,
 ## Structure du projet
 
 ```
-avisboost/
+valoravis/
 ├── docs/                          # Documentation
 │   ├── USER-STORIES.md            # User stories detaillees
 │   ├── architecture/              # Documentation technique

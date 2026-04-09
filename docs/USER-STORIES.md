@@ -1,6 +1,6 @@
-# AvisBoost - User Stories
+# Valoravis - User Stories
 
-> **Projet** : AvisBoost - Plateforme SaaS de collecte d'avis Google pour professionnels locaux
+> **Projet** : Valoravis - Plateforme SaaS de collecte d'avis Google pour professionnels locaux
 > **Version** : 1.0
 > **Derniere mise a jour** : 2026-04-06
 > **Niches cibles** : Dentistes, Osteopathes, Garages automobiles (extensible)

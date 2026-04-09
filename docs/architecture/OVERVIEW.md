@@ -1,4 +1,4 @@
-# Architecture AvisBoost
+# Architecture Valoravis
 
 ## Vue d'ensemble
 
