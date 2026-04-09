@@ -102,34 +102,55 @@ export async function importClients(csvData: string) {
   const lines = csvData.split("\n").filter((l) => l.trim());
 
   if (lines.length > 5000) {
-    return { imported: 0, skipped: 0, error: "Maximum 5000 lignes autorisées" };
+    return { imported: 0, skipped: 0, errors: [{ row: 0, name: "", reason: "Maximum 5000 lignes autorisées" }] };
   }
 
   let imported = 0;
   let skipped = 0;
+  const errors: { row: number; name: string; reason: string }[] = [];
 
-  for (const line of lines) {
-    const [name, email, phone, notes] = line
-      .split(",")
-      .map((s) => s.trim().replace(/^"|"$/g, ""));
+  for (let i = 0; i < lines.length; i++) {
+    const parts: string[] = [];
+    let current = "";
+    let inQuotes = false;
+    for (const char of lines[i]) {
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === "," && !inQuotes) {
+        parts.push(current.trim().replace(/^"|"$/g, ""));
+        current = "";
+      } else {
+        current += char;
+      }
+    }
+    parts.push(current.trim().replace(/^"|"$/g, ""));
+
+    const [name, email, phone, notes] = parts;
+    const rowNum = i + 1;
+
     if (!name || name.length > 200) {
       skipped++;
+      errors.push({ row: rowNum, name: name || "", reason: !name ? "Nom manquant" : "Nom trop long (max 200)" });
       continue;
     }
     if (!email && !phone) {
       skipped++;
+      errors.push({ row: rowNum, name, reason: "Email ou téléphone requis" });
       continue;
     }
     if (email && (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 255)) {
       skipped++;
+      errors.push({ row: rowNum, name, reason: "Email invalide" });
       continue;
     }
     if (phone && (!/^\+?[\d\s\-().]{6,20}$/.test(phone) || phone.length > 20)) {
       skipped++;
+      errors.push({ row: rowNum, name, reason: "Téléphone invalide" });
       continue;
     }
     if (notes && notes.length > 500) {
       skipped++;
+      errors.push({ row: rowNum, name, reason: "Notes trop longues (max 500)" });
       continue;
     }
 
@@ -142,6 +163,7 @@ export async function importClients(csvData: string) {
     });
     if (existing) {
       skipped++;
+      errors.push({ row: rowNum, name, reason: "Doublon (email ou tél. déjà existant)" });
       continue;
     }
 
@@ -158,7 +180,7 @@ export async function importClients(csvData: string) {
   }
 
   revalidatePath("/dashboard/clients");
-  return { imported, skipped };
+  return { imported, skipped, errors };
 }
 
 // --- Review Requests ---
