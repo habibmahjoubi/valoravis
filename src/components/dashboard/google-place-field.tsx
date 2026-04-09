@@ -22,7 +22,9 @@ function toWriteReviewUrl(url: string): string {
   }
 
   // Conversion hex -> Place ID (protobuf encoding)
-  const hexMatch = trimmed.match(/!1s0x([0-9a-f]+):0x([0-9a-f]+)/i);
+  const hexMatch =
+    trimmed.match(/!1s0x([0-9a-f]+):0x([0-9a-f]+)/i) ||
+    trimmed.match(/lrd=0x([0-9a-f]+):0x([0-9a-f]+)/i);
   if (hexMatch) {
     const hex1 = hexMatch[1];
     const hex2 = hexMatch[2];

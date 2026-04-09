@@ -11,6 +11,7 @@ export function PasswordInput({
   minLength,
   value,
   onChange,
+  autoComplete,
 }: {
   id: string;
   name: string;
@@ -19,6 +20,7 @@ export function PasswordInput({
   minLength?: number;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  autoComplete?: string;
 }) {
   const [visible, setVisible] = useState(false);
 
@@ -33,6 +35,7 @@ export function PasswordInput({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
+        autoComplete={autoComplete}
         className="w-full px-3 py-2 pr-10 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
       />
       <button

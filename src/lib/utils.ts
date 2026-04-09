@@ -100,7 +100,10 @@ export function toGoogleWriteReviewUrl(url: string): string {
   }
 
   // Extraire hex depuis une URL Google Maps (!1s0x....:0x....)
-  const hexMatch = trimmed.match(/!1s0x([0-9a-f]+):0x([0-9a-f]+)/i);
+  // ou Google Search (#lrd=0x....:0x....)
+  const hexMatch =
+    trimmed.match(/!1s0x([0-9a-f]+):0x([0-9a-f]+)/i) ||
+    trimmed.match(/lrd=0x([0-9a-f]+):0x([0-9a-f]+)/i);
   if (hexMatch) {
     const placeId = mapsHexToPlaceId(hexMatch[1], hexMatch[2]);
     return `https://search.google.com/local/writereview?placeid=${placeId}`;

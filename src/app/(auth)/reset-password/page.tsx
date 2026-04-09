@@ -111,6 +111,7 @@ function ResetForm() {
             required
             minLength={8}
             placeholder="Min. 8 caractères, 1 majuscule, 1 chiffre"
+            autoComplete="new-password"
           />
           <p className="text-[11px] text-muted-foreground mt-1">
             Minimum 8 caractères, une majuscule et un chiffre
@@ -130,13 +131,14 @@ function ResetForm() {
             required
             minLength={8}
             placeholder="Répétez le mot de passe"
+            autoComplete="new-password"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-primary text-primary-foreground py-2 rounded-lg font-medium hover:opacity-90 disabled:opacity-50"
+          className="w-full bg-primary text-primary-foreground py-2.5 sm:py-3 rounded-lg font-medium hover:opacity-90 disabled:opacity-50"
         >
           {loading ? "Réinitialisation..." : "Réinitialiser le mot de passe"}
         </button>
@@ -154,7 +156,7 @@ function ResetForm() {
 export default function ResetPasswordPage() {
   return (
     <div className="min-h-dvh w-full flex flex-col justify-start sm:justify-center px-4 pt-10 sm:pt-0 pb-8">
-      <div className="w-full sm:max-w-sm sm:mx-auto">
+      <div className="w-full sm:max-w-md lg:max-w-lg sm:mx-auto sm:bg-card sm:border sm:border-border sm:rounded-2xl sm:shadow-sm sm:p-8 lg:p-10">
         <Suspense
           fallback={
             <div className="text-center text-muted-foreground">

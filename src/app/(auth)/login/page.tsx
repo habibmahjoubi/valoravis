@@ -75,7 +75,7 @@ function LoginForm() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full px-3 py-2.5 sm:py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             placeholder="vous@exemple.com"
           />
         </div>
@@ -91,13 +91,14 @@ function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Votre mot de passe"
+            autoComplete="current-password"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-primary text-primary-foreground py-2 rounded-lg font-medium hover:opacity-90 disabled:opacity-50"
+          className="w-full bg-primary text-primary-foreground py-2.5 sm:py-3 rounded-lg font-medium hover:opacity-90 disabled:opacity-50"
         >
           {loading ? "Connexion en cours..." : "Se connecter"}
         </button>
@@ -125,7 +126,7 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <div className="min-h-dvh w-full flex flex-col justify-start sm:justify-center px-4 pt-10 sm:pt-0 pb-8">
-      <div className="w-full sm:max-w-sm sm:mx-auto">
+      <div className="w-full sm:max-w-md lg:max-w-lg sm:mx-auto sm:bg-card sm:border sm:border-border sm:rounded-2xl sm:shadow-sm sm:p-8 lg:p-10">
         <Suspense
           fallback={
             <div className="text-center text-muted-foreground">Chargement...</div>
