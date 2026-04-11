@@ -139,6 +139,12 @@ export async function importClients(csvData: string) {
       errors.push({ row: rowNum, name: name || "", reason: !name ? "Nom manquant" : "Nom trop long (max 200)" });
       continue;
     }
+    // Prevent CSV formula injection
+    if (/^[=+\-@\t\r]/.test(name) || (email && /^[=+\-@\t\r]/.test(email)) || (phone && /^[=+\-@\t\r]/.test(phone))) {
+      skipped++;
+      errors.push({ row: rowNum, name, reason: "Valeur invalide (caractère interdit en début de champ)" });
+      continue;
+    }
     if (!email && !phone) {
       skipped++;
       errors.push({ row: rowNum, name, reason: "Email ou téléphone requis" });

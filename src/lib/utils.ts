@@ -1,13 +1,15 @@
 /** Sanitize user-provided HTML templates: strip dangerous tags and attributes */
 export function sanitizeHtml(html: string): string {
   return html
-    // Remove script/iframe/object/embed/form tags and their content
-    .replace(/<\s*(script|iframe|object|embed|form|link|meta|base)[^>]*>[\s\S]*?<\/\s*\1\s*>/gi, "")
-    .replace(/<\s*(script|iframe|object|embed|form|link|meta|base)[^>]*\/?>/gi, "")
+    // Remove dangerous tags and their content
+    .replace(/<\s*(script|iframe|object|embed|form|link|meta|base|svg|math|style|template|textarea|select|input|button)[^>]*>[\s\S]*?<\/\s*\1\s*>/gi, "")
+    .replace(/<\s*(script|iframe|object|embed|form|link|meta|base|svg|math|style|template|textarea|select|input|button)[^>]*\/?>/gi, "")
     // Remove event handlers (onclick, onerror, onload, etc.)
     .replace(/\s+on\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]*)/gi, "")
-    // Remove javascript: and data: URLs in href/src
-    .replace(/(href|src)\s*=\s*["']?\s*(javascript|data):/gi, "$1=\"#");
+    // Remove javascript:, data:, and vbscript: URLs in href/src/action
+    .replace(/(href|src|action|formaction|xlink:href)\s*=\s*["']?\s*(javascript|data|vbscript):/gi, "$1=\"#")
+    // Remove style attributes containing url() or expression()
+    .replace(/style\s*=\s*["'][^"']*(?:url\s*\(|expression\s*\(|javascript:)[^"']*/gi, "");
 }
 
 /** Escape HTML special characters to prevent XSS in email templates */

@@ -16,9 +16,12 @@ export async function sendEmail({
   replyTo?: string;
 }) {
   const defaultFrom = process.env.EMAIL_FROM!;
-  // If a custom sender name is provided, replace the name portion of the from address
-  const from = fromName
-    ? `${fromName} <${defaultFrom.match(/<(.+)>/)?.[1] || defaultFrom}>`
+  // Sanitize fromName to prevent email header injection
+  const safeName = fromName
+    ? fromName.replace(/[\r\n<>]/g, "").slice(0, 100)
+    : null;
+  const from = safeName
+    ? `${safeName} <${defaultFrom.match(/<(.+)>/)?.[1] || defaultFrom}>`
     : defaultFrom;
 
   const { error } = await resend.emails.send({

@@ -24,61 +24,76 @@ export async function createReviewRequest({
   channel: Channel;
   delayHours?: number;
 }) {
-  const user = await prisma.user.findUniqueOrThrow({
-    where: { id: userId },
-  });
-
-  if (user.quotaUsed >= user.monthlyQuota) {
-    throw new Error("Quota mensuel atteint. Passez au plan supérieur.");
-  }
-
-  // US22 - Anti-doublons : check for recent request to same client
-  const recentRequest = await prisma.reviewRequest.findFirst({
-    where: {
-      clientId,
-      userId,
-      createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
-      status: { not: "FAILED" },
-    },
-  });
-  if (recentRequest) {
-    throw new Error(
-      "Une demande a déjà été envoyée à ce client il y a moins de 7 jours."
-    );
-  }
-
-  const nicheConfig = NICHE_CONFIGS[user.niche];
-  const delay =
-    delayHours !== undefined
-      ? delayHours
-      : user.defaultDelay !== null
-        ? user.defaultDelay
-        : nicheConfig.defaultDelay;
-
-  const scheduledAt = new Date(Date.now() + delay * 60 * 60 * 1000);
-
-  // Transaction atomique : créer la demande + incrémenter le quota
-  const [request] = await prisma.$transaction([
-    prisma.reviewRequest.create({
-      data: {
-        userId,
-        clientId,
-        channel,
-        scheduledAt,
-        token: crypto.randomBytes(32).toString("hex"),
-      },
-    }),
-    prisma.user.update({
+  // Transaction interactive : vérifications + création atomiques (anti race condition)
+  const request = await prisma.$transaction(async (tx) => {
+    const user = await tx.user.findUniqueOrThrow({
       where: { id: userId },
-      data: { quotaUsed: { increment: 1 } },
-    }),
-  ]);
+    });
+
+    if (user.quotaUsed >= user.monthlyQuota) {
+      throw new Error("Quota mensuel atteint. Passez au plan supérieur.");
+    }
+
+    // Vérifier que le client appartient bien à l'utilisateur
+    const client = await tx.client.findFirst({
+      where: { id: clientId, userId },
+    });
+    if (!client) {
+      throw new Error("Client introuvable.");
+    }
+
+    // Anti-doublons : pas de demande au même client dans les 7 derniers jours
+    const recentRequest = await tx.reviewRequest.findFirst({
+      where: {
+        clientId,
+        userId,
+        createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
+        status: { not: "FAILED" },
+      },
+    });
+    if (recentRequest) {
+      throw new Error(
+        "Une demande a déjà été envoyée à ce client il y a moins de 7 jours."
+      );
+    }
+
+    const nicheConfig = NICHE_CONFIGS[user.niche];
+    const delay =
+      delayHours !== undefined
+        ? delayHours
+        : user.defaultDelay !== null
+          ? user.defaultDelay
+          : nicheConfig.defaultDelay;
+
+    const scheduledAt = new Date(Date.now() + delay * 60 * 60 * 1000);
+
+    const [req] = await Promise.all([
+      tx.reviewRequest.create({
+        data: {
+          userId,
+          clientId,
+          channel,
+          scheduledAt,
+          token: crypto.randomBytes(32).toString("hex"),
+        },
+      }),
+      tx.user.update({
+        where: { id: userId },
+        data: { quotaUsed: { increment: 1 } },
+      }),
+    ]);
+
+    return req;
+  });
 
   // Envoi immediat si delai = 0
-  if (delay === 0) {
+  const effectiveDelay = delayHours !== undefined ? delayHours : null;
+  if (effectiveDelay === 0) {
+    const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
     const client = await prisma.client.findUniqueOrThrow({
       where: { id: clientId, userId },
     });
+    const nicheConfig = NICHE_CONFIGS[user.niche];
 
     const customTemplate = await prisma.template.findFirst({
       where: { userId, niche: user.niche, channel },
@@ -115,7 +130,7 @@ export async function createReviewRequest({
         data: { status: "SENT", sentAt: new Date() },
       });
     } catch (error) {
-      console.error(`Failed to send request ${request.id}:`, error);
+      console.error(`[review-request] send failed ${request.id}:`, error instanceof Error ? error.message : "unknown");
       await prisma.reviewRequest.update({
         where: { id: request.id },
         data: { status: "FAILED" },
@@ -185,7 +200,7 @@ export async function processPendingRequests() {
       });
       results.sent++;
     } catch (error) {
-      console.error(`Failed to send request ${request.id}:`, error);
+      console.error(`[review-request] batch send failed:`, error instanceof Error ? error.message : "unknown");
       await prisma.reviewRequest.update({
         where: { id: request.id },
         data: { status: "FAILED" },

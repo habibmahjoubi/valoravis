@@ -59,6 +59,30 @@ describe("sanitizeHtml", () => {
     const safe = '<div><h1>Title</h1><p>Hello <strong>world</strong></p></div>';
     expect(sanitizeHtml(safe)).toBe(safe);
   });
+
+  it("strips SVG tags (XSS vector)", () => {
+    expect(sanitizeHtml('<svg onload="alert(1)"></svg>')).toBe("");
+    expect(sanitizeHtml('<svg><desc>test</desc></svg>')).toBe("");
+  });
+
+  it("strips style tags", () => {
+    expect(sanitizeHtml('<style>body{display:none}</style>')).toBe("");
+  });
+
+  it("strips template and textarea tags", () => {
+    expect(sanitizeHtml('<template><img src=x onerror=alert(1)></template>')).toBe("");
+    expect(sanitizeHtml('<textarea><img src=x onerror=alert(1)></textarea>')).toBe("");
+  });
+
+  it("removes style attributes with url() or expression()", () => {
+    const result = sanitizeHtml('<div style="background:url(javascript:alert(1))">test</div>');
+    expect(result).not.toContain("url(");
+  });
+
+  it("removes vbscript: in href", () => {
+    const result = sanitizeHtml('<a href="vbscript:alert(1)">click</a>');
+    expect(result).not.toContain("vbscript:");
+  });
 });
 
 // ── escapeHtml ──
