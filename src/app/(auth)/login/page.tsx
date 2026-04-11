@@ -21,10 +21,20 @@ function LoginForm() {
       ? rawCallback
       : "/dashboard";
 
+  const [loadedAt] = useState(() => Date.now());
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    // Honeypot check
+    const form = e.target as HTMLFormElement;
+    const hp = (form.elements.namedItem("website") as HTMLInputElement)?.value;
+    if (hp) { setLoading(false); return; }
+
+    // Timing check: reject if submitted in < 1 second (bot)
+    if (Date.now() - loadedAt < 1000) { setLoading(false); return; }
 
     const result = await signIn("credentials", {
       email,
@@ -72,6 +82,10 @@ function LoginForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Honeypot anti-bot */}
+        <div className="absolute opacity-0 h-0 overflow-hidden" aria-hidden="true" tabIndex={-1}>
+          <input type="text" name="website" autoComplete="off" tabIndex={-1} />
+        </div>
         <div>
           <label htmlFor="email" className="block text-sm font-medium mb-1">
             Email

@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/lib/resend";
 import { sendSms } from "@/lib/sms";
 import { NICHE_CONFIGS } from "@/config/niches";
-import { absoluteUrl, escapeHtml } from "@/lib/utils";
+import { absoluteUrl, escapeHtml, sanitizeHtml } from "@/lib/utils";
 import type { Channel, Niche } from "@/generated/prisma/enums";
 import crypto from "crypto";
 
@@ -110,18 +110,21 @@ export async function createReviewRequest({
     };
 
     try {
+      // Re-sanitize template at send time (defense in depth)
+      const resolvedBody = resolveTemplate(template.body, vars);
+
       if (channel === "EMAIL" && client.email) {
         await sendEmail({
           to: client.email,
           subject: resolveTemplate(template.subject || nicheConfig.templates[channel].subject || "Votre avis compte", vars),
-          html: resolveTemplate(template.body, vars),
+          html: sanitizeHtml(resolvedBody),
           fromName: user.senderName || undefined,
           replyTo: user.replyToEmail || undefined,
         });
       } else if (channel === "SMS" && client.phone) {
         await sendSms({
           to: client.phone,
-          body: resolveTemplate(template.body, vars),
+          body: resolvedBody,
         });
       }
 
@@ -130,7 +133,7 @@ export async function createReviewRequest({
         data: { status: "SENT", sentAt: new Date() },
       });
     } catch (error) {
-      console.error(`[review-request] send failed ${request.id}:`, error instanceof Error ? error.message : "unknown");
+      console.error("[review-request] send failed:", error instanceof Error ? error.message : "unknown");
       await prisma.reviewRequest.update({
         where: { id: request.id },
         data: { status: "FAILED" },
@@ -179,11 +182,14 @@ export async function processPendingRequests() {
         link: absoluteUrl(`/review/${request.token}`),
       };
 
+      // Re-sanitize template at send time (defense in depth)
+      const resolvedBody = resolveTemplate(template.body, vars);
+
       if (request.channel === "EMAIL" && client.email) {
         await sendEmail({
           to: client.email,
           subject: resolveTemplate(template.subject || nicheConfig.templates[request.channel].subject || "Votre avis compte", vars),
-          html: resolveTemplate(template.body, vars),
+          html: sanitizeHtml(resolvedBody),
           fromName: user.senderName || undefined,
           replyTo: user.replyToEmail || undefined,
         });

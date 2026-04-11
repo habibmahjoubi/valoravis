@@ -36,10 +36,19 @@ export function RegisterForm({ plans }: { plans: PlanOption[] }) {
   const planInfo = plans.find((p) => p.key === selectedPlan) || plans[0];
   const currentNiche = NICHES.find((n) => n.value === selectedNiche) || NICHES[0];
 
+  const [loadedAt] = useState(() => Date.now());
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    // Honeypot check
+    const hp = (e.currentTarget.elements.namedItem("website") as HTMLInputElement)?.value;
+    if (hp) { setLoading(false); return; }
+
+    // Timing check: reject if submitted in < 2 seconds (bot)
+    if (Date.now() - loadedAt < 2000) { setLoading(false); return; }
 
     const formData = new FormData(e.currentTarget);
     formData.set("niche", selectedNiche);
@@ -102,6 +111,10 @@ export function RegisterForm({ plans }: { plans: PlanOption[] }) {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Honeypot anti-bot */}
+        <div className="absolute opacity-0 h-0 overflow-hidden" aria-hidden="true" tabIndex={-1}>
+          <input type="text" name="website" autoComplete="off" tabIndex={-1} />
+        </div>
         <div>
           <label className="block text-sm font-medium mb-2">Votre métier</label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">

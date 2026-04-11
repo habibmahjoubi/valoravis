@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /review/
+Disallow: /login
+Disallow: /register
+Disallow: /check-email
+Disallow: /verify-email
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /suspended
+
+Sitemap: https://valoravis.habibmahjoubi.fr/sitemap.xml
