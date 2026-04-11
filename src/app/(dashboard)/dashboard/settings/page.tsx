@@ -69,7 +69,7 @@ export default async function SettingsPage() {
 
         <div>
           <label className="block text-sm font-medium mb-1">
-            Téléphone de l'établissement
+            Téléphone du {nicheConfig.vocabulary.establishment}
           </label>
           <input
             name="phone"
@@ -96,6 +96,7 @@ export default async function SettingsPage() {
         phone={user.phone}
         nicheDefaultDelay={nicheConfig.defaultDelay}
         hasSms={hasFeature(user.plan, "sms")}
+        establishment={nicheConfig.vocabulary.establishment}
       />
 
       {/* Satisfaction Threshold */}

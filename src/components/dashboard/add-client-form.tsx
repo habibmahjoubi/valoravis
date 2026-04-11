@@ -40,7 +40,7 @@ export function AddClientForm() {
       <input
         name="phone"
         type="tel"
-        placeholder="Telephone"
+        placeholder="Téléphone"
         className="px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
       />
       <input

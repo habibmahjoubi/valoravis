@@ -12,6 +12,7 @@ interface SendingSettingsProps {
   phone: string | null;
   nicheDefaultDelay: number;
   hasSms: boolean;
+  establishment: string;
 }
 
 export function SendingSettings({
@@ -22,6 +23,7 @@ export function SendingSettings({
   phone,
   nicheDefaultDelay,
   hasSms,
+  establishment,
 }: SendingSettingsProps) {
   const [channel, setChannel] = useState(defaultChannel || "EMAIL");
   const [saving, setSaving] = useState(false);
@@ -119,7 +121,7 @@ export function SendingSettings({
                 type="text"
                 maxLength={100}
                 defaultValue={senderName || ""}
-                placeholder="Ex: Cabinet Dr. Martin"
+                placeholder={`Ex: ${establishment.charAt(0).toUpperCase() + establishment.slice(1)} Dupont`}
                 className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
               <p className="text-xs text-muted-foreground mt-1">
@@ -136,7 +138,7 @@ export function SendingSettings({
                 type="email"
                 maxLength={255}
                 defaultValue={replyToEmail || ""}
-                placeholder="contact@mon-cabinet.fr"
+                placeholder={`contact@mon-${establishment}.fr`}
                 className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
               <p className="text-xs text-muted-foreground mt-1">
@@ -150,7 +152,7 @@ export function SendingSettings({
         {channel === "SMS" && (
           <div>
             <label className="block text-sm font-medium mb-1">
-              Numéro de téléphone de l'établissement
+              Numéro de téléphone du {establishment}
             </label>
             <input
               name="phone"
@@ -161,7 +163,7 @@ export function SendingSettings({
               className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <p className="text-xs text-muted-foreground mt-1">
-              Ce numéro est utilisé pour identifier votre établissement dans les SMS envoyés aux clients.
+              Ce numéro est utilisé pour identifier votre {establishment} dans les SMS envoyés aux clients.
             </p>
           </div>
         )}

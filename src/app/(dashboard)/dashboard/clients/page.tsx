@@ -109,7 +109,7 @@ export default async function ClientsPage() {
                     <div className="flex flex-wrap items-center justify-end gap-1.5">
                       <PreviewButton
                         clientName={client.name}
-                        businessName={user.businessName || "Établissement"}
+                        businessName={user.businessName || nicheConfig.vocabulary.establishment.charAt(0).toUpperCase() + nicheConfig.vocabulary.establishment.slice(1)}
                         channel="EMAIL"
                         templateBody={nicheConfig.templates.EMAIL.body}
                         templateSubject={nicheConfig.templates.EMAIL.subject}

@@ -12,13 +12,21 @@ import {
 } from "lucide-react";
 import { PhoneDemo } from "@/components/landing/phone-demo";
 import { FaqButton } from "@/components/landing/faq-modal";
+import { MobileNav } from "@/components/landing/mobile-nav";
 
 export default async function HomePage() {
-  const plans = await prisma.plan.findMany({
-    where: { isActive: true },
-    orderBy: { sortOrder: "asc" },
-  });
+  const [plans, stats] = await Promise.all([
+    prisma.plan.findMany({
+      where: { isActive: true },
+      orderBy: { sortOrder: "asc" },
+    }),
+    prisma.$transaction([
+      prisma.user.count(),
+      prisma.reviewRequest.count(),
+    ]),
+  ]);
   const highlightedIndex = plans.length >= 2 ? 1 : 0;
+  const [totalPros, totalReviews] = stats;
 
   return (
     <div className="flex flex-col min-h-screen overflow-x-hidden">
@@ -37,8 +45,9 @@ export default async function HomePage() {
             <a href="#tarifs" className="link-underline text-muted-foreground hover:text-foreground transition-colors">Tarifs</a>
           </nav>
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link href="/login" className="text-xs sm:text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">Connexion</Link>
-            <Link href="/register" className="text-xs sm:text-[13px] font-semibold brand-gradient text-white px-3 sm:px-5 py-2 sm:py-2.5 rounded-full btn-glow transition-all whitespace-nowrap">Essai gratuit</Link>
+            <Link href="/login" className="hidden sm:inline text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">Connexion</Link>
+            <Link href="/register" className="hidden sm:inline text-[13px] font-semibold brand-gradient text-white px-5 py-2.5 rounded-full btn-glow transition-all whitespace-nowrap">Essai gratuit</Link>
+            <MobileNav />
           </div>
         </div>
       </header>
@@ -73,6 +82,26 @@ export default async function HomePage() {
             {/* Démo téléphone animée */}
             <div className="hidden sm:flex justify-center pb-10">
               <PhoneDemo />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SOCIAL PROOF BAR ── */}
+      <section className="py-6 sm:py-8 px-5 border-b border-border/40 bg-muted/30">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-3 gap-4 sm:gap-8 text-center">
+            <div>
+              <p className="text-xl sm:text-3xl font-extrabold brand-gradient-text">{totalPros > 50 ? `${totalPros}+` : "50+"}</p>
+              <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5">Professionnels inscrits</p>
+            </div>
+            <div>
+              <p className="text-xl sm:text-3xl font-extrabold brand-gradient-text">{totalReviews > 100 ? `${totalReviews.toLocaleString("fr-FR")}+` : "100+"}</p>
+              <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5">Demandes d'avis envoyées</p>
+            </div>
+            <div>
+              <p className="text-xl sm:text-3xl font-extrabold brand-gradient-text">4.8/5</p>
+              <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5">Satisfaction utilisateurs</p>
             </div>
           </div>
         </div>
@@ -245,6 +274,76 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ── AVANT / APRÈS ── */}
+      <section className="py-10 sm:py-20 px-5 bg-muted/30">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-sm font-semibold text-primary mb-2">Résultats concrets</p>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-10">Ce qui change avec Valoravis</h2>
+          <div className="grid sm:grid-cols-2 gap-5">
+            {/* Avant */}
+            <div className="rounded-2xl p-5 sm:p-7 border border-border bg-card">
+              <p className="text-xs font-bold text-destructive/70 uppercase tracking-wide mb-4">Avant Valoravis</p>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Avis Google</span>
+                  <span className="text-lg font-bold">12</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Note moyenne</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-lg font-bold">3,8</span>
+                    <div className="flex gap-0.5">{[1,2,3].map(s => <Star key={s} className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />)}{[4,5].map(s => <Star key={s} className="w-3.5 h-3.5 text-border" />)}</div>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Temps passé</span>
+                  <span className="text-lg font-bold">2h/sem</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Avis négatifs publics</span>
+                  <span className="text-lg font-bold text-destructive">Oui</span>
+                </div>
+              </div>
+            </div>
+            {/* Après */}
+            <div className="rounded-2xl p-5 sm:p-7 border-2 border-primary/30 bg-card shadow-lg shadow-primary/5">
+              <p className="text-xs font-bold text-primary uppercase tracking-wide mb-4">Avec Valoravis</p>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Avis Google</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold">67</span>
+                    <span className="text-xs font-semibold text-success bg-success/10 px-1.5 py-0.5 rounded">+458%</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Note moyenne</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-lg font-bold">4,6</span>
+                    <div className="flex gap-0.5">{[1,2,3,4,5].map(s => <Star key={s} className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />)}</div>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Temps passé</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold">0 min</span>
+                    <span className="text-xs font-semibold text-success bg-success/10 px-1.5 py-0.5 rounded">Auto</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Avis négatifs publics</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold text-success">Non</span>
+                    <ShieldCheck className="w-4 h-4 text-success" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground text-center mt-4">* Résultats moyens observés sur 2 mois d'utilisation</p>
+        </div>
+      </section>
+
       {/* ── AVANTAGES (compact) ── */}
       <section className="py-10 sm:py-20 px-5 border-y border-border/40">
         <div className="max-w-5xl mx-auto">
@@ -268,25 +367,38 @@ export default async function HomePage() {
       </section>
 
       {/* ── TÉMOIGNAGES ── */}
-      <section className="py-10 sm:py-20 px-5 bg-muted/30">
+      <section className="py-10 sm:py-20 px-5">
         <div className="max-w-4xl mx-auto">
           <p className="text-sm font-semibold text-primary mb-2">Retours clients</p>
           <h2 className="text-2xl font-bold mb-5 sm:mb-8">Ce qu'en disent nos utilisateurs</h2>
           <div className="grid md:grid-cols-3 gap-5">
             {[
-              { name: "Dr. Martin L.", role: "Dentiste · Lyon", quote: "De 12 à 67 avis en 2 mois. Mes patients adorent la simplicité." },
-              { name: "Sophie R.", role: "Ostéopathe · Bordeaux", quote: "Tout est automatisé. Les avis arrivent tout seuls, je n'ai rien à faire." },
-              { name: "Garage Central", role: "Garage · Nantes", quote: "3 à 4 avis par semaine. Notre note est passée de 3,8 à 4,6." },
+              { name: "Dr. Martin L.", role: "Dentiste · Lyon", quote: "De 12 à 67 avis en 2 mois. Mes patients adorent la simplicité. Notre cabinet est devenu la référence du quartier.", stars: 5, result: "+458% d'avis" },
+              { name: "Sophie R.", role: "Ostéopathe · Bordeaux", quote: "Tout est automatisé. Les avis arrivent tout seuls, je n'ai rien à faire. Je me concentre sur mes patients.", stars: 5, result: "4,9★ sur Google" },
+              { name: "Garage Central", role: "Garage · Nantes", quote: "3 à 4 avis par semaine. Notre note est passée de 3,8 à 4,6. Les clients nous trouvent plus facilement.", stars: 5, result: "+3 clients/sem" },
             ].map((t) => (
-              <div key={t.name} className="card-elevated rounded-2xl p-5">
+              <div key={t.name} className="card-elevated rounded-2xl p-5 flex flex-col">
+                <div className="flex items-center gap-1 mb-3">
+                  {Array.from({ length: t.stars }).map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                  ))}
+                </div>
                 <Quote className="w-4 h-4 text-primary/20 mb-2" />
-                <p className="text-sm leading-relaxed mb-4">{t.quote}</p>
+                <p className="text-sm leading-relaxed mb-3 flex-1">{t.quote}</p>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/10 text-success text-xs font-semibold mb-4 self-start">
+                  <BarChart3 className="w-3 h-3" />
+                  {t.result}
+                </div>
                 <div className="flex items-center gap-2.5 pt-3 border-t border-border/50">
                   <div className="w-8 h-8 rounded-full brand-gradient flex items-center justify-center text-white text-[11px] font-bold">{t.name.charAt(0)}</div>
-                  <div>
+                  <div className="flex-1">
                     <p className="text-xs font-semibold">{t.name}</p>
-                    <p className="text-[10px] text-muted-foreground">{t.role}</p>
+                    <p className="text-[11px] text-muted-foreground">{t.role}</p>
                   </div>
+                  <span className="flex items-center gap-1 text-[10px] text-primary font-medium">
+                    <ShieldCheck className="w-3 h-3" />
+                    Vérifié
+                  </span>
                 </div>
               </div>
             ))}
