@@ -285,11 +285,12 @@ Les pages sous `(dashboard)/` verifient la session via `auth()` et redirigent ve
 
 ## 7. Routes API
 
-### `GET /api/cron/send-reviews`
+### `GET|POST /api/cron/send-reviews`
 
 Traite les demandes d'avis en attente.
 
-- **Auth** : Bearer token (`CRON_SECRET`)
+- **Methodes** : GET (Vercel Cron) et POST (appels externes)
+- **Auth** : Bearer token (`CRON_SECRET`), comparaison timing-safe
 - **Reponse** : `{ ok: boolean, sent: number, failed: number, timestamp: string }`
 - **Logique** : Trouve les `ReviewRequest` avec `status=PENDING` et `scheduledAt <= now`, envoie par lot de 50
 
@@ -327,8 +328,8 @@ Routes NextAuth standard (signin, signout, session, csrf, providers).
 | `addClient(formData)` | Ajoute un client | nom requis, email ou phone |
 | `updateClient(formData)` | Modifie un client | verification proprietaire |
 | `deleteClient(formData)` | Supprime un client | verification proprietaire |
-| `importClients(csvString)` | Import CSV en masse | validation ligne par ligne |
-| `sendReviewRequest(formData)` | Cree une demande d'avis | quota, anti-doublon 7j |
+| `importClients(csvString)` | Import CSV en masse | validation ligne par ligne, anti-injection CSV |
+| `sendReviewRequest(formData)` | Cree une demande d'avis | quota atomique, IDOR, anti-doublon 7j |
 | `updateSendingSettings(formData)` | Preferences d'envoi | canal, delai, phone |
 | `updateSettings(formData)` | Profil etablissement | longueurs max |
 | `updateThreshold(formData)` | Seuil de satisfaction | 1-5 |
@@ -360,19 +361,21 @@ Routes NextAuth standard (signin, signout, session, csrf, providers).
 
 #### `createReviewRequest(userId, clientId, channel, delayHours)`
 
-1. Verifie le quota mensuel
-2. Anti-doublon : pas de demande au meme client dans les 7 derniers jours
-3. Transaction atomique : cree le `ReviewRequest` + incremente `quotaUsed`
-4. Si `delayHours === 0` : envoi immediat
-5. Sinon : `scheduledAt = now + delayHours`
-6. Resolution du template : custom (si defaut) > template par defaut du metier
-7. Interpolation des variables : `{{clientName}}`, `{{businessName}}`, `{{link}}`
+1. Transaction interactive atomique (anti race condition sur le quota)
+2. Verifie la propriete du client (anti IDOR)
+3. Verifie le quota mensuel
+4. Anti-doublon : pas de demande au meme client dans les 7 derniers jours
+5. Cree le `ReviewRequest` + incremente `quotaUsed` dans la meme transaction
+6. Si `delayHours === 0` : envoi immediat (template resanitise avant envoi)
+7. Sinon : `scheduledAt = now + delayHours`
+8. Resolution du template : custom (si defaut) > template par defaut du metier
+9. Interpolation des variables : `{{clientName}}`, `{{businessName}}`, `{{link}}`
 
 #### `processPendingRequests()`
 
 1. Trouve les `ReviewRequest` ou `status=PENDING` et `scheduledAt <= now`
 2. Limite : 50 par execution
-3. Pour chaque : envoie email/SMS, met a jour `status=SENT` et `sentAt`
+3. Pour chaque : resanitise le template HTML, envoie email/SMS, met a jour `status=SENT` et `sentAt`
 4. En cas d'echec : `status=FAILED`
 5. Retourne `{ sent, failed }`
 
@@ -457,26 +460,14 @@ if (hasFeature(user.plan, "sms")) {
 - Comparaison timing-safe (dummy hash pour eviter l'enumeration d'emails)
 - Regles : 8+ caracteres, 1 majuscule, 1 chiffre
 
-### Rate limiting
-
-Implementé en memoire (`src/lib/rate-limit.ts`). Auto-nettoyage toutes les 5 minutes.
-
-| Endpoint | Limite |
-|----------|--------|
-| Login | 5 / 15 min par email |
-| Inscription | 5 / 15 min par email, 3 / 5 min par IP |
-| Reset mot de passe | 3 / heure par email |
-| Renvoi verification | 3 / 15 min par email, 5 / 15 min par IP |
-
-> **Production** : Remplacer par Upstash Redis pour le scaling horizontal.
-
 ### Headers de securite (next.config.ts)
 
+- `X-Powered-By` desactive (`poweredByHeader: false`)
 - `X-Frame-Options: DENY`
 - `X-Content-Type-Options: nosniff`
-- `Referrer-Policy: strict-origin-when-cross-origin`
-- `Strict-Transport-Security: max-age=31536000`
-- `Content-Security-Policy` restrictive
+- `Referrer-Policy: strict-origin-when-cross-origin` (global), `no-referrer` (pages `/review/*`)
+- `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload`
+- `Content-Security-Policy` restrictive avec `frame-src` Stripe
 - `Permissions-Policy: camera=(), microphone=(), geolocation=()`
 
 ### Protection des donnees
@@ -485,6 +476,25 @@ Implementé en memoire (`src/lib/rate-limit.ts`). Auto-nettoyage toutes les 5 mi
 - Verification email obligatoire avant connexion
 - Token de review a usage unique
 - Feedback client prive (non publie)
+- Templates HTML resanitises a chaque envoi (defense in depth)
+- Protection anti-injection CSV (formules Excel bloquees)
+- Sanitisation des headers email (fromName)
+
+### Protection anti-bot
+
+- Honeypot invisible sur les formulaires login et register
+- Verification de timing (rejet si soumission < 1-2 secondes)
+- `robots.txt` bloquant `/api/`, `/dashboard/`, `/review/`, pages auth
+
+### Rate limiting public
+
+| Endpoint | Limite |
+|----------|--------|
+| Login | 5 / 15 min par email |
+| Inscription | 5 / 15 min par email, 3 / 5 min par IP |
+| Reset mot de passe | 3 / heure par email |
+| Renvoi verification | 3 / 15 min par email, 5 / 15 min par IP |
+| Soumission avis | 10 / heure par IP |
 
 ---
 
@@ -521,7 +531,7 @@ npx prisma db push
 
 ### Envoi des demandes programmees
 
-L'endpoint `GET /api/cron/send-reviews` doit etre appele regulierement pour traiter les demandes en attente.
+L'endpoint `GET|POST /api/cron/send-reviews` doit etre appele regulierement pour traiter les demandes en attente.
 
 #### Configuration Vercel Cron
 
