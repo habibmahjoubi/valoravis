@@ -117,7 +117,7 @@ export function SatisfactionGate({
         <strong>{businessName}</strong> ?
       </p>
 
-      <div className="flex justify-center gap-2 mb-4">
+      <div className="flex justify-center gap-1.5 sm:gap-2 mb-4">
         {[1, 2, 3, 4, 5].map((star) => (
           <button
             key={star}
@@ -129,7 +129,7 @@ export function SatisfactionGate({
             aria-label={`${star} étoile${star > 1 ? "s" : ""}`}
           >
             <Star
-              className={`w-11 h-11 ${
+              className={`w-9 h-9 sm:w-11 sm:h-11 ${
                 star <= (hovering || rating)
                   ? "text-primary fill-primary"
                   : "text-border"

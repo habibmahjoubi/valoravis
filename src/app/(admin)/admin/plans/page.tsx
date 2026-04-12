@@ -117,10 +117,10 @@ export default async function AdminPlansPage() {
                   {formatPrice(plan.revenue)}
                 </span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Stripe Price ID</span>
-                <span className="font-mono text-xs text-muted-foreground">
-                  {plan.stripePriceId || "Non configure"}
+              <div className="flex justify-between text-sm gap-2">
+                <span className="text-muted-foreground shrink-0">Stripe Price ID</span>
+                <span className="font-mono text-xs text-muted-foreground truncate">
+                  {plan.stripePriceId || "Non configuré"}
                 </span>
               </div>
             </div>

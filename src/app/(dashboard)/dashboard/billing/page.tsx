@@ -249,7 +249,7 @@ export default async function BillingPage() {
                 <th className="text-left text-xs font-medium text-muted-foreground px-4 py-3">
                   Statut
                 </th>
-                <th className="text-right text-xs font-medium text-muted-foreground px-4 py-3">
+                <th className="hidden sm:table-cell text-right text-xs font-medium text-muted-foreground px-4 py-3">
                   Facture
                 </th>
               </tr>
@@ -281,7 +281,7 @@ export default async function BillingPage() {
                       {inv.status === "paid" ? "Payé" : inv.status || "—"}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="hidden sm:table-cell px-4 py-3 text-right">
                     {inv.invoice_pdf && (
                       <a
                         href={inv.invoice_pdf}

@@ -81,7 +81,7 @@ export function SendReviewButton({
         )}
       </form>
       {error && (
-        <span className="text-[11px] text-destructive max-w-[180px] sm:max-w-[200px] text-right break-words">
+        <span className="text-[11px] text-destructive max-w-[200px] break-words">
           {error}
         </span>
       )}
