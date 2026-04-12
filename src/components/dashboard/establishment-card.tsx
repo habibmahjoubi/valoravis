@@ -55,15 +55,15 @@ export function EstablishmentCard({
 
   return (
     <div className={`bg-card border rounded-xl p-4 sm:p-5 transition-all ${isCurrent ? "border-primary/50 ring-2 ring-primary/20" : "border-border"}`}>
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <Building2 className="w-5 h-5 text-primary" />
-          <div>
-            <h3 className="font-semibold text-sm">{name}</h3>
-            <p className="text-xs text-muted-foreground">{customNiche || niche}</p>
+      <div className="flex items-start justify-between gap-2 mb-3">
+        <div className="flex items-center gap-2 min-w-0">
+          <Building2 className="w-5 h-5 text-primary shrink-0" />
+          <div className="min-w-0">
+            <h3 className="font-semibold text-sm truncate">{name}</h3>
+            <p className="text-xs text-muted-foreground truncate">{customNiche || niche}</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 shrink-0">
           <span className={`text-[10px] font-medium uppercase ${roleColor}`}>
             {roleLabel}
           </span>
@@ -78,8 +78,8 @@ export function EstablishmentCard({
       <div className="space-y-1 mb-4 text-xs text-muted-foreground">
         {phone && (
           <div className="flex items-center gap-1.5">
-            <Phone className="w-3 h-3" />
-            {phone}
+            <Phone className="w-3 h-3 shrink-0" />
+            <span className="truncate">{phone}</span>
           </div>
         )}
         {googlePlaceUrl && (
@@ -90,7 +90,7 @@ export function EstablishmentCard({
         )}
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         {!isCurrent && (
           <button
             onClick={() => {

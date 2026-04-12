@@ -178,33 +178,33 @@ export default async function AdminUsersPage({
                     row.owner.isSuspended ? "opacity-50 bg-destructive/5" : ""
                   }`}
                 >
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 max-w-[200px]">
                     <Link
                       href={`/admin/users/${row.owner.id}`}
-                      className="hover:text-primary"
+                      className="hover:text-primary block"
                     >
-                      <p className="text-sm font-medium">
-                        {row.establishment.name}
+                      <div className="flex flex-wrap items-center gap-1">
+                        <p className="text-sm font-medium truncate">{row.establishment.name}</p>
                         {row.owner.isSuspended && (
-                          <span className="ml-1 px-1.5 py-0.5 bg-destructive/10 text-destructive text-[10px] rounded font-medium">
+                          <span className="px-1.5 py-0.5 bg-destructive/10 text-destructive text-[10px] rounded font-medium shrink-0">
                             Suspendu
                           </span>
                         )}
                         {row.owner.trialEndsAt &&
                           row.owner.trialEndsAt > new Date() && (
-                            <span className="ml-1 px-1.5 py-0.5 bg-primary/10 text-primary text-[10px] rounded font-medium">
+                            <span className="px-1.5 py-0.5 bg-primary/10 text-primary text-[10px] rounded font-medium shrink-0">
                               Essai
                             </span>
                           )}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
+                      </div>
+                      <p className="text-xs text-muted-foreground truncate">
                         {getNicheLabel(row.establishment.niche, row.establishment.customNiche)}
                       </p>
                     </Link>
                   </td>
                   <td className="hidden md:table-cell px-4 py-3">
-                    <p className="text-sm">{row.owner.name || row.owner.email}</p>
-                    <p className="text-xs text-muted-foreground">{row.owner.email}</p>
+                    <p className="text-sm truncate">{row.owner.name || row.owner.email}</p>
+                    <p className="text-xs text-muted-foreground truncate">{row.owner.email}</p>
                   </td>
                   <td className="px-4 py-3">
                     <ChangePlanForm
@@ -237,7 +237,7 @@ export default async function AdminUsersPage({
                     {formatDate(row.owner.createdAt)}
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex flex-wrap items-center justify-end gap-1">
+                    <div className="flex flex-wrap items-center justify-end gap-1.5">
                       <ResetQuotaButton userId={row.owner.id} />
                       <SuspendButton
                         userId={row.owner.id}

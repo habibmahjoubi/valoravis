@@ -117,7 +117,7 @@ export default async function AdminUserDetailPage({
             )}
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <ResetQuotaButton userId={user.id} />
           <SuspendButton userId={user.id} isSuspended={user.isSuspended} />
           <DeleteUserButton userId={user.id} />
@@ -139,7 +139,7 @@ export default async function AdminUserDetailPage({
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-8">
         {[
           { label: "Clients", value: user._count.clients },
           {
@@ -161,7 +161,7 @@ export default async function AdminUserDetailPage({
       </div>
 
       {/* Infos */}
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
+      <div className="grid md:grid-cols-2 gap-4 sm:gap-6 mb-8">
         <div className="bg-card border border-border rounded-xl p-6">
           <h2 className="font-semibold mb-3">Informations</h2>
           <div className="space-y-2 text-sm">
@@ -257,9 +257,12 @@ export default async function AdminUserDetailPage({
                       const rl = member.role === "OWNER" ? "Propriétaire" : member.role === "ADMIN" ? "Admin" : "Membre";
                       const rc = member.role === "OWNER" ? "text-primary" : member.role === "ADMIN" ? "text-amber-500" : "text-muted-foreground";
                       return (
-                        <div key={member.id} className="flex items-center justify-between text-xs py-1">
-                          <span>{member.user.name || member.user.email} <span className="text-muted-foreground">({member.user.email})</span></span>
-                          <span className={`font-medium uppercase ${rc}`}>{rl}</span>
+                        <div key={member.id} className="flex items-center justify-between text-xs py-1 min-w-0 gap-2">
+                          <div className="min-w-0 flex-1">
+                            <span className="truncate block">{member.user.name || member.user.email}</span>
+                            {member.user.name && <span className="text-muted-foreground text-[10px] truncate block">{member.user.email}</span>}
+                          </div>
+                          <span className={`font-medium uppercase shrink-0 ${rc}`}>{rl}</span>
                         </div>
                       );
                     })}
@@ -289,16 +292,16 @@ export default async function AdminUserDetailPage({
                 <th className="text-left text-xs font-medium text-muted-foreground px-4 py-2">
                   Client
                 </th>
-                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-2">
+                <th className="hidden sm:table-cell text-left text-xs font-medium text-muted-foreground px-4 py-2">
                   Canal
                 </th>
                 <th className="text-left text-xs font-medium text-muted-foreground px-4 py-2">
                   Statut
                 </th>
-                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-2">
+                <th className="hidden md:table-cell text-left text-xs font-medium text-muted-foreground px-4 py-2">
                   Note
                 </th>
-                <th className="text-left text-xs font-medium text-muted-foreground px-4 py-2">
+                <th className="hidden sm:table-cell text-left text-xs font-medium text-muted-foreground px-4 py-2">
                   Date
                 </th>
               </tr>
@@ -311,8 +314,8 @@ export default async function AdminUserDetailPage({
                     key={req.id}
                     className="border-b border-border last:border-0"
                   >
-                    <td className="px-4 py-2 text-sm">{req.client.name}</td>
-                    <td className="px-4 py-2 text-sm text-muted-foreground">
+                    <td className="px-4 py-2 text-sm truncate max-w-[120px]">{req.client.name}</td>
+                    <td className="hidden sm:table-cell px-4 py-2 text-sm text-muted-foreground">
                       {req.channel}
                     </td>
                     <td className="px-4 py-2">
@@ -322,10 +325,10 @@ export default async function AdminUserDetailPage({
                         {sc.label}
                       </span>
                     </td>
-                    <td className="px-4 py-2 text-sm">
+                    <td className="hidden md:table-cell px-4 py-2 text-sm">
                       {req.rating ? "\u2B50".repeat(req.rating) : "\u2014"}
                     </td>
-                    <td className="px-4 py-2 text-xs text-muted-foreground">
+                    <td className="hidden sm:table-cell px-4 py-2 text-xs text-muted-foreground">
                       {formatDate(req.createdAt)}
                     </td>
                   </tr>

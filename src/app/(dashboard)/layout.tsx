@@ -138,11 +138,11 @@ export default async function DashboardLayout({
         </nav>
 
         <div className="p-3 border-t border-border">
-          <div className="flex items-center justify-between px-3 py-2 text-xs text-muted-foreground">
-            <span>
+          <div className="flex items-center justify-between px-3 py-2 text-xs text-muted-foreground min-w-0">
+            <span className="truncate">
               {effectiveQuotaUsed}/{effectiveQuota} envois
             </span>
-            <span className="font-medium uppercase">{effectivePlan}</span>
+            <span className="font-medium uppercase shrink-0 ml-2">{effectivePlan}</span>
           </div>
           <LogoutButton />
         </div>

@@ -141,7 +141,7 @@ function MemberRow({
                 if (result?.error) setError(result.error);
               });
             }}
-            className="text-[10px] bg-background border border-border rounded px-1.5 py-0.5 focus:outline-none focus:ring-1 focus:ring-primary"
+            className="text-[10px] sm:text-xs bg-background border border-border rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-primary"
           >
             <option value="ADMIN">Admin</option>
             <option value="MEMBER">Membre</option>

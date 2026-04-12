@@ -75,7 +75,7 @@ export default async function InvitePage({
           <div className="text-center py-8">
             <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg mb-6">
               <p className="font-medium">Vous êtes invité à rejoindre</p>
-              <p className="text-lg font-bold text-primary mt-1">{invitation.establishmentName}</p>
+              <p className="text-base sm:text-lg font-bold text-primary mt-1 truncate">{invitation.establishmentName}</p>
               <p className="text-sm text-muted-foreground mt-1">en tant que {invitation.role}</p>
             </div>
             <p className="text-sm text-muted-foreground mb-4">

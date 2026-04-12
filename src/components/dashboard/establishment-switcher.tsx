@@ -56,9 +56,9 @@ export function EstablishmentSwitcher({
                     setOpen(false);
                   });
                 }}
-                className="flex items-center gap-2 w-full px-3 py-2 text-xs hover:bg-muted transition-colors text-left"
+                className="flex items-center gap-2 w-full px-3 py-2 text-xs hover:bg-muted transition-colors text-left min-w-0"
               >
-                <span className="truncate flex-1">{est.name}</span>
+                <span className="truncate flex-1 min-w-0">{est.name}</span>
                 <span className="text-[10px] text-muted-foreground uppercase shrink-0">
                   {est.role === "OWNER" ? "Propriétaire" : est.role === "ADMIN" ? "Admin" : "Membre"}
                 </span>

@@ -44,7 +44,7 @@ export function AcceptInviteForm({
     <>
       <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg mb-6 text-center">
         <p className="text-sm text-muted-foreground">Vous rejoignez</p>
-        <p className="text-lg font-bold text-primary mt-1">{establishmentName}</p>
+        <p className="text-base sm:text-lg font-bold text-primary mt-1 truncate">{establishmentName}</p>
         <p className="text-sm text-muted-foreground mt-1">en tant que <strong>{role}</strong></p>
       </div>
 
