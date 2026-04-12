@@ -11,4 +11,4 @@ Disallow: /forgot-password
 Disallow: /reset-password
 Disallow: /suspended
 
-Sitemap: https://valoravis.habibmahjoubi.fr/sitemap.xml
+Sitemap: https://valoravis.fr/sitemap.xml
