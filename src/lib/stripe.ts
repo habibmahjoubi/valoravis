@@ -1,15 +1,35 @@
 import Stripe from "stripe";
 import { prisma } from "./prisma";
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-03-31.basil",
+// Construction paresseuse : ne pas exiger la clé au moment du build.
+let _stripe: Stripe | null = null;
+function getStripe(): Stripe {
+  if (!_stripe) {
+    if (!process.env.STRIPE_SECRET_KEY) {
+      throw new Error("STRIPE_SECRET_KEY manquant");
+    }
+    _stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2025-03-31.basil",
+    });
+  }
+  return _stripe;
+}
+
+// Proxy : conserve l'API `stripe.xxx.yyy(...)` sans construire le client au build.
+export const stripe = new Proxy({} as Stripe, {
+  get(_target, prop) {
+    const c = getStripe() as unknown as Record<string | symbol, unknown>;
+    const v = c[prop];
+    return typeof v === "function" ? v.bind(c) : v;
+  },
 });
 
-// Fallback statique si la base n'est pas accessible
+// Fallback statique UNIQUEMENT si la table Plan est vide/inaccessible.
+// La source de vérité est la table `Plan` en base (voir getPlanByKey / getPlans).
 export const DEFAULT_PLANS = {
   free: { name: "Gratuit", quota: 50, price: 0 },
-  pro: { name: "Pro", quota: 200, price: 29, priceId: process.env.STRIPE_PRICE_PRO! },
-  business: { name: "Business", quota: 500, price: 59, priceId: process.env.STRIPE_PRICE_BUSINESS! },
+  pro: { name: "Pro", quota: 100, price: 29, priceId: process.env.STRIPE_PRICE_PRO! },
+  business: { name: "Business", quota: 500, price: 79, priceId: process.env.STRIPE_PRICE_BUSINESS! },
 } as const;
 
 // Pour compatibilite avec le code existant
@@ -42,13 +62,32 @@ export async function getPlans() {
   }));
 }
 
-// Trouver un plan par sa cle
+// Trouver un plan par sa cle. Retourne toujours une forme homogène
+// { key, name, price, quota, trialDays, stripePriceId }.
 export async function getPlanByKey(key: string) {
   const plan = await prisma.plan.findUnique({ where: { key } });
-  if (plan) return plan;
+  if (plan) {
+    return {
+      key: plan.key,
+      name: plan.name,
+      price: plan.price,
+      quota: plan.quota,
+      trialDays: plan.trialDays,
+      stripePriceId: plan.stripePriceId,
+    };
+  }
 
   // Fallback
   const fallback = DEFAULT_PLANS[key as keyof typeof DEFAULT_PLANS];
-  if (fallback) return { key, ...fallback, stripePriceId: null };
+  if (fallback) {
+    return {
+      key,
+      name: fallback.name,
+      price: fallback.price,
+      quota: fallback.quota,
+      trialDays: 0,
+      stripePriceId: "priceId" in fallback ? fallback.priceId : null,
+    };
+  }
   return null;
 }

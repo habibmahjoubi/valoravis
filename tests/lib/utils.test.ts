@@ -1,87 +1,110 @@
 import { describe, it, expect } from "vitest";
 import {
-  sanitizeHtml,
   escapeHtml,
   getNicheLabel,
   cn,
   addBusinessDays,
   formatPrice,
   toGoogleWriteReviewUrl,
+  csvCell,
+  isFormulaInjection,
+  formString,
 } from "@/lib/utils";
+import { sanitizeTemplateHtml } from "@/lib/sanitize";
 
-// ── sanitizeHtml ──
+// ── sanitizeTemplateHtml ──
 
-describe("sanitizeHtml", () => {
+describe("sanitizeTemplateHtml", () => {
   it("strips script tags with content", () => {
-    expect(sanitizeHtml('<p>Hello</p><script>alert("xss")</script>')).toBe(
-      "<p>Hello</p>"
-    );
+    const r = sanitizeTemplateHtml('<p>Hello</p><script>alert("xss")</script>');
+    expect(r).toContain("Hello");
+    expect(r).not.toContain("<script");
+    expect(r).not.toContain("alert");
   });
 
-  it("strips self-closing script tags", () => {
-    expect(sanitizeHtml('<script src="evil.js"/>')).toBe("");
+  it("strips iframe / object / embed / form / style / svg", () => {
+    for (const bad of [
+      '<iframe src="https://evil.com"></iframe>',
+      '<object data="x"></object>',
+      '<embed src="x"/>',
+      '<form action="/"><input/></form>',
+      "<style>body{display:none}</style>",
+      '<svg onload="alert(1)"></svg>',
+    ]) {
+      const r = sanitizeTemplateHtml(bad);
+      expect(r).not.toMatch(/<(iframe|object|embed|form|input|style|svg)/i);
+    }
   });
 
-  it("strips iframe tags", () => {
-    expect(
-      sanitizeHtml('<iframe src="https://evil.com"></iframe>')
-    ).toBe("");
+  it("removes event handlers", () => {
+    const r = sanitizeTemplateHtml('<div onclick="alert(1)">text</div>');
+    expect(r).toContain("text");
+    expect(r).not.toContain("onclick");
   });
 
-  it("strips object, embed, form, link, meta, base tags", () => {
-    const input = '<object data="x"></object><embed src="x"/><form action="/"><input/></form>';
-    const result = sanitizeHtml(input);
-    expect(result).not.toContain("<object");
-    expect(result).not.toContain("<embed");
-    expect(result).not.toContain("<form");
+  it("neutralizes javascript:/vbscript:/data: URLs", () => {
+    expect(sanitizeTemplateHtml('<a href="javascript:alert(1)">c</a>')).not.toContain("javascript:");
+    expect(sanitizeTemplateHtml('<a href="vbscript:alert(1)">c</a>')).not.toContain("vbscript:");
+    expect(sanitizeTemplateHtml('<a href="data:text/html,x">c</a>')).not.toContain("data:");
   });
 
-  it("removes event handlers (onclick, onerror, onload)", () => {
-    expect(sanitizeHtml('<div onclick="alert(1)">text</div>')).toBe(
-      "<div>text</div>"
-    );
-    expect(sanitizeHtml("<img onerror='alert(1)' src='x'>")).toBe(
-      "<img src='x'>"
-    );
+  it("keeps safe formatting", () => {
+    const r = sanitizeTemplateHtml('<div><h2>Title</h2><p>Hello <strong>world</strong></p></div>');
+    expect(r).toContain("<h2>Title</h2>");
+    expect(r).toContain("<strong>world</strong>");
   });
 
-  it("neutralizes javascript: URLs in href", () => {
-    const result = sanitizeHtml('<a href="javascript:alert(1)">click</a>');
-    expect(result).not.toContain("javascript:");
+  it("resists tag-reconstruction bypass", () => {
+    const r = sanitizeTemplateHtml("<scr<script>ipt>alert(1)</script>");
+    expect(r).not.toContain("<script");
   });
 
-  it("neutralizes data: URLs in src", () => {
-    const result = sanitizeHtml('<img src="data:text/html,<script>alert(1)</script>">');
-    expect(result).not.toContain("data:");
+  it("adds rel=noopener to links", () => {
+    const r = sanitizeTemplateHtml('<a href="https://example.com">x</a>');
+    expect(r).toContain('rel="noopener noreferrer"');
   });
+});
 
-  it("keeps safe HTML intact", () => {
-    const safe = '<div><h1>Title</h1><p>Hello <strong>world</strong></p></div>';
-    expect(sanitizeHtml(safe)).toBe(safe);
+// ── csvCell / isFormulaInjection ──
+
+describe("csvCell", () => {
+  it("quotes and doubles inner quotes", () => {
+    expect(csvCell('a"b')).toBe('"a""b"');
   });
-
-  it("strips SVG tags (XSS vector)", () => {
-    expect(sanitizeHtml('<svg onload="alert(1)"></svg>')).toBe("");
-    expect(sanitizeHtml('<svg><desc>test</desc></svg>')).toBe("");
+  it("neutralises formula-injection leading chars", () => {
+    expect(csvCell("=1+1")).toBe("\"'=1+1\"");
+    expect(csvCell("@SUM(A1)")).toBe("\"'@SUM(A1)\"");
   });
-
-  it("strips style tags", () => {
-    expect(sanitizeHtml('<style>body{display:none}</style>')).toBe("");
+  it("handles null/undefined/number", () => {
+    expect(csvCell(null)).toBe('""');
+    expect(csvCell(42)).toBe('"42"');
   });
-
-  it("strips template and textarea tags", () => {
-    expect(sanitizeHtml('<template><img src=x onerror=alert(1)></template>')).toBe("");
-    expect(sanitizeHtml('<textarea><img src=x onerror=alert(1)></textarea>')).toBe("");
+  it("prevents column breakout", () => {
+    expect(csvCell('x","=2')).toBe('"x"",""=2"');
   });
+});
 
-  it("removes style attributes with url() or expression()", () => {
-    const result = sanitizeHtml('<div style="background:url(javascript:alert(1))">test</div>');
-    expect(result).not.toContain("url(");
+describe("isFormulaInjection", () => {
+  it("flags leading = + - @ tab CR", () => {
+    for (const s of ["=x", "+x", "-x", "@x", "\tx", "\rx"]) {
+      expect(isFormulaInjection(s)).toBe(true);
+    }
   });
+  it("passes normal values and empty", () => {
+    expect(isFormulaInjection("Jean Dupont")).toBe(false);
+    expect(isFormulaInjection(null)).toBe(false);
+    expect(isFormulaInjection("")).toBe(false);
+  });
+});
 
-  it("removes vbscript: in href", () => {
-    const result = sanitizeHtml('<a href="vbscript:alert(1)">click</a>');
-    expect(result).not.toContain("vbscript:");
+describe("formString", () => {
+  it("returns the string value", () => {
+    const fd = new FormData();
+    fd.set("a", "hello");
+    expect(formString(fd, "a")).toBe("hello");
+  });
+  it("returns empty string when missing", () => {
+    expect(formString(new FormData(), "missing")).toBe("");
   });
 });
 

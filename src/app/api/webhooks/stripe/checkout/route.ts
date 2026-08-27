@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { stripe, PLANS } from "@/lib/stripe";
+import { prisma } from "@/lib/prisma";
+import { stripe, getPlanByKey } from "@/lib/stripe";
 import { absoluteUrl } from "@/lib/utils";
 
 export async function POST(request: Request) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const user = await prisma.user.findUniqueOrThrow({ where: { id: session.user.id } });
+  if (user.isSuspended) {
+    return NextResponse.json({ error: "Compte suspendu" }, { status: 403 });
   }
 
   let body;
@@ -21,25 +27,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing plan" }, { status: 400 });
   }
 
-  const planConfig = PLANS[plan as keyof typeof PLANS];
-
-  if (!planConfig || !("priceId" in planConfig)) {
+  const planConfig = await getPlanByKey(plan);
+  if (!planConfig || planConfig.price <= 0 || !planConfig.stripePriceId) {
     return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
   }
 
   const checkoutSession = await stripe.checkout.sessions.create({
     mode: "subscription",
     payment_method_types: ["card"],
-    line_items: [
-      {
-        price: planConfig.priceId,
-        quantity: 1,
-      },
-    ],
-    metadata: {
-      userId: session.user.id,
-      plan,
-    },
+    line_items: [{ price: planConfig.stripePriceId, quantity: 1 }],
+    client_reference_id: session.user.id,
+    ...(user.stripeCustomerId ? { customer: user.stripeCustomerId } : {}),
+    metadata: { userId: session.user.id, plan },
     success_url: absoluteUrl("/dashboard/billing?success=1"),
     cancel_url: absoluteUrl("/dashboard/billing?canceled=1"),
   });

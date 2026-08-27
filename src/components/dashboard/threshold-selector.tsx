@@ -10,10 +10,12 @@ export function ThresholdSelector({ defaultValue }: { defaultValue: number }) {
 
   return (
     <div className="max-w-lg bg-card border border-border rounded-xl p-4 sm:p-6">
-      <h2 className="font-semibold mb-1">Seuil de satisfaction</h2>
+      <h2 className="font-semibold mb-1">Alerte satisfaction</h2>
       <p className="text-sm text-muted-foreground mb-4">
-        Les clients qui donnent une note <strong>en dessous</strong> de ce seuil
-        seront redirigés vers un formulaire privé au lieu de Google.
+        Vous serez notifié lorsqu&apos;un client laisse une note strictement
+        inférieure à ce seuil, afin de pouvoir le recontacter. Tous les clients,
+        quelle que soit leur note, se voient proposer de publier leur avis sur
+        Google.
       </p>
 
       <div className="flex items-center gap-3 mb-3">
@@ -38,11 +40,11 @@ export function ThresholdSelector({ defaultValue }: { defaultValue: number }) {
 
       <p className="text-sm text-muted-foreground mb-4">
         {value === 1 ? (
-          "Tous les avis seront redirigés vers Google (pas de filtre)."
+          "Aucune alerte : vous ne serez pas notifié des notes basses."
         ) : (
           <>
-            Note <strong>&lt; {value}</strong> → feedback privé.
-            Note <strong>≥ {value}</strong> → redirigé vers Google.
+            Note <strong>&lt; {value}</strong> → alerte envoyée à
+            l&apos;établissement.
           </>
         )}
       </p>

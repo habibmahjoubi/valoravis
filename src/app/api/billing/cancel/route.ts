@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/lib/resend";
+import { checkRateLimit } from "@/lib/rate-limit";
+import { reconcileUserSubscription } from "@/lib/subscription";
 import { absoluteUrl, escapeHtml } from "@/lib/utils";
+import { headers } from "next/headers";
 
 export async function POST() {
   const session = await auth();
@@ -10,9 +13,24 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const user = await prisma.user.findUniqueOrThrow({
+  const h = await headers();
+  const ip = h.get("x-forwarded-for")?.split(",")[0].trim() || h.get("x-real-ip") || "unknown";
+  const rl = await checkRateLimit(`billing-cancel:${ip}`, { maxAttempts: 5, windowMs: 15 * 60 * 1000 });
+  if (!rl.success) {
+    return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 });
+  }
+
+  let user = await prisma.user.findUniqueOrThrow({
     where: { id: session.user.id },
   });
+
+  if (user.isSuspended) {
+    return NextResponse.json({ error: "Compte suspendu" }, { status: 403 });
+  }
+
+  if (await reconcileUserSubscription(user)) {
+    user = await prisma.user.findUniqueOrThrow({ where: { id: user.id } });
+  }
 
   if (user.plan === "free") {
     return NextResponse.json({ error: "Pas d'abonnement actif" }, { status: 400 });

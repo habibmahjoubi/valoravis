@@ -36,6 +36,20 @@ export function RegisterForm({ plans }: { plans: PlanOption[] }) {
   const planInfo = plans.find((p) => p.key === selectedPlan) || plans[0];
   const currentNiche = NICHES.find((n) => n.value === selectedNiche) || NICHES[0];
 
+  if (!planInfo) {
+    return (
+      <div className="text-center py-8">
+        <Link href="/" className="text-2xl font-bold text-primary">
+          Valoravis
+        </Link>
+        <p className="text-sm text-muted-foreground mt-4">
+          Aucune formule n&apos;est disponible pour le moment. Merci de réessayer
+          plus tard.
+        </p>
+      </div>
+    );
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);

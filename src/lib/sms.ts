@@ -1,9 +1,17 @@
 import twilio from "twilio";
+import type { Twilio } from "twilio";
 
-const client = twilio(
-  process.env.TWILIO_ACCOUNT_SID!,
-  process.env.TWILIO_AUTH_TOKEN!
-);
+// Construction paresseuse : ne pas exiger les identifiants au moment du build.
+let _client: Twilio | null = null;
+function getClient(): Twilio {
+  if (!_client) {
+    if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
+      throw new Error("Identifiants Twilio manquants");
+    }
+    _client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+  }
+  return _client;
+}
 
 export async function sendSms({
   to,
@@ -21,7 +29,7 @@ export async function sendSms({
     formattedTo = "+" + formattedTo;
   }
 
-  const message = await client.messages.create({
+  const message = await getClient().messages.create({
     body,
     from: process.env.TWILIO_PHONE_NUMBER!,
     to: formattedTo,

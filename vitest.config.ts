@@ -11,6 +11,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
+      // `server-only` throws outside a React Server Component context; no-op it in tests.
+      "server-only": path.resolve(__dirname, "tests/stubs/empty.ts"),
     },
   },
 });

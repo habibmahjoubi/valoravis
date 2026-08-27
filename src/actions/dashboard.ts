@@ -3,7 +3,8 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { createReviewRequest } from "@/services/review-request.service";
-import { sanitizeHtml } from "@/lib/utils";
+import { isFormulaInjection, formString } from "@/lib/utils";
+import { sanitizeTemplateHtml } from "@/lib/sanitize";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { Niche, Channel } from "@/generated/prisma/enums";
@@ -35,12 +36,23 @@ async function getEffectivePlan(userId: string): Promise<string> {
 // --- Onboarding ---
 export async function completeOnboarding(formData: FormData) {
   const userId = await getUserId();
-  const businessName = formData.get("businessName") as string;
-  const niche = formData.get("niche") as Niche;
-  const customNiche = (formData.get("customNiche") as string) || null;
-  const googlePlaceUrl = formData.get("googlePlaceUrl") as string;
-  const phone = (formData.get("phone") as string) || null;
 
+  // Garde-fou : l'onboarding ne crée qu'un seul établissement. S'il a déjà été
+  // fait (ou si l'utilisateur possède déjà un établissement), on ne recrée rien.
+  const existingOwnership = await prisma.establishmentMember.findFirst({
+    where: { userId, role: "OWNER" },
+  });
+  if (existingOwnership) {
+    redirect("/dashboard");
+  }
+
+  const businessName = formString(formData, "businessName").trim();
+  const niche = formData.get("niche") as Niche;
+  const customNiche = formString(formData, "customNiche") || null;
+  const googlePlaceUrl = formString(formData, "googlePlaceUrl");
+  const phone = formString(formData, "phone") || null;
+
+  if (!businessName) throw new Error("Le nom de l'établissement est requis.");
   validateLength(businessName, 200, "Nom de l'établissement");
   validateLength(customNiche, 100, "Métier personnalisé");
   validateLength(googlePlaceUrl, 2000, "URL Google");
@@ -97,10 +109,14 @@ function validateLength(value: string | null, max: number, label: string) {
 export async function addClient(formData: FormData) {
   const userId = await getUserId();
   const establishmentId = await getEstablishmentId();
-  const name = formData.get("name") as string;
+  const name = formString(formData, "name").trim();
+  const email = formString(formData, "email") || null;
+  const phone = formString(formData, "phone") || null;
+  const notes = formString(formData, "notes") || null;
+  if (!name) throw new Error("Le nom est requis.");
   validateLength(name, 200, "Nom");
-  validateLength(formData.get("email") as string, 255, "Email");
-  validateLength(formData.get("notes") as string, 1000, "Notes");
+  validateLength(email, 255, "Email");
+  validateLength(notes, 1000, "Notes");
 
   if (!establishmentId) throw new Error("Aucun établissement sélectionné.");
 
@@ -108,10 +124,10 @@ export async function addClient(formData: FormData) {
     data: {
       user: { connect: { id: userId } },
       establishment: { connect: { id: establishmentId } },
-      name: formData.get("name") as string,
-      email: (formData.get("email") as string) || null,
-      phone: (formData.get("phone") as string) || null,
-      notes: (formData.get("notes") as string) || null,
+      name,
+      email,
+      phone,
+      notes,
     },
   });
 
@@ -121,16 +137,19 @@ export async function addClient(formData: FormData) {
 export async function updateClient(formData: FormData) {
   const userId = await getUserId();
   const establishmentId = await getEstablishmentId();
-  const clientId = formData.get("clientId") as string;
+  const clientId = formString(formData, "clientId");
+  const name = formString(formData, "name").trim();
+  if (!name) throw new Error("Le nom est requis.");
+  validateLength(name, 200, "Nom");
 
   // Scope to establishment to prevent IDOR across establishments
   await prisma.client.update({
     where: { id: clientId, userId, ...(establishmentId ? { establishmentId } : {}) },
     data: {
-      name: formData.get("name") as string,
-      email: (formData.get("email") as string) || null,
-      phone: (formData.get("phone") as string) || null,
-      notes: (formData.get("notes") as string) || null,
+      name,
+      email: formString(formData, "email") || null,
+      phone: formString(formData, "phone") || null,
+      notes: formString(formData, "notes") || null,
     },
   });
 
@@ -165,7 +184,6 @@ export async function importClients(csvData: string) {
   if (est && est.role === "MEMBER") {
     return { imported: 0, skipped: 0, errors: [{ row: 0, name: "", reason: "Permissions insuffisantes." }] };
   }
-  const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
   const plan = await getEffectivePlan(userId);
   if (!hasFeature(plan, "csv_import")) {
     return { imported: 0, skipped: 0, errors: [{ row: 0, name: "", reason: "L'import CSV nécessite le plan Pro ou supérieur." }] };
@@ -205,8 +223,13 @@ export async function importClients(csvData: string) {
       errors.push({ row: rowNum, name: name || "", reason: !name ? "Nom manquant" : "Nom trop long (max 200)" });
       continue;
     }
-    // Prevent CSV formula injection
-    if (/^[=+\-@\t\r]/.test(name) || (email && /^[=+\-@\t\r]/.test(email)) || (phone && /^[=+\-@\t\r]/.test(phone))) {
+    // Prevent CSV formula injection (tous les champs, y compris les notes)
+    if (
+      isFormulaInjection(name) ||
+      isFormulaInjection(email) ||
+      isFormulaInjection(phone) ||
+      isFormulaInjection(notes)
+    ) {
       skipped++;
       errors.push({ row: rowNum, name, reason: "Valeur invalide (caractère interdit en début de champ)" });
       continue;
@@ -237,7 +260,7 @@ export async function importClients(csvData: string) {
     if (phone) orClauses.push({ phone });
 
     const existing = await prisma.client.findFirst({
-      where: { userId, OR: orClauses },
+      where: { userId, establishmentId, OR: orClauses },
     });
     if (existing) {
       skipped++;
@@ -349,7 +372,6 @@ export async function startTrial(planKey: string) {
 export async function saveTemplate(formData: FormData) {
   const userId = await getUserId();
   const establishmentId = await getEstablishmentId();
-  const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
 
   // MEMBER cannot manage templates
   const est = await getCurrentEstablishment();
@@ -364,7 +386,7 @@ export async function saveTemplate(formData: FormData) {
   const channel = formData.get("channel") as Channel;
   const name = (formData.get("name") as string) || "Sans nom";
   const subject = (formData.get("subject") as string) || null;
-  const body = sanitizeHtml(formData.get("body") as string);
+  const body = sanitizeTemplateHtml(formString(formData, "body"));
   const templateId = formData.get("templateId") as string | null;
   const isDefault = formData.get("isDefault") === "true";
 
@@ -425,6 +447,14 @@ export async function updateThreshold(formData: FormData) {
     throw new Error("Seuil invalide (entre 1 et 5)");
   }
 
+  // Écrire au niveau de l'établissement courant (source de vérité lue par
+  // l'app), et garder User synchronisé pour la rétrocompatibilité.
+  if (est) {
+    await prisma.establishment.update({
+      where: { id: est.id },
+      data: { satisfactionThreshold: threshold },
+    });
+  }
   await prisma.user.update({
     where: { id: userId },
     data: { satisfactionThreshold: threshold },
@@ -469,16 +499,19 @@ export async function updateSendingSettings(formData: FormData) {
     return { error: "Adresse de réponse invalide" };
   }
 
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
-      defaultChannel: defaultChannel as Channel,
-      defaultDelay,
-      senderName,
-      replyToEmail,
-      ...(phone !== null ? { phone } : {}),
-    },
-  });
+  const data = {
+    defaultChannel: defaultChannel as Channel,
+    defaultDelay,
+    senderName,
+    replyToEmail,
+    ...(phone !== null ? { phone } : {}),
+  };
+
+  // Écrire au niveau de l'établissement courant + garder User synchronisé.
+  if (est) {
+    await prisma.establishment.update({ where: { id: est.id }, data });
+  }
+  await prisma.user.update({ where: { id: userId }, data });
 
   revalidatePath("/dashboard/settings");
   return { success: true };
@@ -570,12 +603,13 @@ export async function updateSettings(formData: FormData) {
   if (estCtx && estCtx.role === "MEMBER") throw new Error("Permissions insuffisantes.");
   const establishmentId = estCtx?.id ?? null;
   const niche = formData.get("niche") as Niche;
-  const customNicheInput = formData.get("customNiche") as string | null;
+  const customNicheInput = formString(formData, "customNiche") || null;
 
-  const businessName = formData.get("businessName") as string;
-  const googlePlaceUrl = formData.get("googlePlaceUrl") as string;
-  const phone = (formData.get("phone") as string) || null;
+  const businessName = formString(formData, "businessName").trim();
+  const googlePlaceUrl = formString(formData, "googlePlaceUrl");
+  const phone = formString(formData, "phone") || null;
 
+  if (!businessName) throw new Error("Le nom de l'établissement est requis.");
   validateLength(businessName, 200, "Nom de l'établissement");
   validateLength(customNicheInput, 100, "Métier personnalisé");
   validateLength(googlePlaceUrl, 2000, "URL Google");

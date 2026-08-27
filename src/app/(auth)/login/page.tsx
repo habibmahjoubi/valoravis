@@ -40,7 +40,7 @@ function LoginForm() {
 
     if (result?.error) {
       // Vérifier si l'échec est dû à un email non vérifié
-      const verif = await checkEmailVerificationStatus(email);
+      const verif = await checkEmailVerificationStatus(email, password);
       if (verif.status === "unverified") {
         router.push(`/check-email?email=${encodeURIComponent(email)}`);
         return;

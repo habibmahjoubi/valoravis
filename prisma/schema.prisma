@@ -46,6 +46,7 @@ model User {
   googlePlaceUrl   String?
   phone            String?
   stripeCustomerId String?  @unique
+  stripeSubscriptionId String? @unique
   plan             String   @default("free")
   monthlyQuota     Int      @default(50)
   quotaUsed        Int      @default(0)
@@ -228,6 +229,8 @@ model ReviewRequest {
   clickedAt       DateTime?
   rating          Int?
   feedback        String?
+  claimId         String?
+  claimedAt       DateTime?
   createdAt       DateTime      @default(now())
 
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -238,6 +241,14 @@ model ReviewRequest {
   @@index([establishmentId])
   @@index([token])
   @@index([status, scheduledAt])
+  @@index([claimId])
+}
+
+// Idempotence des webhooks Stripe : on n'agit qu'une fois par event.id.
+model StripeEvent {
+  id         String   @id
+  type       String
+  receivedAt DateTime @default(now())
 }
 
 model Template {

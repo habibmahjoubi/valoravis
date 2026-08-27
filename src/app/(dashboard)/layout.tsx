@@ -7,6 +7,7 @@ import { LogoutButton } from "@/components/dashboard/logout-button";
 import { MobileSidebar } from "@/components/ui/mobile-sidebar";
 import { EstablishmentSwitcher } from "@/components/dashboard/establishment-switcher";
 import { getCurrentEstablishment, getUserEstablishments, getEstablishmentOwner } from "@/lib/establishment";
+import { reconcileUserSubscription } from "@/lib/subscription";
 import {
   LayoutDashboard,
   Users,
@@ -36,36 +37,8 @@ export default async function DashboardLayout({
   if (user.isAdmin) redirect("/admin");
   if (user.isSuspended) redirect("/suspended");
 
-  if (
-    user.trialEndsAt &&
-    user.trialEndsAt <= new Date() &&
-    user.plan !== "free"
-  ) {
-    await prisma.user.update({
-      where: { id: user.id },
-      data: { plan: "free", monthlyQuota: 50, quotaUsed: 0 },
-    });
-    user.plan = "free";
-    user.monthlyQuota = 50;
-    user.quotaUsed = 0;
-  }
-
-  // Auto-downgrade if cancellation effective date has passed
-  if (
-    user.cancelEffectiveAt &&
-    user.cancelEffectiveAt <= new Date() &&
-    user.plan !== "free"
-  ) {
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        plan: "free",
-        monthlyQuota: 50,
-        quotaUsed: 0,
-        cancelRequestedAt: null,
-        cancelEffectiveAt: null,
-      },
-    });
+  // Rétrogradations dues (essai expiré / annulation effective), idempotent.
+  if (await reconcileUserSubscription(user)) {
     user.plan = "free";
     user.monthlyQuota = 50;
     user.quotaUsed = 0;

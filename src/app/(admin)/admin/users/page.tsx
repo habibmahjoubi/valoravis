@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
-import { formatDate, getNicheLabel } from "@/lib/utils";
+import { formatDate, getNicheLabel, csvCell } from "@/lib/utils";
 import {
   SuspendButton,
   DeleteUserButton,
@@ -69,9 +69,21 @@ export default async function AdminUsersPage({
 
   // CSV export
   const csvHeader = "Établissement,Propriétaire,Email,Métier,Plan,Quota,Membres,Clients,Envois,Inscription";
-  const csvRows = rows.map(
-    (r) =>
-      `"${r.establishment.name}","${r.owner.name || ""}","${r.owner.email}","${r.establishment.niche}","${r.owner.plan}","${r.owner.quotaUsed}/${r.owner.monthlyQuota}","${r.memberCount}","${r.clientCount}","${r.requestCount}","${r.owner.createdAt.toISOString().slice(0, 10)}"`
+  const csvRows = rows.map((r) =>
+    [
+      r.establishment.name,
+      r.owner.name || "",
+      r.owner.email,
+      r.establishment.niche,
+      r.owner.plan,
+      `${r.owner.quotaUsed}/${r.owner.monthlyQuota}`,
+      r.memberCount,
+      r.clientCount,
+      r.requestCount,
+      r.owner.createdAt.toISOString().slice(0, 10),
+    ]
+      .map(csvCell)
+      .join(",")
   );
   const csvData = [csvHeader, ...csvRows].join("\n");
 
