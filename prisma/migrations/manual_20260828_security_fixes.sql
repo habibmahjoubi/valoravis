@@ -24,10 +24,11 @@ CREATE TABLE IF NOT EXISTS "StripeEvent" (
   CONSTRAINT "StripeEvent_pkey" PRIMARY KEY ("id")
 );
 
--- S7 : RLS sur les tables ajoutées après la v1 (bloque l'API Data publique de Supabase)
+-- S7 : RLS sur les tables non couvertes (bloque l'API Data publique de Supabase)
 ALTER TABLE "Establishment"           ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "EstablishmentMember"     ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "EstablishmentInvitation" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE "EmailVerificationToken"  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "StripeEvent"             ENABLE ROW LEVEL SECURITY;
 
 COMMIT;
