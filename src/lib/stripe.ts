@@ -35,6 +35,14 @@ export const DEFAULT_PLANS = {
 // Pour compatibilite avec le code existant
 export const PLANS = DEFAULT_PLANS;
 
+// Repli : si la ligne Plan existe mais sans stripePriceId, utiliser la variable
+// d'environnement historique (STRIPE_PRICE_PRO / STRIPE_PRICE_BUSINESS).
+function priceIdFor(key: string, dbValue: string | null): string | null {
+  if (dbValue) return dbValue;
+  const env = process.env[`STRIPE_PRICE_${key.toUpperCase()}`];
+  return env || null;
+}
+
 // Charger les plans depuis la base de donnees
 export async function getPlans() {
   const plans = await prisma.plan.findMany({
@@ -58,7 +66,7 @@ export async function getPlans() {
     name: p.name,
     price: p.price,
     quota: p.quota,
-    stripePriceId: p.stripePriceId,
+    stripePriceId: priceIdFor(p.key, p.stripePriceId),
   }));
 }
 
@@ -73,7 +81,7 @@ export async function getPlanByKey(key: string) {
       price: plan.price,
       quota: plan.quota,
       trialDays: plan.trialDays,
-      stripePriceId: plan.stripePriceId,
+      stripePriceId: priceIdFor(plan.key, plan.stripePriceId),
     };
   }
 
