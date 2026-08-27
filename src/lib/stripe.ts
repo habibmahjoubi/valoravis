@@ -1,8 +1,27 @@
 import Stripe from "stripe";
 import { prisma } from "./prisma";
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-03-31.basil",
+// Construction paresseuse : ne pas exiger la clé au moment du build.
+let _stripe: Stripe | null = null;
+function getStripe(): Stripe {
+  if (!_stripe) {
+    if (!process.env.STRIPE_SECRET_KEY) {
+      throw new Error("STRIPE_SECRET_KEY manquant");
+    }
+    _stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2025-03-31.basil",
+    });
+  }
+  return _stripe;
+}
+
+// Proxy : conserve l'API `stripe.xxx.yyy(...)` sans construire le client au build.
+export const stripe = new Proxy({} as Stripe, {
+  get(_target, prop) {
+    const c = getStripe() as unknown as Record<string | symbol, unknown>;
+    const v = c[prop];
+    return typeof v === "function" ? v.bind(c) : v;
+  },
 });
 
 // Fallback statique UNIQUEMENT si la table Plan est vide/inaccessible.

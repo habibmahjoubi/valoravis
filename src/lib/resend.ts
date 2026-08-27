@@ -1,6 +1,16 @@
 import { Resend } from "resend";
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+// Construction paresseuse : ne pas exiger la clé au moment du build.
+let _resend: Resend | null = null;
+export function getResend(): Resend {
+  if (!_resend) {
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY manquant");
+    }
+    _resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return _resend;
+}
 
 export async function sendEmail({
   to,
@@ -24,7 +34,7 @@ export async function sendEmail({
     ? `${safeName} <${defaultFrom.match(/<(.+)>/)?.[1] || defaultFrom}>`
     : defaultFrom;
 
-  const { error } = await resend.emails.send({
+  const { error } = await getResend().emails.send({
     from,
     to,
     subject,
