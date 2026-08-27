@@ -22,7 +22,6 @@ export default async function ReviewPage({
   const est = request.establishment;
   const businessName = est?.name ?? request.user.businessName ?? "notre établissement";
   const googlePlaceUrl = est?.googlePlaceUrl ?? request.user.googlePlaceUrl ?? "";
-  const threshold = est?.satisfactionThreshold ?? request.user.satisfactionThreshold;
 
   if (request.status === "SENT") {
     await prisma.reviewRequest.update({
@@ -43,14 +42,14 @@ export default async function ReviewPage({
           <p className="text-muted-foreground mb-4">
             Votre retour a bien été enregistré.
           </p>
-          {googleUrl && request.rating >= threshold && (
+          {googleUrl && (
             <a
               href={googleUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-primary text-primary-foreground px-4 sm:px-6 py-2 rounded-lg text-sm font-medium hover:opacity-90"
             >
-              Publier aussi sur Google
+              Partager mon avis sur Google
             </a>
           )}
         </div>
@@ -68,7 +67,6 @@ export default async function ReviewPage({
         businessName={businessName}
         clientName={request.client.name}
         googlePlaceUrl={googleReviewUrl}
-        threshold={threshold}
       />
       </div>
     </div>

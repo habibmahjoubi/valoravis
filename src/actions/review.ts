@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { rateLimit } from "@/lib/rate-limit";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { headers } from "next/headers";
 
 export async function submitRating(
@@ -12,7 +12,7 @@ export async function submitRating(
   // Rate limiting par IP pour éviter le brute force de tokens
   const h = await headers();
   const ip = h.get("x-forwarded-for")?.split(",")[0].trim() || h.get("x-real-ip") || "unknown";
-  const rl = rateLimit(`review:${ip}`, { maxAttempts: 10, windowMs: 60 * 60 * 1000 });
+  const rl = await checkRateLimit(`review:${ip}`, { maxAttempts: 10, windowMs: 60 * 60 * 1000 });
   if (!rl.success) {
     throw new Error("Trop de tentatives. Réessayez plus tard.");
   }
@@ -39,18 +39,31 @@ export async function submitRating(
 
   if (!request) throw new Error("Ce lien de demande d'avis est invalide");
 
-  // Prevent re-submission
+  const cleanFeedback = feedback?.slice(0, 2000) || null;
+
+  // The client rates first (feedback null), then may add optional private
+  // feedback afterwards. Allow that follow-up write; block anything else.
   if (request.rating !== null) {
+    if (request.feedback === null && cleanFeedback !== null) {
+      await prisma.reviewRequest.update({
+        where: { id: request.id },
+        data: { feedback: cleanFeedback },
+      });
+      return;
+    }
     throw new Error("Vous avez déjà donné votre avis, merci !");
   }
 
+  // The satisfaction threshold is used only to categorise the request for the
+  // establishment's internal follow-up. It never changes what the client is
+  // offered: every client is invited to publish their review on Google.
   const threshold = request.user.satisfactionThreshold;
 
   await prisma.reviewRequest.update({
     where: { id: request.id },
     data: {
       rating,
-      feedback: feedback?.slice(0, 2000) || null,
+      feedback: cleanFeedback,
       status: rating >= threshold ? "REVIEWED" : "FEEDBACK",
     },
   });

@@ -52,6 +52,7 @@ export type UserMinAggregateOutputType = {
   googlePlaceUrl: string | null
   phone: string | null
   stripeCustomerId: string | null
+  stripeSubscriptionId: string | null
   plan: string | null
   monthlyQuota: number | null
   quotaUsed: number | null
@@ -82,6 +83,7 @@ export type UserMaxAggregateOutputType = {
   googlePlaceUrl: string | null
   phone: string | null
   stripeCustomerId: string | null
+  stripeSubscriptionId: string | null
   plan: string | null
   monthlyQuota: number | null
   quotaUsed: number | null
@@ -112,6 +114,7 @@ export type UserCountAggregateOutputType = {
   googlePlaceUrl: number
   phone: number
   stripeCustomerId: number
+  stripeSubscriptionId: number
   plan: number
   monthlyQuota: number
   quotaUsed: number
@@ -158,6 +161,7 @@ export type UserMinAggregateInputType = {
   googlePlaceUrl?: true
   phone?: true
   stripeCustomerId?: true
+  stripeSubscriptionId?: true
   plan?: true
   monthlyQuota?: true
   quotaUsed?: true
@@ -188,6 +192,7 @@ export type UserMaxAggregateInputType = {
   googlePlaceUrl?: true
   phone?: true
   stripeCustomerId?: true
+  stripeSubscriptionId?: true
   plan?: true
   monthlyQuota?: true
   quotaUsed?: true
@@ -218,6 +223,7 @@ export type UserCountAggregateInputType = {
   googlePlaceUrl?: true
   phone?: true
   stripeCustomerId?: true
+  stripeSubscriptionId?: true
   plan?: true
   monthlyQuota?: true
   quotaUsed?: true
@@ -335,6 +341,7 @@ export type UserGroupByOutputType = {
   googlePlaceUrl: string | null
   phone: string | null
   stripeCustomerId: string | null
+  stripeSubscriptionId: string | null
   plan: string
   monthlyQuota: number
   quotaUsed: number
@@ -388,6 +395,7 @@ export type UserWhereInput = {
   googlePlaceUrl?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   stripeCustomerId?: Prisma.StringNullableFilter<"User"> | string | null
+  stripeSubscriptionId?: Prisma.StringNullableFilter<"User"> | string | null
   plan?: Prisma.StringFilter<"User"> | string
   monthlyQuota?: Prisma.IntFilter<"User"> | number
   quotaUsed?: Prisma.IntFilter<"User"> | number
@@ -424,6 +432,7 @@ export type UserOrderByWithRelationInput = {
   googlePlaceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripeSubscriptionId?: Prisma.SortOrderInput | Prisma.SortOrder
   plan?: Prisma.SortOrder
   monthlyQuota?: Prisma.SortOrder
   quotaUsed?: Prisma.SortOrder
@@ -452,6 +461,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
   stripeCustomerId?: string
+  stripeSubscriptionId?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
@@ -485,7 +495,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   reviewRequests?: Prisma.ReviewRequestListRelationFilter
   templates?: Prisma.TemplateListRelationFilter
   memberships?: Prisma.EstablishmentMemberListRelationFilter
-}, "id" | "email" | "stripeCustomerId">
+}, "id" | "email" | "stripeCustomerId" | "stripeSubscriptionId">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -499,6 +509,7 @@ export type UserOrderByWithAggregationInput = {
   googlePlaceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripeSubscriptionId?: Prisma.SortOrderInput | Prisma.SortOrder
   plan?: Prisma.SortOrder
   monthlyQuota?: Prisma.SortOrder
   quotaUsed?: Prisma.SortOrder
@@ -537,6 +548,7 @@ export type UserScalarWhereWithAggregatesInput = {
   googlePlaceUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   stripeCustomerId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  stripeSubscriptionId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   plan?: Prisma.StringWithAggregatesFilter<"User"> | string
   monthlyQuota?: Prisma.IntWithAggregatesFilter<"User"> | number
   quotaUsed?: Prisma.IntWithAggregatesFilter<"User"> | number
@@ -567,6 +579,7 @@ export type UserCreateInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -603,6 +616,7 @@ export type UserUncheckedCreateInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -639,6 +653,7 @@ export type UserUpdateInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -675,6 +690,7 @@ export type UserUncheckedUpdateInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -711,6 +727,7 @@ export type UserCreateManyInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -741,6 +758,7 @@ export type UserUpdateManyMutationInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -771,6 +789,7 @@ export type UserUncheckedUpdateManyInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -801,6 +820,7 @@ export type UserCountOrderByAggregateInput = {
   googlePlaceUrl?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
+  stripeSubscriptionId?: Prisma.SortOrder
   plan?: Prisma.SortOrder
   monthlyQuota?: Prisma.SortOrder
   quotaUsed?: Prisma.SortOrder
@@ -838,6 +858,7 @@ export type UserMaxOrderByAggregateInput = {
   googlePlaceUrl?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
+  stripeSubscriptionId?: Prisma.SortOrder
   plan?: Prisma.SortOrder
   monthlyQuota?: Prisma.SortOrder
   quotaUsed?: Prisma.SortOrder
@@ -868,6 +889,7 @@ export type UserMinOrderByAggregateInput = {
   googlePlaceUrl?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   stripeCustomerId?: Prisma.SortOrder
+  stripeSubscriptionId?: Prisma.SortOrder
   plan?: Prisma.SortOrder
   monthlyQuota?: Prisma.SortOrder
   quotaUsed?: Prisma.SortOrder
@@ -1038,6 +1060,7 @@ export type UserCreateWithoutAccountsInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -1073,6 +1096,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -1124,6 +1148,7 @@ export type UserUpdateWithoutAccountsInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1159,6 +1184,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1194,6 +1220,7 @@ export type UserCreateWithoutSessionsInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -1229,6 +1256,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -1280,6 +1308,7 @@ export type UserUpdateWithoutSessionsInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1315,6 +1344,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1350,6 +1380,7 @@ export type UserCreateWithoutMembershipsInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -1385,6 +1416,7 @@ export type UserUncheckedCreateWithoutMembershipsInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -1436,6 +1468,7 @@ export type UserUpdateWithoutMembershipsInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1471,6 +1504,7 @@ export type UserUncheckedUpdateWithoutMembershipsInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1506,6 +1540,7 @@ export type UserCreateWithoutClientsInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -1541,6 +1576,7 @@ export type UserUncheckedCreateWithoutClientsInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -1592,6 +1628,7 @@ export type UserUpdateWithoutClientsInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1627,6 +1664,7 @@ export type UserUncheckedUpdateWithoutClientsInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1662,6 +1700,7 @@ export type UserCreateWithoutReviewRequestsInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -1697,6 +1736,7 @@ export type UserUncheckedCreateWithoutReviewRequestsInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -1748,6 +1788,7 @@ export type UserUpdateWithoutReviewRequestsInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1783,6 +1824,7 @@ export type UserUncheckedUpdateWithoutReviewRequestsInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1818,6 +1860,7 @@ export type UserCreateWithoutTemplatesInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -1853,6 +1896,7 @@ export type UserUncheckedCreateWithoutTemplatesInput = {
   googlePlaceUrl?: string | null
   phone?: string | null
   stripeCustomerId?: string | null
+  stripeSubscriptionId?: string | null
   plan?: string
   monthlyQuota?: number
   quotaUsed?: number
@@ -1904,6 +1948,7 @@ export type UserUpdateWithoutTemplatesInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1939,6 +1984,7 @@ export type UserUncheckedUpdateWithoutTemplatesInput = {
   googlePlaceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeSubscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyQuota?: Prisma.IntFieldUpdateOperationsInput | number
   quotaUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -2050,6 +2096,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   googlePlaceUrl?: boolean
   phone?: boolean
   stripeCustomerId?: boolean
+  stripeSubscriptionId?: boolean
   plan?: boolean
   monthlyQuota?: boolean
   quotaUsed?: boolean
@@ -2087,6 +2134,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   googlePlaceUrl?: boolean
   phone?: boolean
   stripeCustomerId?: boolean
+  stripeSubscriptionId?: boolean
   plan?: boolean
   monthlyQuota?: boolean
   quotaUsed?: boolean
@@ -2117,6 +2165,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   googlePlaceUrl?: boolean
   phone?: boolean
   stripeCustomerId?: boolean
+  stripeSubscriptionId?: boolean
   plan?: boolean
   monthlyQuota?: boolean
   quotaUsed?: boolean
@@ -2147,6 +2196,7 @@ export type UserSelectScalar = {
   googlePlaceUrl?: boolean
   phone?: boolean
   stripeCustomerId?: boolean
+  stripeSubscriptionId?: boolean
   plan?: boolean
   monthlyQuota?: boolean
   quotaUsed?: boolean
@@ -2165,7 +2215,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "password" | "name" | "businessName" | "niche" | "customNiche" | "googlePlaceUrl" | "phone" | "stripeCustomerId" | "plan" | "monthlyQuota" | "quotaUsed" | "onboarded" | "isAdmin" | "isSuspended" | "satisfactionThreshold" | "defaultChannel" | "defaultDelay" | "senderName" | "replyToEmail" | "trialEndsAt" | "cancelRequestedAt" | "cancelEffectiveAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "password" | "name" | "businessName" | "niche" | "customNiche" | "googlePlaceUrl" | "phone" | "stripeCustomerId" | "stripeSubscriptionId" | "plan" | "monthlyQuota" | "quotaUsed" | "onboarded" | "isAdmin" | "isSuspended" | "satisfactionThreshold" | "defaultChannel" | "defaultDelay" | "senderName" | "replyToEmail" | "trialEndsAt" | "cancelRequestedAt" | "cancelEffectiveAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -2200,6 +2250,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     googlePlaceUrl: string | null
     phone: string | null
     stripeCustomerId: string | null
+    stripeSubscriptionId: string | null
     plan: string
     monthlyQuota: number
     quotaUsed: number
@@ -2656,6 +2707,7 @@ export interface UserFieldRefs {
   readonly googlePlaceUrl: Prisma.FieldRef<"User", 'String'>
   readonly phone: Prisma.FieldRef<"User", 'String'>
   readonly stripeCustomerId: Prisma.FieldRef<"User", 'String'>
+  readonly stripeSubscriptionId: Prisma.FieldRef<"User", 'String'>
   readonly plan: Prisma.FieldRef<"User", 'String'>
   readonly monthlyQuota: Prisma.FieldRef<"User", 'Int'>
   readonly quotaUsed: Prisma.FieldRef<"User", 'Int'>

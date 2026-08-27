@@ -2,8 +2,9 @@
 
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { requireRole } from "@/lib/establishment";
+import { requireRole, getEstablishmentOwner } from "@/lib/establishment";
 import { getEstablishmentLimit, getMembersPerEstablishment } from "@/config/plan-features";
+import { formString } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import type { Niche, Channel } from "@/generated/prisma/enums";
@@ -131,11 +132,9 @@ export async function updateEstablishment(formData: FormData) {
 // --- Update establishment sending settings ---
 export async function updateEstablishmentSendingSettings(formData: FormData) {
   const userId = await getUserId();
-  const establishmentId = formData.get("establishmentId") as string;
+  const establishmentId = formString(formData, "establishmentId");
 
   await requireRole(userId, establishmentId, "ADMIN");
-
-  const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
 
   const defaultChannel = formData.get("defaultChannel") as string;
   const defaultDelayRaw = formData.get("defaultDelay") as string;
@@ -203,9 +202,9 @@ export async function deleteEstablishment(establishmentId: string) {
 // --- Invite member ---
 export async function inviteMember(formData: FormData) {
   const userId = await getUserId();
-  const establishmentId = formData.get("establishmentId") as string;
-  const email = (formData.get("email") as string).trim().toLowerCase();
-  const role = (formData.get("role") as string) || "MEMBER";
+  const establishmentId = formString(formData, "establishmentId");
+  const email = formString(formData, "email").trim().toLowerCase();
+  const role = formString(formData, "role") || "MEMBER";
 
   if (!["ADMIN", "MEMBER"].includes(role)) {
     return { error: "Rôle invalide" };
@@ -216,62 +215,42 @@ export async function inviteMember(formData: FormData) {
 
   await requireRole(userId, establishmentId, "ADMIN");
 
-  // Check members limit (count current members + pending invitations)
   const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
-  const memberCount = await prisma.establishmentMember.count({
-    where: { establishmentId },
-  });
-  const limit = getMembersPerEstablishment(user.plan);
-  if (memberCount >= limit) {
-    return { error: `Limite de ${limit} membre${limit > 1 ? "s" : ""} atteinte pour votre plan.` };
+
+  // La limite dépend du plan du PROPRIÉTAIRE (les membres en héritent partout),
+  // pas de celui de l'ADMIN qui envoie l'invitation.
+  const owner = await getEstablishmentOwner(establishmentId);
+  const effectivePlan = owner?.plan ?? user.plan;
+
+  // Check members limit (count current members + pending invitations)
+  const [memberCount, pendingInvites] = await Promise.all([
+    prisma.establishmentMember.count({ where: { establishmentId } }),
+    prisma.establishmentInvitation.count({
+      where: { establishmentId, expires: { gt: new Date() } },
+    }),
+  ]);
+  const limit = getMembersPerEstablishment(effectivePlan);
+  if (memberCount + pendingInvites >= limit) {
+    return { error: `Limite de ${limit} membre${limit > 1 ? "s" : ""} atteinte pour ce plan.` };
   }
 
   const establishment = await prisma.establishment.findUniqueOrThrow({
     where: { id: establishmentId },
   });
 
-  // Check if user already exists
+  // Déjà membre ? (l'ADMIN voit de toute façon la liste des membres — pas une fuite)
   const existingUser = await prisma.user.findUnique({ where: { email } });
-
   if (existingUser) {
-    // Check if already a member
     const existingMember = await prisma.establishmentMember.findUnique({
       where: { userId_establishmentId: { userId: existingUser.id, establishmentId } },
     });
     if (existingMember) {
       return { error: "Cet utilisateur est déjà membre de cet établissement." };
     }
-
-    // Add directly + send notification email
-    await prisma.establishmentMember.create({
-      data: {
-        userId: existingUser.id,
-        establishmentId,
-        role: role as "ADMIN" | "MEMBER",
-      },
-    });
-
-    // Send notification
-    const { sendEmail } = await import("@/lib/resend");
-    const { absoluteUrl } = await import("@/lib/utils");
-    const roleLabel = role === "ADMIN" ? "Administrateur" : "Membre";
-    await sendEmail({
-      to: email,
-      subject: `Vous avez été ajouté à ${establishment.name} sur Valoravis`,
-      html: `
-        <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
-          <h2>Vous avez rejoint un établissement</h2>
-          <p><strong>${user.name || user.email}</strong> vous a ajouté comme <strong>${roleLabel}</strong> de l'établissement <strong>${establishment.name}</strong> sur Valoravis.</p>
-          <p><a href="${absoluteUrl("/dashboard")}" style="display:inline-block;background:#6366f1;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600">Accéder au tableau de bord</a></p>
-        </div>
-      `,
-    }).catch(() => { /* non-blocking */ });
-
-    revalidatePath("/dashboard/establishments");
-    return { success: true, message: "Invitation envoyée." };
   }
 
-  // User doesn't exist → create invitation token
+  // Dans TOUS les cas (compte existant ou non) : on crée une invitation à accepter.
+  // Personne n'est ajouté à un établissement sans action explicite de sa part.
   const { randomBytes } = await import("crypto");
   const token = randomBytes(32).toString("hex");
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
@@ -292,9 +271,12 @@ export async function inviteMember(formData: FormData) {
 
   // Send invitation email
   const { sendEmail } = await import("@/lib/resend");
-  const { absoluteUrl } = await import("@/lib/utils");
+  const { absoluteUrl, escapeHtml } = await import("@/lib/utils");
   const roleLabel = role === "ADMIN" ? "Administrateur" : "Membre";
   const inviteUrl = absoluteUrl(`/invite/${token}`);
+  const inviterName = escapeHtml(user.name || user.email);
+  const estName = escapeHtml(establishment.name);
+  const cta = existingUser ? "Rejoindre l'établissement" : "Créer mon compte";
 
   await sendEmail({
     to: email,
@@ -302,10 +284,10 @@ export async function inviteMember(formData: FormData) {
     html: `
       <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
         <h2>Vous êtes invité !</h2>
-        <p><strong>${user.name || user.email}</strong> vous invite à rejoindre l'établissement <strong>${establishment.name}</strong> en tant que <strong>${roleLabel}</strong> sur Valoravis.</p>
-        <p>Créez votre compte pour accéder à l'établissement :</p>
-        <p><a href="${inviteUrl}" style="display:inline-block;background:#6366f1;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600">Créer mon compte</a></p>
-        <p style="color:#666;font-size:12px">Ce lien expire dans 7 jours.</p>
+        <p><strong>${inviterName}</strong> vous invite à rejoindre l'établissement <strong>${estName}</strong> en tant que <strong>${roleLabel}</strong> sur Valoravis.</p>
+        <p>Cliquez ci-dessous pour accepter l'invitation :</p>
+        <p><a href="${inviteUrl}" style="display:inline-block;background:#6366f1;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600">${cta}</a></p>
+        <p style="color:#666;font-size:12px">Ce lien expire dans 7 jours. Si vous n'attendiez pas cette invitation, ignorez cet email.</p>
       </div>
     `,
   });

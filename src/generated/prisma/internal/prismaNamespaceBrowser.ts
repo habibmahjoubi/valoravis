@@ -63,6 +63,7 @@ export const ModelName = {
   EstablishmentMember: 'EstablishmentMember',
   Client: 'Client',
   ReviewRequest: 'ReviewRequest',
+  StripeEvent: 'StripeEvent',
   Template: 'Template'
 } as const
 
@@ -94,6 +95,7 @@ export const UserScalarFieldEnum = {
   googlePlaceUrl: 'googlePlaceUrl',
   phone: 'phone',
   stripeCustomerId: 'stripeCustomerId',
+  stripeSubscriptionId: 'stripeSubscriptionId',
   plan: 'plan',
   monthlyQuota: 'monthlyQuota',
   quotaUsed: 'quotaUsed',
@@ -264,10 +266,21 @@ export const ReviewRequestScalarFieldEnum = {
   clickedAt: 'clickedAt',
   rating: 'rating',
   feedback: 'feedback',
+  claimId: 'claimId',
+  claimedAt: 'claimedAt',
   createdAt: 'createdAt'
 } as const
 
 export type ReviewRequestScalarFieldEnum = (typeof ReviewRequestScalarFieldEnum)[keyof typeof ReviewRequestScalarFieldEnum]
+
+
+export const StripeEventScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  receivedAt: 'receivedAt'
+} as const
+
+export type StripeEventScalarFieldEnum = (typeof StripeEventScalarFieldEnum)[keyof typeof StripeEventScalarFieldEnum]
 
 
 export const TemplateScalarFieldEnum = {

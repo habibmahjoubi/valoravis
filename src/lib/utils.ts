@@ -1,17 +1,3 @@
-/** Sanitize user-provided HTML templates: strip dangerous tags and attributes */
-export function sanitizeHtml(html: string): string {
-  return html
-    // Remove dangerous tags and their content
-    .replace(/<\s*(script|iframe|object|embed|form|link|meta|base|svg|math|style|template|textarea|select|input|button)[^>]*>[\s\S]*?<\/\s*\1\s*>/gi, "")
-    .replace(/<\s*(script|iframe|object|embed|form|link|meta|base|svg|math|style|template|textarea|select|input|button)[^>]*\/?>/gi, "")
-    // Remove event handlers (onclick, onerror, onload, etc.)
-    .replace(/\s+on\w+\s*=\s*("[^"]*"|'[^']*'|[^\s>]*)/gi, "")
-    // Remove javascript:, data:, and vbscript: URLs in href/src/action
-    .replace(/(href|src|action|formaction|xlink:href)\s*=\s*["']?\s*(javascript|data|vbscript):/gi, "$1=\"#")
-    // Remove style attributes containing url() or expression()
-    .replace(/style\s*=\s*["'][^"']*(?:url\s*\(|expression\s*\(|javascript:)[^"']*/gi, "");
-}
-
 /** Escape HTML special characters to prevent XSS in email templates */
 export function escapeHtml(text: string): string {
   return text
@@ -20,6 +6,31 @@ export function escapeHtml(text: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+/**
+ * Escape a value for safe inclusion in a CSV file:
+ * - neutralises spreadsheet formula injection (leading = + - @ TAB CR)
+ * - doubles quotes and always wraps the field in quotes
+ */
+export function csvCell(value: unknown): string {
+  let s = value == null ? "" : String(value);
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+  return `"${s.replace(/"/g, '""')}"`;
+}
+
+/** True if a string looks like a spreadsheet formula (CSV injection vector) */
+export function isFormulaInjection(value: string | null | undefined): boolean {
+  return !!value && /^[=+\-@\t\r]/.test(value);
+}
+
+/**
+ * Read a string field from FormData, tolerating a missing/non-string value.
+ * Never throws — returns "" when absent so callers can `.trim()` safely.
+ */
+export function formString(formData: FormData, key: string): string {
+  const v = formData.get(key);
+  return typeof v === "string" ? v : "";
 }
 
 const NICHE_LABELS: Record<string, string> = {
@@ -130,6 +141,18 @@ function isGoogleUrl(url: string): boolean {
   }
 }
 
+/** Only ever emit a safe absolute https URL (or empty). Blocks javascript:/data: etc. */
+function safeHttpsUrl(url: string): string {
+  const v = url.trim();
+  if (/^https:\/\//i.test(v)) return v;
+  if (/^http:\/\//i.test(v)) return "https://" + v.slice(7);
+  return "";
+}
+
+function encodePlaceId(id: string): string {
+  return `https://search.google.com/local/writereview?placeid=${encodeURIComponent(id)}`;
+}
+
 export function toGoogleWriteReviewUrl(url: string): string {
   if (!url) return "";
 
@@ -137,7 +160,7 @@ export function toGoogleWriteReviewUrl(url: string): string {
 
   // Deja un Place ID brut
   if (/^ChIJ[a-zA-Z0-9_-]+$/.test(trimmed)) {
-    return `https://search.google.com/local/writereview?placeid=${trimmed}`;
+    return encodePlaceId(trimmed);
   }
 
   // Vérifier que c'est un domaine Google avant d'extraire
@@ -145,19 +168,19 @@ export function toGoogleWriteReviewUrl(url: string): string {
 
   // Deja au format writereview
   if (trimmed.includes("search.google.com/local/writereview")) {
-    return trimmed;
+    return safeHttpsUrl(trimmed);
   }
 
   // Extraire placeid d'un parametre URL
   const placeIdParam = trimmed.match(/[?&]placeid=([^&]+)/i);
   if (placeIdParam) {
-    return `https://search.google.com/local/writereview?placeid=${placeIdParam[1]}`;
+    return encodePlaceId(decodeURIComponent(placeIdParam[1]));
   }
 
   // Extraire place_id: depuis q= param (format Google Maps search)
   const placeIdInQuery = trimmed.match(/place_id:(ChIJ[a-zA-Z0-9_-]+)/);
   if (placeIdInQuery) {
-    return `https://search.google.com/local/writereview?placeid=${placeIdInQuery[1]}`;
+    return encodePlaceId(placeIdInQuery[1]);
   }
 
   // Extraire hex depuis une URL Google Maps (!1s0x....:0x....)
@@ -167,13 +190,13 @@ export function toGoogleWriteReviewUrl(url: string): string {
     trimmed.match(/lrd=0x([0-9a-f]+):0x([0-9a-f]+)/i);
   if (hexMatch) {
     const placeId = mapsHexToPlaceId(hexMatch[1], hexMatch[2]);
-    return `https://search.google.com/local/writereview?placeid=${placeId}`;
+    return encodePlaceId(placeId);
   }
 
   // Format g.page/r/... → ajouter /review
   if (trimmed.includes("g.page/r/")) {
     const clean = trimmed.replace(/\/(review)?$/, "");
-    return `${clean}/review`;
+    return safeHttpsUrl(`${clean}/review`);
   }
 
   // Google Search URLs don't contain Place IDs — cannot convert
@@ -181,5 +204,7 @@ export function toGoogleWriteReviewUrl(url: string): string {
 
   // URL non reconnue — rejeter si ce n'est pas un domaine Google
   if (!isGoogleUrl(trimmed)) return "";
-  return trimmed;
+
+  // Défense finale : uniquement une URL https absolue
+  return safeHttpsUrl(trimmed);
 }

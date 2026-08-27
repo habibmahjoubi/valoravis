@@ -26,7 +26,18 @@ export default async function AcceptInvitePage({
       where: { token },
     });
 
-    if (inv && inv.expires > new Date()) {
+    // L'invitation ne peut être acceptée que par le compte dont l'email
+    // correspond exactement à celui invité.
+    const sessionUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { email: true },
+    });
+    const emailMatches =
+      !!sessionUser &&
+      !!inv &&
+      sessionUser.email.toLowerCase() === inv.email.toLowerCase();
+
+    if (inv && emailMatches && inv.expires > new Date()) {
       // Check not already a member
       const existing = await prisma.establishmentMember.findUnique({
         where: {

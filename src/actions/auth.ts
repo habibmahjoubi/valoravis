@@ -1,9 +1,9 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { rateLimit } from "@/lib/rate-limit";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { sendEmail } from "@/lib/resend";
-import { absoluteUrl, escapeHtml } from "@/lib/utils";
+import { absoluteUrl, escapeHtml, formString } from "@/lib/utils";
 import { headers } from "next/headers";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
@@ -71,41 +71,52 @@ async function sendVerificationEmail(email: string, name: string | null, token: 
 }
 
 // --- Vérifier si un email non vérifié bloque le login ---
-export async function checkEmailVerificationStatus(email: string) {
+// Appelé uniquement après un échec de login (mot de passe correct mais compte
+// non vérifié). On exige donc le mot de passe pour éviter d'en faire un oracle
+// d'énumération de comptes, et on limite par IP.
+export async function checkEmailVerificationStatus(email: string, password?: string) {
   if (!email || !validateEmail(email)) return { status: "unknown" as const };
+
+  const ip = await getClientIp();
+  const rl = await checkRateLimit(`verif-status:${ip}`, { maxAttempts: 10, windowMs: 15 * 60 * 1000 });
+  if (!rl.success) return { status: "unknown" as const };
 
   const user = await prisma.user.findUnique({
     where: { email: email.trim().toLowerCase() },
-    select: { emailVerified: true },
+    select: { emailVerified: true, password: true },
   });
 
-  if (!user) return { status: "unknown" as const };
+  // Toujours exécuter bcrypt (anti-timing) et ne rien révéler sans le bon mot de passe
+  const dummyHash = "$2b$12$000000000000000000000uGWGmhFBiGFCkT9OJkwROmkAR.gzZXa";
+  const ok = await bcrypt.compare(password || "", user?.password || dummyHash);
+
+  if (!user || !user.password || !ok) return { status: "unknown" as const };
   if (!user.emailVerified) return { status: "unverified" as const };
   return { status: "verified" as const };
 }
 
 // --- Inscription ---
 export async function registerUser(formData: FormData) {
-  const email = (formData.get("email") as string).trim().toLowerCase();
-  const password = formData.get("password") as string;
-  const name = (formData.get("name") as string) || null;
-  const niche = (formData.get("niche") as string) || "DENTIST";
-  const customNiche = (formData.get("customNiche") as string) || null;
-  const inviteToken = (formData.get("inviteToken") as string) || null;
+  const email = formString(formData, "email").trim().toLowerCase();
+  const password = formString(formData, "password");
+  const name = formString(formData, "name") || null;
+  const niche = formString(formData, "niche") || "DENTIST";
+  const customNiche = formString(formData, "customNiche") || null;
+  const inviteToken = formString(formData, "inviteToken") || null;
 
   if (!email || !password) {
     return { error: "Email et mot de passe requis" };
   }
 
   // Rate limit par email
-  const rlEmail = rateLimit(`register:${email}`, { maxAttempts: 5, windowMs: 15 * 60 * 1000 });
+  const rlEmail = await checkRateLimit(`register:${email}`, { maxAttempts: 5, windowMs: 15 * 60 * 1000 });
   if (!rlEmail.success) {
     return { error: `Trop de tentatives. Réessayez dans ${rlEmail.retryAfterSeconds}s.` };
   }
 
   // Rate limit par IP (3 inscriptions / 5 minutes)
   const ip = await getClientIp();
-  const rlIp = rateLimit(`register-ip:${ip}`, { maxAttempts: 3, windowMs: 5 * 60 * 1000 });
+  const rlIp = await checkRateLimit(`register-ip:${ip}`, { maxAttempts: 3, windowMs: 5 * 60 * 1000 });
   if (!rlIp.success) {
     return { error: `Trop de tentatives depuis cette adresse. Réessayez dans ${rlIp.retryAfterSeconds}s.` };
   }
@@ -123,9 +134,26 @@ export async function registerUser(formData: FormData) {
     return { error: passwordError };
   }
 
+  // Ne pas révéler si l'email existe déjà : on renvoie le même succès générique
+  // et on envoie un email « vous avez déjà un compte » à la place.
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
-    return { error: "Cette adresse email est déjà associée à un compte. Connectez-vous ou utilisez une autre adresse." };
+    try {
+      await sendEmail({
+        to: email,
+        subject: "Vous avez déjà un compte Valoravis",
+        html: `<div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:24px;background:#ffffff;color:#1a1a1a">
+  <h2>Un compte existe déjà</h2>
+  <p>Bonjour,</p>
+  <p>Quelqu'un vient de tenter de créer un compte Valoravis avec cette adresse email, mais un compte existe déjà.</p>
+  <p><a href="${absoluteUrl("/login")}" style="color:#6d28d9">Se connecter</a> — ou <a href="${absoluteUrl("/forgot-password")}" style="color:#6d28d9">réinitialiser votre mot de passe</a>.</p>
+  <p style="color:#888;font-size:13px">Si vous n'êtes pas à l'origine de cette tentative, vous pouvez ignorer cet email.</p>
+</div>`,
+      });
+    } catch (err) {
+      console.error("[register] existing-account email failed:", err);
+    }
+    return { success: true, email };
   }
 
   // Validate invitation token if provided
@@ -150,13 +178,23 @@ export async function registerUser(formData: FormData) {
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
-  const selectedPlan = (formData.get("plan") as string) || "free";
+  const selectedPlan = formString(formData, "plan") || "free";
 
   const plan = await prisma.plan.findUnique({ where: { key: selectedPlan } });
 
-  const isTrialPlan = plan && plan.trialDays > 0 && plan.price > 0;
+  // Sécurité : on ne provisionne un plan payant à l'inscription QUE s'il s'agit
+  // d'un véritable essai gratuit (prix > 0 ET jours d'essai > 0). Tout autre cas
+  // (plan inconnu, plan payant sans essai) retombe sur "free". Les plans payants
+  // s'activent ensuite via Stripe Checkout.
+  const isTrialPlan = !!plan && plan.trialDays > 0 && plan.price > 0;
+  const grantedPlanKey = isTrialPlan ? plan!.key : "free";
+  const grantedQuota = isTrialPlan
+    ? plan!.quota === 0
+      ? 999999
+      : plan!.quota
+    : 50;
   const trialEndsAt = isTrialPlan
-    ? new Date(Date.now() + plan.trialDays * 24 * 60 * 60 * 1000)
+    ? new Date(Date.now() + plan!.trialDays * 24 * 60 * 60 * 1000)
     : null;
 
   // If invited: auto-verify email (the invitation link proves email ownership)
@@ -172,12 +210,8 @@ export async function registerUser(formData: FormData) {
         businessName: name,
         niche: niche as "DENTIST" | "OSTEOPATH" | "GARAGE" | "OTHER",
         customNiche: niche === "OTHER" ? customNiche : null,
-        plan: plan ? plan.key : "free",
-        monthlyQuota: plan
-          ? plan.quota === 0
-            ? 999999
-            : plan.quota
-          : 50,
+        plan: grantedPlanKey,
+        monthlyQuota: grantedQuota,
         trialEndsAt,
         emailVerified: isInvited ? new Date() : null,
         onboarded: isInvited,
@@ -220,10 +254,10 @@ export async function registerUser(formData: FormData) {
 
 // --- Accepter une invitation (créer un compte simplifié) ---
 export async function acceptInvitation(formData: FormData) {
-  const token = formData.get("token") as string;
-  const email = (formData.get("email") as string).trim().toLowerCase();
-  const name = (formData.get("name") as string) || null;
-  const password = formData.get("password") as string;
+  const token = formString(formData, "token");
+  const email = formString(formData, "email").trim().toLowerCase();
+  const name = formString(formData, "name") || null;
+  const password = formString(formData, "password");
 
   if (!token || !email || !password) {
     return { error: "Données manquantes" };
@@ -240,7 +274,7 @@ export async function acceptInvitation(formData: FormData) {
 
   // Rate limit
   const ip = await getClientIp();
-  const rl = rateLimit(`invite-accept:${ip}`, { maxAttempts: 5, windowMs: 15 * 60 * 1000 });
+  const rl = await checkRateLimit(`invite-accept:${ip}`, { maxAttempts: 5, windowMs: 15 * 60 * 1000 });
   if (!rl.success) {
     return { error: `Trop de tentatives. Réessayez dans ${rl.retryAfterSeconds}s.` };
   }
@@ -385,14 +419,14 @@ export async function resendVerificationEmail(email: string) {
   const normalizedEmail = email.trim().toLowerCase();
 
   // Rate limit par email (3 renvois / 15 minutes)
-  const rl = rateLimit(`resend-verify:${normalizedEmail}`, { maxAttempts: 3, windowMs: 15 * 60 * 1000 });
+  const rl = await checkRateLimit(`resend-verify:${normalizedEmail}`, { maxAttempts: 3, windowMs: 15 * 60 * 1000 });
   if (!rl.success) {
     return { error: `Trop de tentatives. Réessayez dans ${rl.retryAfterSeconds}s.` };
   }
 
   // Rate limit par IP
   const ip = await getClientIp();
-  const rlIp = rateLimit(`resend-verify-ip:${ip}`, { maxAttempts: 5, windowMs: 15 * 60 * 1000 });
+  const rlIp = await checkRateLimit(`resend-verify-ip:${ip}`, { maxAttempts: 5, windowMs: 15 * 60 * 1000 });
   if (!rlIp.success) {
     return { error: `Trop de tentatives. Réessayez dans ${rlIp.retryAfterSeconds}s.` };
   }
@@ -417,13 +451,13 @@ export async function resendVerificationEmail(email: string) {
 
 // --- Mot de passe oublié ---
 export async function requestPasswordReset(formData: FormData) {
-  const email = (formData.get("email") as string).trim().toLowerCase();
+  const email = formString(formData, "email").trim().toLowerCase();
 
   if (!email || !validateEmail(email)) {
     return { error: "Adresse email invalide" };
   }
 
-  const rl = rateLimit(`reset:${email}`, { maxAttempts: 3, windowMs: 60 * 60 * 1000 });
+  const rl = await checkRateLimit(`reset:${email}`, { maxAttempts: 3, windowMs: 60 * 60 * 1000 });
   if (!rl.success) {
     return { error: `Trop de tentatives. Réessayez dans ${rl.retryAfterSeconds}s.` };
   }
@@ -477,9 +511,9 @@ export async function requestPasswordReset(formData: FormData) {
 
 // --- Réinitialiser le mot de passe ---
 export async function resetPassword(formData: FormData) {
-  const token = formData.get("token") as string;
-  const password = formData.get("password") as string;
-  const confirmPassword = formData.get("confirmPassword") as string;
+  const token = formString(formData, "token");
+  const password = formString(formData, "password");
+  const confirmPassword = formString(formData, "confirmPassword");
 
   if (!token || !password) {
     return { error: "Données manquantes" };

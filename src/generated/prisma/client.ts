@@ -102,6 +102,11 @@ export type Client = Prisma.ClientModel
  */
 export type ReviewRequest = Prisma.ReviewRequestModel
 /**
+ * Model StripeEvent
+ * 
+ */
+export type StripeEvent = Prisma.StripeEventModel
+/**
  * Model Template
  * 
  */

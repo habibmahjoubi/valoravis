@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { sendEmail } from "@/lib/resend";
+import { stripe } from "@/lib/stripe";
 import { absoluteUrl, escapeHtml, addBusinessDays } from "@/lib/utils";
 
 async function requireAdmin() {
@@ -53,6 +54,18 @@ export async function updateUserPlan(formData: FormData) {
 export async function deleteUser(userId: string) {
   const admin = await requireAdmin();
   if (admin.id === userId) throw new Error("Impossible de supprimer votre propre compte");
+
+  // Supprimer d'abord les établissements dont l'utilisateur est le seul OWNER,
+  // sinon ils resteraient orphelins (plus aucun OWNER, ingérables).
+  const owned = await prisma.establishment.findMany({
+    where: { members: { some: { userId, role: "OWNER" } } },
+    include: { members: { where: { role: "OWNER" }, select: { userId: true } } },
+  });
+  for (const est of owned) {
+    if (est.members.length === 1) {
+      await prisma.establishment.delete({ where: { id: est.id } });
+    }
+  }
 
   await prisma.user.delete({ where: { id: userId } });
   revalidatePath("/admin/users");
@@ -105,10 +118,18 @@ export async function updatePlan(formData: FormData) {
 
 export async function createPlan(formData: FormData) {
   await requireAdmin();
-  const key = (formData.get("key") as string).toLowerCase().replace(/\s+/g, "-");
-  const name = formData.get("name") as string;
-  const price = parseFloat((formData.get("price") as string).replace(",", "."));
+  const key = String(formData.get("key") ?? "").toLowerCase().replace(/\s+/g, "-");
+  const name = String(formData.get("name") ?? "").trim();
+  const price = parseFloat(String(formData.get("price") ?? "").replace(",", "."));
   const quota = Number(formData.get("quota"));
+
+  if (!/^[a-z0-9-]{2,30}$/.test(key)) throw new Error("Clé invalide (a-z, 0-9, tirets)");
+  if (!name || name.length > 60) throw new Error("Nom invalide");
+  if (!isFinite(price) || price < 0 || price > 99999) throw new Error("Prix invalide");
+  if (!Number.isInteger(quota) || quota < 0) throw new Error("Quota invalide");
+
+  const existing = await prisma.plan.findUnique({ where: { key } });
+  if (existing) throw new Error("Un plan avec cette clé existe déjà");
 
   const maxOrder = await prisma.plan.aggregate({ _max: { sortOrder: true } });
 
@@ -142,6 +163,18 @@ export async function approveCancellation(userId: string) {
   if (!user.cancelRequestedAt) throw new Error("Aucune demande d'annulation");
 
   const effectiveDate = addBusinessDays(new Date(), 5);
+
+  // Programmer la résiliation réelle côté Stripe à la date effective.
+  if (user.stripeSubscriptionId) {
+    try {
+      await stripe.subscriptions.update(user.stripeSubscriptionId, {
+        cancel_at: Math.floor(effectiveDate.getTime() / 1000),
+      });
+    } catch (err) {
+      console.error("[cancel] Stripe schedule cancel failed:", err);
+      throw new Error("Échec de la programmation de la résiliation Stripe. Réessayez.");
+    }
+  }
 
   await prisma.user.update({
     where: { id: userId },
@@ -177,6 +210,18 @@ export async function rejectCancellation(userId: string) {
   await requireAdmin();
   const user = await prisma.user.findUniqueOrThrow({ where: { id: userId } });
   if (!user.cancelRequestedAt) throw new Error("Aucune demande d'annulation");
+
+  // Annuler une éventuelle résiliation déjà programmée côté Stripe.
+  if (user.stripeSubscriptionId) {
+    try {
+      await stripe.subscriptions.update(user.stripeSubscriptionId, {
+        cancel_at: null,
+        cancel_at_period_end: false,
+      });
+    } catch (err) {
+      console.error("[cancel] Stripe un-schedule failed:", err);
+    }
+  }
 
   await prisma.user.update({
     where: { id: userId },
