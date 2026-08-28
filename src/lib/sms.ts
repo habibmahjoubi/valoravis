@@ -13,25 +13,47 @@ function getClient(): Twilio {
   return _client;
 }
 
+/** 06 12 34 56 78 → +33612345678 (format E.164). */
+export function formatFrPhone(phone: string): string {
+  let p = phone.replace(/[\s.\-()]/g, "").trim();
+  if (p.startsWith("00")) p = "+" + p.slice(2);
+  if (p.startsWith("0")) p = "+33" + p.slice(1);
+  if (!p.startsWith("+")) p = "+" + p;
+  return p;
+}
+
 export async function sendSms({
   to,
   body,
+  senderId,
 }: {
   to: string;
   body: string;
+  /**
+   * Sender ID alphanumérique (nom du commerce, ≤11 car. alphanum.).
+   * Utilisé uniquement vers la France (+33) — l'expéditeur alphanumérique n'est
+   * pas supporté partout et le destinataire ne peut pas répondre.
+   * Sinon, repli sur le numéro Twilio partagé.
+   */
+  senderId?: string | null;
 }) {
-  // Format numéro français : 06... → +336...
-  let formattedTo = to.trim();
-  if (formattedTo.startsWith("0")) {
-    formattedTo = "+33" + formattedTo.slice(1);
-  }
-  if (!formattedTo.startsWith("+")) {
-    formattedTo = "+" + formattedTo;
+  const formattedTo = formatFrPhone(to);
+  const twilioNumber = process.env.TWILIO_PHONE_NUMBER;
+
+  const useSenderId =
+    !!senderId &&
+    /^[A-Za-z0-9]{1,11}$/.test(senderId) &&
+    /[A-Za-z]/.test(senderId) &&
+    formattedTo.startsWith("+33");
+
+  const from = useSenderId ? senderId! : twilioNumber;
+  if (!from) {
+    throw new Error("Aucun expéditeur SMS configuré (TWILIO_PHONE_NUMBER manquant)");
   }
 
   const message = await getClient().messages.create({
     body,
-    from: process.env.TWILIO_PHONE_NUMBER!,
+    from,
     to: formattedTo,
   });
 

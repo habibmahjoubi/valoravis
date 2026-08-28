@@ -1,42 +1,69 @@
 import { describe, it, expect } from "vitest";
+import { formatFrPhone } from "@/lib/sms";
+import { toSmsSenderId, stripAccents } from "@/lib/utils";
 
-// Re-implement the phone formatting logic from src/lib/sms.ts
-// (the actual function requires Twilio client, so we test the formatting logic separately)
-
-function formatPhoneNumber(to: string): string {
-  let formatted = to.trim();
-  if (formatted.startsWith("0")) {
-    formatted = "+33" + formatted.slice(1);
-  }
-  if (!formatted.startsWith("+")) {
-    formatted = "+" + formatted;
-  }
-  return formatted;
-}
-
-describe("formatPhoneNumber (SMS)", () => {
-  it("converts French 06 numbers to +33 format", () => {
-    expect(formatPhoneNumber("0612345678")).toBe("+33612345678");
-  });
-
-  it("converts French 07 numbers to +33 format", () => {
-    expect(formatPhoneNumber("0712345678")).toBe("+33712345678");
+describe("formatFrPhone", () => {
+  it("converts French 06 / 07 numbers to E.164", () => {
+    expect(formatFrPhone("0612345678")).toBe("+33612345678");
+    expect(formatFrPhone("0712345678")).toBe("+33712345678");
   });
 
   it("keeps international format unchanged", () => {
-    expect(formatPhoneNumber("+33612345678")).toBe("+33612345678");
-    expect(formatPhoneNumber("+1234567890")).toBe("+1234567890");
+    expect(formatFrPhone("+33612345678")).toBe("+33612345678");
+    expect(formatFrPhone("+1234567890")).toBe("+1234567890");
   });
 
-  it("adds + prefix if missing and not starting with 0", () => {
-    expect(formatPhoneNumber("33612345678")).toBe("+33612345678");
+  it("adds + when missing and not a national number", () => {
+    expect(formatFrPhone("33612345678")).toBe("+33612345678");
   });
 
-  it("trims whitespace", () => {
-    expect(formatPhoneNumber("  0612345678  ")).toBe("+33612345678");
+  it("strips spaces, dots, dashes, parens", () => {
+    expect(formatFrPhone("06 12 34 56 78")).toBe("+33612345678");
+    expect(formatFrPhone("01.45.67.89.00")).toBe("+33145678900");
+    expect(formatFrPhone(" (06) 12-34-56-78 ")).toBe("+33612345678");
+  });
+
+  it("handles 00 international prefix", () => {
+    expect(formatFrPhone("0033612345678")).toBe("+33612345678");
   });
 
   it("handles landline numbers", () => {
-    expect(formatPhoneNumber("0145678900")).toBe("+33145678900");
+    expect(formatFrPhone("0145678900")).toBe("+33145678900");
+  });
+});
+
+describe("toSmsSenderId", () => {
+  it("derives an alphanumeric id from a business name", () => {
+    expect(toSmsSenderId("Garage Dupont")).toBe("GarageDupon");
+    expect(toSmsSenderId("Cabinet Dentaire Martin")).toBe("CabinetDent");
+  });
+
+  it("strips accents and punctuation", () => {
+    expect(toSmsSenderId("Osteo Santé & Co")).toBe("OsteoSanteC");
+    expect(toSmsSenderId("L'Atelier")).toBe("LAtelier");
+  });
+
+  it("caps at 11 characters", () => {
+    expect(toSmsSenderId("Établissement Extraordinaire").length).toBeLessThanOrEqual(11);
+  });
+
+  it("returns null when no usable id can be produced", () => {
+    expect(toSmsSenderId(null)).toBeNull();
+    expect(toSmsSenderId("")).toBeNull();
+    expect(toSmsSenderId("   ")).toBeNull();
+    expect(toSmsSenderId("12345")).toBeNull(); // no letter
+    expect(toSmsSenderId("---")).toBeNull();
+  });
+});
+
+describe("stripAccents", () => {
+  it("removes French accents", () => {
+    expect(stripAccents("séance véhicule à côté")).toBe("seance vehicule a cote");
+    expect(stripAccents("Notre établissement vous remercie")).toBe(
+      "Notre etablissement vous remercie"
+    );
+  });
+  it("leaves plain ASCII untouched", () => {
+    expect(stripAccents("Bonjour Marie")).toBe("Bonjour Marie");
   });
 });

@@ -33,6 +33,23 @@ export function formString(formData: FormData, key: string): string {
   return typeof v === "string" ? v : "";
 }
 
+/** Retire les accents d'une chaîne (é → e, à → a, ç → c…). */
+export function stripAccents(s: string): string {
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+/**
+ * Dérive un Sender ID SMS alphanumérique à partir d'un nom (nom du commerce).
+ * Règles opérateurs : 1 à 11 caractères, [A-Za-z0-9], au moins une lettre.
+ * Retourne null si aucun ID valide ne peut être produit (→ repli sur le numéro).
+ */
+export function toSmsSenderId(name: string | null | undefined): string | null {
+  if (!name) return null;
+  const cleaned = stripAccents(name).replace(/[^A-Za-z0-9]/g, "").slice(0, 11);
+  if (cleaned.length === 0 || !/[A-Za-z]/.test(cleaned)) return null;
+  return cleaned;
+}
+
 const NICHE_LABELS: Record<string, string> = {
   DENTIST: "Dentiste",
   OSTEOPATH: "Ostéopathe",

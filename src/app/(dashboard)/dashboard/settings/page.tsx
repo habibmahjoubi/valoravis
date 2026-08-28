@@ -116,6 +116,7 @@ export default async function SettingsPage() {
         nicheDefaultDelay={nicheConfig.defaultDelay}
         hasSms={hasFeature(effectivePlan, "sms")}
         establishment={nicheConfig.vocabulary.establishment}
+        businessName={establishment?.name || user.businessName || ""}
       />
 
       {/* Satisfaction Threshold */}
