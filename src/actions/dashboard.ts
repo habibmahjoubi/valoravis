@@ -572,6 +572,7 @@ export async function sendTestSms() {
 
   const { sendSms } = await import("@/lib/sms");
   const { NICHE_CONFIGS } = await import("@/config/niches");
+  const { toSmsSenderId, stripAccents } = await import("@/lib/utils");
   const nicheConfig = NICHE_CONFIGS[user.niche];
 
   const vars: Record<string, string> = {
@@ -581,13 +582,16 @@ export async function sendTestSms() {
   };
 
   const template = nicheConfig.templates.SMS;
-  const body = `[TEST] ${template.body.replace(
-    /\{\{(\w+)\}\}/g,
-    (_, key) => vars[key] || ""
-  )}`;
+  const body = stripAccents(
+    `[TEST] ${template.body.replace(/\{\{(\w+)\}\}/g, (_, key) => vars[key] || "")}`
+  );
 
   try {
-    await sendSms({ to: user.phone, body });
+    await sendSms({
+      to: user.phone,
+      body,
+      senderId: toSmsSenderId(user.senderName || user.businessName),
+    });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Erreur inconnue";
     return { error: message };

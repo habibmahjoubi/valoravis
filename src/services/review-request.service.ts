@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/lib/resend";
 import { sendSms } from "@/lib/sms";
 import { NICHE_CONFIGS } from "@/config/niches";
-import { absoluteUrl, escapeHtml } from "@/lib/utils";
+import { absoluteUrl, escapeHtml, toSmsSenderId, stripAccents } from "@/lib/utils";
 import { sanitizeTemplateHtml } from "@/lib/sanitize";
 import type { Channel, Niche } from "@/generated/prisma/enums";
 import crypto from "crypto";
@@ -19,6 +19,7 @@ type DeliverParams = {
   establishmentId: string | null;
   niche: Niche;
   businessName: string;
+  businessPhone: string | null;
   senderName: string | null;
   replyToEmail: string | null;
   client: { name: string; email: string | null; phone: string | null };
@@ -71,9 +72,20 @@ async function deliverReviewRequest(p: DeliverParams): Promise<"SENT" | "FAILED"
         replyTo: p.replyToEmail || undefined,
       });
     } else if (p.channel === "SMS" && p.client.phone) {
+      // Sender ID = variable d'env globale, sinon nom du commerce.
+      const senderId = toSmsSenderId(p.senderName || p.businessName);
+      const usesAlphaSender = !!process.env.SMS_SENDER_ID?.trim() || !!senderId;
+      let smsBody = fillTemplate(template.body, textVars);
+      // Le client ne peut pas répondre à un Sender ID → on ajoute le contact
+      // (le nom du commerce figure déjà dans le corps du message).
+      if (usesAlphaSender && p.businessPhone) {
+        smsBody += ` Contact : ${p.businessPhone}`;
+      }
+      // SMS sans accents : reste en GSM-7 (160 car./segment au lieu de 70).
       await sendSms({
         to: p.client.phone,
-        body: fillTemplate(template.body, textVars),
+        body: stripAccents(smsBody),
+        senderId,
       });
     }
 
@@ -202,6 +214,7 @@ export async function createReviewRequest({
       establishmentId: establishmentId ?? null,
       niche: establishment?.niche ?? user.niche,
       businessName: establishment?.name ?? user.businessName ?? "notre établissement",
+      businessPhone: establishment?.phone ?? user.phone,
       senderName: establishment?.senderName ?? user.senderName,
       replyToEmail: establishment?.replyToEmail ?? user.replyToEmail,
       client: { name: client.name, email: client.email, phone: client.phone },
@@ -259,6 +272,7 @@ export async function processPendingRequests() {
       establishmentId: establishment?.id ?? null,
       niche: establishment?.niche ?? user.niche,
       businessName: establishment?.name ?? user.businessName ?? "notre établissement",
+      businessPhone: establishment?.phone ?? user.phone,
       senderName: establishment?.senderName ?? user.senderName,
       replyToEmail: establishment?.replyToEmail ?? user.replyToEmail,
       client: { name: client.name, email: client.email, phone: client.phone },

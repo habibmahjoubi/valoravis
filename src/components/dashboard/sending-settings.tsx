@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { updateSendingSettings } from "@/actions/dashboard";
+import { toSmsSenderId } from "@/lib/utils";
 import { Mail, Smartphone, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 interface SendingSettingsProps {
@@ -13,6 +14,8 @@ interface SendingSettingsProps {
   nicheDefaultDelay: number;
   hasSms: boolean;
   establishment: string;
+  businessName: string;
+  smsSenderOverride: string | null;
 }
 
 export function SendingSettings({
@@ -24,8 +27,11 @@ export function SendingSettings({
   nicheDefaultDelay,
   hasSms,
   establishment,
+  businessName,
+  smsSenderOverride,
 }: SendingSettingsProps) {
   const [channel, setChannel] = useState(defaultChannel || "EMAIL");
+  const smsSenderId = smsSenderOverride || toSmsSenderId(senderName || businessName);
   const [saving, setSaving] = useState(false);
   const [result, setResult] = useState<{ success?: boolean; error?: string } | null>(null);
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -150,22 +156,48 @@ export function SendingSettings({
 
         {/* SMS-specific fields */}
         {channel === "SMS" && (
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Numéro de téléphone du {establishment}
-            </label>
-            <input
-              name="phone"
-              type="tel"
-              maxLength={20}
-              defaultValue={phone || ""}
-              placeholder="06 12 34 56 78"
-              className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <p className="text-xs text-muted-foreground mt-1">
-              Ce numéro est utilisé pour identifier votre {establishment} dans les SMS envoyés aux clients.
-            </p>
-          </div>
+          <>
+            {/* Préserver senderName (champ non affiché en mode SMS) */}
+            <input type="hidden" name="senderName" value={senderName || ""} />
+
+            <div className="rounded-lg border border-border bg-muted/30 p-3">
+              <p className="text-sm font-medium">Expéditeur des SMS</p>
+              {smsSenderId ? (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Vos clients verront{" "}
+                  <span className="font-mono font-medium text-foreground">{smsSenderId}</span>{" "}
+                  comme expéditeur
+                  {smsSenderOverride
+                    ? " (configuré globalement)"
+                    : ` (dérivé du nom « ${businessName || "votre établissement"} »)`}
+                  . Ils <strong>ne peuvent pas répondre</strong> à ce SMS.
+                  Vers un numéro étranger, un numéro standard est utilisé à la place.
+                </p>
+              ) : (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Renseignez un nom d&apos;établissement pour personnaliser l&apos;expéditeur.
+                  Sinon, un numéro standard est utilisé.
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                Numéro de téléphone du {establishment}
+              </label>
+              <input
+                name="phone"
+                type="tel"
+                maxLength={20}
+                defaultValue={phone || ""}
+                placeholder="06 12 34 56 78"
+                className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Affiché dans le corps du SMS pour que le client puisse vous joindre.
+              </p>
+            </div>
+          </>
         )}
 
         {/* Save button + status */}

@@ -116,6 +116,8 @@ export default async function SettingsPage() {
         nicheDefaultDelay={nicheConfig.defaultDelay}
         hasSms={hasFeature(effectivePlan, "sms")}
         establishment={nicheConfig.vocabulary.establishment}
+        businessName={establishment?.name || user.businessName || ""}
+        smsSenderOverride={process.env.SMS_SENDER_ID?.trim() || null}
       />
 
       {/* Satisfaction Threshold */}
