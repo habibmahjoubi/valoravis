@@ -40,13 +40,15 @@ export async function sendSms({
   const formattedTo = formatFrPhone(to);
   const twilioNumber = process.env.TWILIO_PHONE_NUMBER;
 
+  // SMS_SENDER_ID (variable d'env) prend le pas sur le nom du commerce : un seul
+  // Sender ID à enregistrer auprès de Twilio pour la France.
+  const candidate = process.env.SMS_SENDER_ID?.trim() || senderId || "";
   const useSenderId =
-    !!senderId &&
-    /^[A-Za-z0-9]{1,11}$/.test(senderId) &&
-    /[A-Za-z]/.test(senderId) &&
+    /^[A-Za-z0-9]{1,11}$/.test(candidate) &&
+    /[A-Za-z]/.test(candidate) &&
     formattedTo.startsWith("+33");
 
-  const from = useSenderId ? senderId! : twilioNumber;
+  const from = useSenderId ? candidate : twilioNumber;
   if (!from) {
     throw new Error("Aucun expéditeur SMS configuré (TWILIO_PHONE_NUMBER manquant)");
   }

@@ -15,6 +15,7 @@ interface SendingSettingsProps {
   hasSms: boolean;
   establishment: string;
   businessName: string;
+  smsSenderOverride: string | null;
 }
 
 export function SendingSettings({
@@ -27,9 +28,10 @@ export function SendingSettings({
   hasSms,
   establishment,
   businessName,
+  smsSenderOverride,
 }: SendingSettingsProps) {
   const [channel, setChannel] = useState(defaultChannel || "EMAIL");
-  const smsSenderId = toSmsSenderId(senderName || businessName);
+  const smsSenderId = smsSenderOverride || toSmsSenderId(senderName || businessName);
   const [saving, setSaving] = useState(false);
   const [result, setResult] = useState<{ success?: boolean; error?: string } | null>(null);
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -164,8 +166,11 @@ export function SendingSettings({
                 <p className="text-xs text-muted-foreground mt-1">
                   Vos clients verront{" "}
                   <span className="font-mono font-medium text-foreground">{smsSenderId}</span>{" "}
-                  comme expéditeur (dérivé du nom «&nbsp;{businessName || "votre établissement"}&nbsp;»).
-                  Ils <strong>ne peuvent pas répondre</strong> à ce SMS.
+                  comme expéditeur
+                  {smsSenderOverride
+                    ? " (configuré globalement)"
+                    : ` (dérivé du nom « ${businessName || "votre établissement"} »)`}
+                  . Ils <strong>ne peuvent pas répondre</strong> à ce SMS.
                   Vers un numéro étranger, un numéro standard est utilisé à la place.
                 </p>
               ) : (

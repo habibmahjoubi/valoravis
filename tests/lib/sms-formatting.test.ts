@@ -44,7 +44,7 @@ describe("toSmsSenderId", () => {
   });
 
   it("caps at 11 characters", () => {
-    expect(toSmsSenderId("Établissement Extraordinaire").length).toBeLessThanOrEqual(11);
+    expect(toSmsSenderId("Établissement Extraordinaire")).toBe("Etablisseme");
   });
 
   it("returns null when no usable id can be produced", () => {

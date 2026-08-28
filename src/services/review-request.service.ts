@@ -72,12 +72,13 @@ async function deliverReviewRequest(p: DeliverParams): Promise<"SENT" | "FAILED"
         replyTo: p.replyToEmail || undefined,
       });
     } else if (p.channel === "SMS" && p.client.phone) {
-      // Sender ID = nom du commerce (senderName sinon nom de l'établissement).
+      // Sender ID = variable d'env globale, sinon nom du commerce.
       const senderId = toSmsSenderId(p.senderName || p.businessName);
+      const usesAlphaSender = !!process.env.SMS_SENDER_ID?.trim() || !!senderId;
       let smsBody = fillTemplate(template.body, textVars);
       // Le client ne peut pas répondre à un Sender ID → on ajoute le contact
       // (le nom du commerce figure déjà dans le corps du message).
-      if (senderId && p.businessPhone) {
+      if (usesAlphaSender && p.businessPhone) {
         smsBody += ` Contact : ${p.businessPhone}`;
       }
       // SMS sans accents : reste en GSM-7 (160 car./segment au lieu de 70).
